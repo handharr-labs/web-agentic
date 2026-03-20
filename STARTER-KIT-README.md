@@ -110,6 +110,7 @@ You can also mix both in the same project — one feature calls an external API,
 | `pickup-issue` | `/pickup-issue NNN` — pick up a PM-created GitHub Issue |
 | `new-server-action` | `/new-server-action` — **Full-stack** |
 | `new-db-repository` | `/new-db-repository` — **Full-stack** |
+| `setup-nextjs-project` | `/setup-nextjs-project` — wire submodule + symlinks for a new project |
 
 ---
 
@@ -230,17 +231,25 @@ Generate or instruct the user to run the following in order:
 
 4. **Create `.env.local`** with the template from `nextjs-arch/project-setup.md` Section 4
 
-5. **Copy agents, skills, hooks, and docs** into the project:
+5. **Add the starter kit as a git submodule and create symlinks:**
    ```bash
-   mkdir -p .claude
-   cp -r docs/starter-kit/nextjs/agents   .claude/agents/
-   cp -r docs/starter-kit/nextjs/skills   .claude/skills/
-   cp -r docs/starter-kit/nextjs/hooks    .claude/hooks/ && chmod +x .claude/hooks/*.sh
-   cp -r docs/starter-kit/nextjs/docs     .claude/docs/
-   cp docs/starter-kit/nextjs/settings-template.json .claude/settings.local.json
+   git submodule add https://github.com/handharr-labs/nextjs-arch .claude/starter-kit
+   cd .claude
+   ln -s starter-kit/agents     agents
+   ln -s starter-kit/docs       docs
+   ln -s starter-kit/hooks      hooks
+   ln -s starter-kit/nextjs-arch nextjs-arch
+   ln -s starter-kit/skills     skills
+   cd ..
+   chmod +x .claude/starter-kit/hooks/*.sh
+   cp .claude/starter-kit/settings-template.json .claude/settings.local.json
    # Edit .claude/settings.local.json — replace PROJECT_ROOT with $(pwd)/.claude
    ```
-   (Adjust path to wherever this starter kit lives)
+
+   > **Why submodule + symlinks instead of copying?**
+   > Updates to agents, skills, and arch docs flow from a single place. Run `cd .claude/starter-kit && git pull` to get the latest — no manual re-copying across projects.
+
+   > **Tip:** You can automate this entire step with the `/setup-nextjs-project` skill once the starter kit is wired.
 
    **What hooks do:**
    | Hook | Event | Effect |
@@ -249,7 +258,7 @@ Generate or instruct the user to run the following in order:
    | `lint-on-edit.sh` | PostToolUse Write/Edit | Runs `npm run lint --fix` on every `.ts`/`.tsx` file written |
    | `check-use-server.sh` | PostToolUse Write | Warns when `'use server'` is missing from action files |
 
-5a. **Copy and customize `CLAUDE.md`**:
+5a. **Copy and customize `CLAUDE.md`** (or let `/setup-nextjs-project` do it):
    ```bash
    cp docs/starter-kit/nextjs/CLAUDE-template.md CLAUDE.md
    ```
@@ -416,3 +425,17 @@ After setup, tell the user:
 - Which project-specific decisions were deferred (with a link to `nextjs-arch/project-setup.md`)
 - The first command to scaffold a feature: `/new-feature` or `@backend-scaffolder`
 - Any `// TODO` stubs that need to be filled in before the app can run (e.g., `DbDataSourceImpl`, `lib/db.ts`, auth config)
+
+---
+
+## Updating the Starter Kit
+
+After the submodule is wired (Step 5 above), pull updates from the starter-kit repo at any time:
+
+```bash
+cd .claude/starter-kit && git pull && cd ../..
+git add .claude/starter-kit
+git commit -m "chore: bump nextjs-arch starter kit"
+```
+
+This updates all 5 linked directories (agents, docs, hooks, nextjs-arch, skills) in one operation across every project that uses the submodule.
