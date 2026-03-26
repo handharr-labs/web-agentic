@@ -266,5 +266,58 @@ Atomic Design owns the **horizontal** slice (how components are structured *with
 4. Shared atoms/molecules live in `src/shared/presentation/common/`. Feature-specific organisms live inside their own feature slice.
 5. A component that is used in ≥2 features must be promoted to `shared/presentation/common/`.
 
+### 5.6 View Data Transformer Pattern
+
+Domain objects return structured, semantic data. The presentation layer is responsible for converting that data into display-ready values like CSS class strings, labels, and icons. **Never put Tailwind class strings or locale-formatted display strings inside domain services or use cases.**
+
+**Pattern: status enum → display config map**
+
+When a domain service communicates visual severity (progress state, health status), it returns a typed status string. The organism (or a shared presentation util if used in ≥2 places) defines a lookup map from that status to CSS classes.
+
+```typescript
+// domain/services/BudgetProgressService.ts — domain returns semantic status
+export type BudgetStatus = 'on-track' | 'at-risk' | 'over';
+
+export interface BudgetProgressData {
+  readonly percent: number;
+  readonly remaining: number;
+  readonly isOverrun: boolean;
+  readonly status: BudgetStatus;   // semantic, not visual
+}
+```
+
+```typescript
+// presentation/organisms/CategoryBreakdownSection.tsx — presentation maps to CSS
+import type { BudgetStatus } from '@/features/dashboard/domain/services/BudgetProgressService';
+
+const STATUS_COLOR: Record<BudgetStatus, string> = {
+  'on-track': 'bg-emerald-400',
+  'at-risk':  'bg-yellow-400',
+  'over':     'bg-red-400',
+};
+
+const STATUS_TEXT: Record<BudgetStatus, string> = {
+  'on-track': 'text-emerald-600 dark:text-emerald-300',
+  'at-risk':  'text-yellow-600 dark:text-yellow-300',
+  'over':     'text-red-600 dark:text-red-300',
+};
+
+// Usage in JSX:
+<div className={STATUS_COLOR[progress.status]} />
+<span className={STATUS_TEXT[progress.status]} />
+```
+
+**Placement rule:** If the same config map is needed in ≥2 organisms, extract it to `src/shared/presentation/common/utils/[feature]StatusConfig.ts`.
+
+**Domain vs presentation boundary:**
+
+| Concern | Layer | Example |
+|---------|-------|---------|
+| Severity classification | Domain | `status: 'over' \| 'at-risk' \| 'on-track'` |
+| CSS class strings | Presentation | `'bg-red-400'`, `'text-red-600 dark:text-red-300'` |
+| Locale-formatted numbers | Presentation | `'Rp 1.2jt'` via `formatCompactCurrency` |
+| Raw numbers / booleans | Domain | `remaining: number`, `isOverrun: boolean` |
+| User-facing message strings | Presentation | `'The requested resource was not found.'` |
+
 ---
 

@@ -268,6 +268,16 @@ export class SubmitLeaveRequestUseCaseImpl {
 }
 ```
 
+**What a Service must NOT return:**
+
+| ❌ Violation | ✅ Correct alternative |
+|---|---|
+| `compactLabel: "71.8K left"` (formatted string) | `remaining: number` + `isOverrun: boolean` |
+| `colorClass: "bg-red-400"` (CSS class name from outside domain) | `status: 'on-track' \| 'at-risk' \| 'over'` |
+| `displayText: "Over by 71000"` via a locale formatter import | `remaining: number` (let presentation format it) |
+
+Domain services return **structured data**. The presentation layer converts that data into display strings, CSS classes, and formatted labels. If your service imports anything from `shared/core/utils/format*`, it has crossed the boundary.
+
 **When to use a Service vs keeping logic inline:**
 
 | Scenario | Approach |

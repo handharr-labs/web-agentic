@@ -27,6 +27,16 @@ All entity interface properties must be `readonly`. Mutable entity properties ar
 ### 4. Service Purity Rule
 Domain services must be synchronous pure functions — no `async`, no `fetch`, no DOM APIs, no side effects.
 
+### 4a. Service Formatting Rule
+Domain services must not import display/formatting utilities (e.g. `formatCurrency`, `formatCompactCurrency`, `Intl.NumberFormat` wrappers, date formatters) or return locale-formatted strings, currency symbols, or CSS class names sourced from outside the domain.
+
+**Allowed:** returning `remaining: number`, `isOverrun: boolean`, `status: 'on-track' | 'at-risk' | 'over'`
+**Not allowed:**
+- `compactLabel: "71.8K left"` computed via a `shared/core/utils/formatCurrency` import
+- `colorClass: 'bg-red-400'` or `textClass: 'text-red-600 dark:text-red-300'` — Tailwind CSS strings are a presentation concern; use a status enum (`status: 'over'`) instead
+
+Move label-building logic to a presentation-layer helper (e.g. `formatBudgetLabel()` in the organism file or a shared presentation util). The domain service returns structured data; the presentation layer formats it for display.
+
 ### 5. Mapper Interface Rule
 Mappers must be defined as an interface + class (`[Name]Mapper` interface + `[Name]MapperImpl` class). Plain utility functions used as mappers are a violation (they cannot be mocked in tests).
 

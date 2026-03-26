@@ -82,7 +82,7 @@ Read: src/presentation/navigation/routes.ts
 6. `src/data/data-sources/remote/[Feature]RemoteDataSource.ts` — interface
 7. `src/data/data-sources/remote/[Feature]RemoteDataSourceImpl.ts` — implementation
 8. `src/data/repositories/[Feature]RepositoryImpl.ts` — implements domain interface, uses mapper
-9. `src/presentation/features/[feature-name]/use[Feature]ViewModel.ts` — `'use client'`, useQuery/useMutation
+9. `src/presentation/features/[feature-name]/use[Feature]ViewModel.ts` — `'use client'`, useQuery/useMutation (TanStack Query) or useState/useEffect + Server Action (next-safe-action pattern)
 10. `src/presentation/features/[feature-name]/[Feature]View.tsx` — `'use client'`, calls useDI()
 11. `src/presentation/navigation/routes.ts` — add route constant (if new page)
 12. `src/app/[route]/page.tsx` — Server Component page (if new page)
@@ -90,6 +90,7 @@ Read: src/presentation/navigation/routes.ts
 
 **Step 4 — Verify**:
 - No Domain file imports from `react`, `next`, `axios`, Data, or Presentation
+- No Domain service imports formatting/display utilities (e.g. `shared/core/utils/formatCurrency`) — domain returns structured data, presentation formats it
 - No Presentation file imports from `src/data/` implementations directly
 - Every ViewModel hook receives use cases via deps parameter
 
@@ -133,6 +134,38 @@ export function use[Feature]ViewModel({ [verbFeature]UseCase }: [Feature]ViewMod
   return { data, isLoading, isError, errorMessage: error?.message ?? null } as const;
 }
 ```
+
+**ViewModel hook — Server Actions pattern** (next-safe-action / full-stack Next.js):
+
+Use this pattern when the project uses `next-safe-action` Server Actions instead of TanStack Query for data fetching.
+
+```typescript
+'use client';
+import { useState, useCallback, useEffect } from 'react';
+import { [verb][Feature]Action } from './actions/[verb][Feature]Action';
+
+export function use[Feature]ViewModel() {
+  const [data, setData] = useState<[ReturnType] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    const result = await [verb][Feature]Action({ /* params */ });
+    if (result?.data) setData(result.data);
+    else if (result?.serverError) setError(result.serverError);
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  return { data, isLoading, error, refresh: load } as const;
+}
+```
+
+**Choose TanStack Query when:** the project uses a REST/GraphQL client layer and needs caching, deduplication, or background refetching.
+**Choose Server Actions when:** the project uses Supabase/Drizzle with `next-safe-action` and all data access runs server-side.
 
 **View component**:
 ```typescript

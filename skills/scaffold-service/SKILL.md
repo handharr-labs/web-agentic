@@ -55,8 +55,10 @@ export class [Feature][Noun]Service implements [Feature][Noun] {
 **Enforced rules — violating any of these is a domain layer violation:**
 - No `async` / `await` — services are synchronous pure functions
 - No `import` from `react`, `next`, `axios`, or any `src/data/` or `src/presentation/` path
+- No `import` from display/formatting utilities (e.g. `shared/core/utils/formatCurrency`, `Intl.NumberFormat` wrappers, date formatters) — these are presentation concerns
 - No network calls, no filesystem access, no DOM access
 - Parameters and return types use only domain entities, primitives, or value objects
+- Never return locale-formatted strings (e.g. `"71.8K left"`), currency symbols, or CSS class names sourced from outside the domain — return structured data (`remaining: number`, `isOverrun: boolean`, status enums) and let the presentation layer format it
 
 **Step 3 — Default parameter injection (for testability)**
 
