@@ -90,7 +90,8 @@ The Presentation layer is almost entirely client-side because it depends on hook
 | `presentation/navigation/routes.ts` (`ROUTES` constant) | **Both** | Plain object literal, no framework deps |
 | `presentation/navigation/useAppRouter.ts` | **Client only** | Uses `useRouter`, `usePathname`, `useSearchParams` |
 | `presentation/features/**/use[Feature]ViewModel.ts` | **Client only** | Uses `useState`, `useQuery`, `useMutation`, `useRouter` |
-| `presentation/features/**/*View.tsx` | **Client only** | `'use client'` directive; uses hooks + event handlers |
+| `presentation/features/**/build[Feature]ViewModel.ts` | **Both** | Pure function — no hooks, no deps. Called in Server Component pages; testable without React |
+| `presentation/features/**/*View.tsx` | **Client only*** | `'use client'` directive; uses hooks + event handlers. *Omit if view has no interactivity |
 | `presentation/common/LoadingView.tsx` | **Both*** | Pure JSX with no hooks — Server-renderable |
 | `presentation/common/ErrorView.tsx` | **Client only** | Has `onClick` event handler |
 | `presentation/common/BottomNav.tsx` | **Client only** | Uses `usePathname()` |
@@ -199,6 +200,7 @@ The `initialData` prop must be **serializable** — plain objects and arrays onl
 │                AxiosHTTPClient, TokenRefreshService             │
 │  presentation/common/QueryState.ts                             │
 │  presentation/navigation/routes.ts (ROUTES constant)           │
+│  presentation/features/**/build*ViewModel.ts (pure functions)  │
 │  core/date/DateServiceImpl                                      │
 │  core/logger/ConsoleLogger                                      │
 │  core/storage/InMemoryStorageService                           │

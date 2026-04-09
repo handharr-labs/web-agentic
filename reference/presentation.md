@@ -319,5 +319,87 @@ const STATUS_TEXT: Record<BudgetStatus, string> = {
 | Raw numbers / booleans | Domain | `remaining: number`, `isOverrun: boolean` |
 | User-facing message strings | Presentation | `'The requested resource was not found.'` |
 
+### 5.7 Server-Side ViewModel (Pure Function)
+
+When a page is a **Server Component** (`async page.tsx`), data is fetched server-side and there are no React hooks. The ViewModel is a **pure function** instead of a hook.
+
+**Naming:** `build[Feature]ViewModel` — the `build*` prefix signals "not a hook, not stateful"
+**Location:** `src/presentation/features/[feature]/build[Feature]ViewModel.ts`
+**Runtime:** Isomorphic — runs on server at request time; trivially testable as a pure function
+
+```typescript
+// presentation/features/career-page/buildCareerPageViewModel.ts
+import type { Company } from '@/domain/entities/Company';
+import type { Job } from '@/domain/entities/Job';
+
+export interface CareerPageViewModelInput {
+  company: Company;
+  jobs: Job[];
+}
+
+export interface CareerPageViewModel {
+  company: Company;
+  jobs: Job[];
+  isHiring: boolean;
+  featuredJobs: Job[];
+}
+
+export function buildCareerPageViewModel(input: CareerPageViewModelInput): CareerPageViewModel {
+  return {
+    company: input.company,
+    jobs: input.jobs,
+    isHiring: input.company.siteStatus === 'active',
+    featuredJobs: input.jobs.filter((j) => j.isFeatured),
+  };
+}
+```
+
+**Call site — `async` Server Component page:**
+
+```typescript
+// app/careers/[slug]/page.tsx
+import { getCompanyUseCase, getJobsUseCase } from '@/di/container.server';
+import { buildCareerPageViewModel } from '@/presentation/features/career-page/buildCareerPageViewModel';
+import { CareerPageView } from '@/presentation/features/career-page/CareerPageView';
+
+export default async function CareerPage({ params }: { params: { slug: string } }) {
+  const [company, jobs] = await Promise.all([
+    getCompanyUseCase().execute({ slug: params.slug }),
+    getJobsUseCase().execute({ companySlug: params.slug }),
+  ]);
+  const viewModel = buildCareerPageViewModel({ company, jobs });
+  return <CareerPageView viewModel={viewModel} />;
+}
+```
+
+**View receives the pre-built ViewModel as a prop:**
+
+```typescript
+// presentation/features/career-page/CareerPageView.tsx
+// Add 'use client' only if interactivity is needed
+import type { CareerPageViewModel } from './buildCareerPageViewModel';
+
+export function CareerPageView({ viewModel }: { viewModel: CareerPageViewModel }) {
+  const { company, isHiring, featuredJobs } = viewModel;
+  return ( /* render */ );
+}
+```
+
+**Pattern selection guide:**
+
+| Scenario | Pattern |
+|----------|---------|
+| Server Component, read-only | `build*ViewModel` pure function |
+| Client Component, live data / caching | `use*ViewModel` hook + TanStack Query |
+| Client Component, mutations (full-stack) | `use*ViewModel` hook + Server Actions |
+| RSC page + client interactivity | `build*ViewModel` → pass as `initialData` to `use*ViewModel` hook |
+
+**Rules:**
+- `build*ViewModel` is a **pure function** — no hooks, no async, no side effects
+- Input: domain entities only
+- Output: a plain serializable object (safe to cross the Server → Client boundary)
+- Derived fields (computed from entities) belong here, not inside the component
+- No display formatting (CSS classes, locale strings) — those stay in the component or organism
+
 ---
 

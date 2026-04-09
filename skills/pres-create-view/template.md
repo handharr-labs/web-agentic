@@ -1,6 +1,8 @@
 # View + Page Templates
 
-## View Component
+## Client Component path (hook pattern)
+
+### View
 ```typescript
 // src/presentation/features/[feature]/[Feature]View.tsx
 'use client';
@@ -13,16 +15,11 @@ export function [Feature]View() {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>{errorMessage ?? 'Something went wrong'}</div>;
-
-  return (
-    <div>
-      {/* render data */}
-    </div>
-  );
+  return ( /* render data */ );
 }
 ```
 
-## App Router Page (Server Component)
+### Page
 ```typescript
 // src/app/[route]/page.tsx
 import { [Feature]View } from '@/presentation/features/[feature]/[Feature]View';
@@ -31,6 +28,41 @@ export default function [Feature]Page() {
   return <[Feature]View />;
 }
 ```
+
+---
+
+## Server Component path (build*ViewModel pattern)
+
+### View (add 'use client' only if interactivity needed)
+```typescript
+// src/presentation/features/[feature]/[Feature]View.tsx
+import type { [Feature]ViewModel } from './build[Feature]ViewModel';
+
+interface Props {
+  viewModel: [Feature]ViewModel;
+}
+
+export function [Feature]View({ viewModel }: Props) {
+  const { [fields] } = viewModel;
+  return ( /* render */ );
+}
+```
+
+### Page (async Server Component)
+```typescript
+// src/app/[route]/page.tsx
+import { [verb][Feature]UseCase } from '@/di/container.server';
+import { build[Feature]ViewModel } from '@/presentation/features/[feature]/build[Feature]ViewModel';
+import { [Feature]View } from '@/presentation/features/[feature]/[Feature]View';
+
+export default async function [Feature]Page() {
+  const data = await [verb][Feature]UseCase().execute({ /* params */ });
+  const viewModel = build[Feature]ViewModel({ data });
+  return <[Feature]View viewModel={viewModel} />;
+}
+```
+
+---
 
 ## Route constant
 ```typescript

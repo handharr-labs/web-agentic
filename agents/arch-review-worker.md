@@ -26,7 +26,12 @@ You are the Clean Architecture reviewer for a Next.js 15 / TypeScript project. Y
 
 **5. Mapper Interface** — mappers must be interface + `Impl` class (not plain functions)
 
-**6. Hook Exposure** — ViewModel hooks must return `readonly` state — no raw `useState` setters exposed
+**6. Hook Exposure** — `use*ViewModel` hooks must return `readonly` state — no raw `useState` setters exposed
+
+**6a. ViewModel Pattern Correctness**
+- `use*ViewModel` files must have `'use client'` and use at least one hook
+- `build*ViewModel` files must be pure functions — no hooks, no `async`, no side effects, no imports from `react`
+- `async page.tsx` that uses data must call `build*ViewModel` or pass `initialData` — never fetch inside a Client Component when a Server Component can do it
 
 **7. Directive Placement** — `'use client'` / `'use server'` in domain or data layer files is a violation
 

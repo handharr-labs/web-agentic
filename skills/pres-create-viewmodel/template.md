@@ -1,6 +1,6 @@
-# ViewModel Hook Templates
+# ViewModel Templates
 
-## TanStack Query pattern (external API)
+## Pattern A — Hook (Client Component, TanStack Query)
 ```typescript
 'use client';
 import { useQuery } from '@tanstack/react-query';
@@ -25,7 +25,7 @@ export function use[Feature]ViewModel({ [verbFeature]UseCase }: [Feature]ViewMod
 }
 ```
 
-## Server Actions pattern (full-stack DB)
+## Pattern A — Hook (Client Component, Server Actions)
 ```typescript
 'use client';
 import { useState, useCallback, useEffect } from 'react';
@@ -46,7 +46,28 @@ export function use[Feature]ViewModel() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
-
   return { data, isLoading, error, refresh: load } as const;
+}
+```
+
+## Pattern B — Pure function (Server Component)
+```typescript
+// No 'use client' — isomorphic pure function
+import type { [Entity] } from '@/domain/entities/[Entity]';
+
+export interface [Feature]ViewModelInput {
+  [field]: [Entity];
+}
+
+export interface [Feature]ViewModel {
+  [field]: [Entity];
+  [derivedField]: [type]; // computed from input
+}
+
+export function build[Feature]ViewModel(input: [Feature]ViewModelInput): [Feature]ViewModel {
+  return {
+    [field]: input.[field],
+    [derivedField]: /* pure computation */,
+  };
 }
 ```
