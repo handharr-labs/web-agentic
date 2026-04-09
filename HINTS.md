@@ -11,7 +11,7 @@
 | Skills — Type B, User-triggered (`skills/`) | 4 |
 | Hooks (`hooks/`) | 3 (impl import guard, lint on edit, use server warn) |
 | `settings-template.json` | Base settings with hooks wired |
-| Entry point | `STARTER-KIT-README.md` |
+| Entry point | `README.md` |
 
 ---
 
@@ -46,7 +46,7 @@ Replace every `[placeholder]` in CLAUDE.md.
 
 Describe intent in natural language — Claude routes to the right agent:
 
-> "Set up the project scaffold" → reads STARTER-KIT-README.md and follows the AI Project Setup flow
+> "Set up the project scaffold" → reads README.md and follows the AI Project Setup flow
 > "Create the leave request feature" → `feature-orchestrator`
 > "Add an entity for Employee" → `domain-worker`
 

@@ -45,5 +45,5 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Hooks: `block-impl-import-in-presentation.sh`, `lint-on-edit.sh`, `check-use-server.sh`
 - `CLAUDE-template.md` for project-level Claude instructions
 - `settings-template.json` with hooks pre-wired
-- `STARTER-KIT-README.md` with AI Project Setup flow
+- `README.md` with AI Project Setup flow
 - `HINTS.md` quick reference guide
