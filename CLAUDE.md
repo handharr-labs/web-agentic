@@ -6,7 +6,10 @@ Consumed as a git submodule at `.claude/web-agentic/` in downstream projects. No
 ## Dev Commands
 
 ```bash
-# Wire into a downstream project (run from that project's root)
+# Wire into a downstream project — interactive package selection (recommended)
+.claude/web-agentic/scripts/setup-packages.sh
+
+# Or link everything without prompts
 .claude/web-agentic/scripts/setup-symlinks.sh
 
 # Cut a release
