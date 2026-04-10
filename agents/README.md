@@ -25,6 +25,7 @@ Domain specialists. Validate preconditions, pick the right skill, execute. Can b
 | `test-worker` | Testing | Write tests for any layer — auto-selects test type by layer |
 | `arch-review-worker` | Cross-layer | Audit code for Clean Architecture violations |
 | `debug-worker` | Cross-layer | Trace runtime errors through the layers to root cause |
+| `issue-worker` | Product | Create or pick up a GitHub Issue — opens issue, creates branch, updates backlog |
 
 ## Natural Language Routing
 
@@ -34,6 +35,8 @@ Describe intent — Claude routes to the right agent automatically.
 > "Add an entity for Employee" → `domain-worker`
 > "Write tests for LeaveRepositoryImpl" → `test-worker`
 > "Why is my form submission failing silently?" → `debug-worker`
+> "Create an issue for adding export button" → `issue-worker`
+> "Pick up issue #42" → `issue-worker`
 
 ## Extension
 

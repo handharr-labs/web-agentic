@@ -1,4 +1,4 @@
-# Next.js StarterKit
+# web-agentic
 
 > **For AI agents**: If a user asks you to "set up a project using this starter kit" or similar, jump to the [AI Project Setup](#ai-project-setup) section at the bottom and follow it step by step before generating any code.
 
@@ -6,7 +6,9 @@
 
 ## What This Is
 
-A Clean Architecture starter kit for Next.js 15 projects. It gives you a proven layer structure, a full set of patterns and conventions, and Claude agents + skills to scaffold any layer in seconds.
+A Claude Code toolkit for Next.js 15 projects built on Clean Architecture. Add it as a git submodule — it wires agents, skills, hooks, and architecture reference docs into your project's `.claude/` directory. All tooling is version-controlled in one place and shared across projects.
+
+It is not a template you clone. You add it to an existing or new Next.js project and it plugs in alongside your code.
 
 It supports two modes — both share the same domain layer:
 
@@ -87,11 +89,12 @@ You can also mix both in the same project — one feature calls an external API,
 
 | Agents (`.claude/agents/`) | When to invoke |
 |---------------------------|---------------|
-| `feature-scaffolder` | New feature end-to-end — all layers + DI |
-| `arch-reviewer` | Audit a file or feature for Clean Architecture violations |
-| `test-writer` | Generate tests for any layer |
-| `debug-agent` | Trace a runtime error through the layers to its root cause |
-| `backend-scaffolder` | **Full-stack** — Server Action + UseCase + DB DataSource + Repository |
+| `feature-orchestrator` | New feature end-to-end — all layers + DI |
+| `backend-orchestrator` | **Full-stack** — Server Action + UseCase + DB DataSource + Repository |
+| `issue-worker` | Create or pick up a GitHub Issue — opens issue, creates branch, updates backlog |
+| `arch-review-worker` | Audit a file or feature for Clean Architecture violations |
+| `test-worker` | Generate tests for any layer |
+| `debug-worker` | Trace a runtime error through the layers to its root cause |
 
 | Skills (`.claude/skills/`) | Trigger |
 |---------------------------|---------|
@@ -106,8 +109,6 @@ You can also mix both in the same project — one feature calls an external API,
 | `scaffold-service` | `/scaffold-service` |
 | `scaffold-repository` | `/scaffold-repository` |
 | `integration-test` | `/integration-test` |
-| `create-issue` | `/create-issue` |
-| `pickup-issue` | `/pickup-issue NNN` — pick up a PM-created GitHub Issue |
 | `new-server-action` | `/new-server-action` — **Full-stack** |
 | `new-db-repository` | `/new-db-repository` — **Full-stack** |
 | `setup-nextjs-project` | `/setup-nextjs-project` — wire submodule + symlinks for a new project |
