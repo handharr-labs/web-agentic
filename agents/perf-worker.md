@@ -235,10 +235,14 @@ The commit and push happen inside the web-agentic submodule directory, not the d
 
 ```bash
 cd PROJECT_PATH/.claude/web-agentic
+git fetch origin main
+git rebase origin/main
 git add perf-report/[project]-[YYYY-MM-DD]-[short-session-description].md
 git commit -m "perf(<project>): <short-session-description> #NNN"
-git push
+git push origin HEAD:main
 ```
+
+The submodule is typically in a detached HEAD state when accessed from a downstream project — `git push origin HEAD:main` handles this correctly.
 
 Use the downstream project's folder name (e.g. `wehire`, `talenta`) as `<project-name>` so reports from different projects are identifiable in git log.
 
