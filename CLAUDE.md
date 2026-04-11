@@ -25,7 +25,12 @@ No build, lint, or test commands — all files are Markdown and Bash.
 
 ```
 core/
-  agents/        # Platform-agnostic orchestrators and utility workers
+  agents/
+    builder/     # Feature builders — orchestrators + layer workers + test-worker
+    detective/   # Debug orchestrator + debug worker
+    tracker/     # Issue lifecycle management
+    auditor/     # Architecture review (future: security-review, perf-audit)
+    perf-worker.md  # Session performance analysis (ungrouped — meta/observability)
   skills/        # Platform-agnostic skills (release, doctor, agentic-perf-review)
   reference/
     clean-arch/  # Universal CLEAN Architecture principles
