@@ -1,6 +1,6 @@
 ---
-name: pres-create-view
-description: Create a View component and App Router page. Handles both Client Component (hook pattern) and Server Component (build*ViewModel pattern). Called by presentation-worker.
+name: pres-create-screen
+description: Create a View component and App Router page. Handles both Client Component (hook pattern) and Server Component (build*ViewModel pattern). Called by ui-worker.
 user-invocable: false
 tools: Read, Write, Edit, Glob
 ---
@@ -24,7 +24,7 @@ Create the View component and App Router page. Pattern depends on which ViewMode
 ---
 
 **Preconditions:**
-- ViewModel file must exist — run `pres-create-viewmodel` first if missing
+- ViewModel file must exist — run `pres-create-stateholder` first if missing
 - Check `Glob: src/presentation/features/*/[A-Z]*View.tsx` — read one to match style
 
 **Rules (both paths):**

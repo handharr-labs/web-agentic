@@ -1,6 +1,6 @@
 ---
-name: pres-create-viewmodel
-description: Create a ViewModel for a feature — either a hook (client-side) or a pure function (server-side). Called by presentation-worker.
+name: pres-create-stateholder
+description: Create a StateHolder for a feature — either a hook (client-side) or a pure function (server-side). Called by presentation-worker.
 user-invocable: false
 tools: Read, Write, Glob
 ---
@@ -29,4 +29,4 @@ Create a ViewModel for a feature. First determine which pattern applies:
 
 **Pattern:** `reference/presentation.md` § 5.2 (hook), § 5.7 (pure function)
 
-**Return:** created file path and which pattern was used. Suggest next step: `pres-create-view`.
+**Return:** created file path and which pattern was used. Suggest next step: `pres-create-screen`.
