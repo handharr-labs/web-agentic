@@ -153,7 +153,15 @@ Create the `perf-report/` directory inside the submodule if it doesn't exist:
 mkdir -p PROJECT_PATH/.claude/web-agentic/perf-report
 ```
 
-Write the report to: `PROJECT_PATH/.claude/web-agentic/perf-report/perf-issue-NNN-YYYY-MM-DD.md`
+**File naming:** `[project]-[YYYY-MM-DD]-[short-session-description].md`
+
+- `project` — downstream project folder name (e.g. `wehire`, `talenta`)
+- `YYYY-MM-DD` — session date from `started_at`
+- `short-session-description` — 3–5 word kebab-case summary of what the session worked on, derived from `git_branch` or `skill_calls[0].args` (e.g. `design-system-admin-ui`, `refactor-auth-middleware`)
+
+Example: `wehire-2026-04-11-design-system-admin-ui.md`
+
+Write the report to: `PROJECT_PATH/.claude/web-agentic/perf-report/[project]-[YYYY-MM-DD]-[short-session-description].md`
 
 Use this exact format:
 
@@ -227,8 +235,8 @@ The commit and push happen inside the web-agentic submodule directory, not the d
 
 ```bash
 cd PROJECT_PATH/.claude/web-agentic
-git add perf-report/perf-issue-NNN-YYYY-MM-DD.md
-git commit -m "perf(NNN): add performance report for <project-name> issue #NNN"
+git add perf-report/[project]-[YYYY-MM-DD]-[short-session-description].md
+git commit -m "perf(<project>): <short-session-description> #NNN"
 git push
 ```
 
