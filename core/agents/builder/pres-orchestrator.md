@@ -103,3 +103,4 @@ Next steps: [any manual wiring steps the platform requires]
 - Always read existing UseCase files before spawning `presentation-worker` — never guess signatures
 - Pass the **complete StateHolder contract** to `ui-worker` — it does not share context with Phase 1
 - Do not write code yourself — delegate all code generation to the workers
+- Spawn each worker with `isolation: worktree`

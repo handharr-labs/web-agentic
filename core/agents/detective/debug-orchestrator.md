@@ -76,6 +76,7 @@ Paste the output back and I'll help interpret it.
 - Read all relevant files before spawning `debug-worker` — pass precise file paths and method names
 - Never suggest a fix during investigation — surface the bug, don't resolve it
 - If the issue spans multiple modules, focus on the most likely failing layer first
+- Spawn `debug-worker` with `isolation: worktree`
 
 ## Extension Point
 
