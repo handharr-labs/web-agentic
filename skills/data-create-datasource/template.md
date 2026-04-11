@@ -12,7 +12,6 @@ export interface [Feature]RemoteDataSource {
   update(id: string, data: Partial<[Name]DTO>): Promise<[Name]DTO>;
   delete(id: string): Promise<void>;
 }
-// Include only requested operations
 ```
 
 ## Implementation

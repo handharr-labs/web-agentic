@@ -11,5 +11,4 @@ export interface [Feature]Repository {
   update(id: string, data: Partial<Omit<[Entity], 'id'>>): Promise<[Entity]>;
   delete(id: string): Promise<void>;
 }
-// Include only the methods that were requested
 ```

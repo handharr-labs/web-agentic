@@ -55,7 +55,7 @@ Before writing tests:
 | ViewModel hooks | loading → loaded → error states |
 | View components | renders correctly per state |
 
-Reference: `reference/testing.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located
+Reference: `reference/testing.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Extension Point
 

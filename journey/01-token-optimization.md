@@ -145,13 +145,19 @@ Both orchestrators now instruct: "Pass only the list of created file paths from 
 
 ### Medium Impact
 
-**F. Use the reference index for selective loading**
+**F. Use the reference index for selective loading** ✅ Done
 
-`reference/index.md` exists. Workers should read that first, then fetch only the relevant section via targeted `Grep` rather than reading a whole reference file.
+All worker Reference lines now include: "If uncertain which reference file covers a topic, check `reference/index.md` first." Workers consult the index to identify the right file, then Grep into it — avoiding full reads of the wrong file.
 
-**G. Strip explanatory comments from skill templates**
+**G. Strip explanatory comments from skill templates** ✅ Done
 
-Templates like `pres-create-viewmodel/template.md` (73 lines) may include inline comments explaining the pattern. Those are redundant — the worker already has the SKILL.md. Remove them to reduce template load size.
+Removed redundant instructional content from templates:
+- `test-create-mock/template.md` — removed 14-line usage example (covered by SKILL.md's Return instruction)
+- `domain-create-repository/template.md` — removed `// Include only the methods that were requested`
+- `data-create-datasource/template.md` — removed `// Include only requested operations`
+- `data-create-repository-impl/template.md` — removed `// repeat pattern for each method`
+
+ORM-specific comments in `data-create-db-datasource` and `data-create-db-repository` were kept — they are code generation hints, not explanatory padding.
 
 ---
 

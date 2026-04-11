@@ -50,7 +50,7 @@ Before writing, check:
 | Use case | `[Verb][Feature]UseCase.ts` | `SubmitLeaveRequestUseCase.ts` |
 | Domain service | `[Name]Service.ts` | `LeaveBalanceService.ts` |
 
-Reference: `reference/domain.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located
+Reference: `reference/domain.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Extension Point
 

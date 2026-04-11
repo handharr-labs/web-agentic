@@ -67,7 +67,7 @@ Before writing, check:
 | DB Mapper | `[Feature]DbMapper.ts` | `LeaveDbMapper.ts` |
 | DB Repository impl | `[Feature]DbRepositoryImpl.ts` | `LeaveDbRepositoryImpl.ts` |
 
-Reference: `reference/data.md`, `reference/database.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located
+Reference: `reference/data.md`, `reference/database.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Extension Point
 

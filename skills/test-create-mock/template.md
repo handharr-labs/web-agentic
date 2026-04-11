@@ -12,17 +12,3 @@ export class Mock[InterfaceName] implements [InterfaceName] {
 }
 ```
 
-## Usage example
-```typescript
-let mock: Mock[InterfaceName];
-
-beforeEach(() => {
-  mock = new Mock[InterfaceName]();
-});
-
-it('example', async () => {
-  mock.[methodOne].mockResolvedValue([expectedValue]);
-  // call system under test
-  expect(mock.[methodOne]).toHaveBeenCalledWith([expectedArgs]);
-});
-```

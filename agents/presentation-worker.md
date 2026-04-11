@@ -63,7 +63,7 @@ Before writing, check:
 | Route constant | `ROUTES.[feature]` | `ROUTES.leaveRequest` |
 | Feature folder | `src/presentation/features/[kebab-case]/` | `leave-request/` |
 
-Reference: `reference/presentation.md`, `reference/server-actions.md`, `reference/di.md`, `reference/navigation.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located
+Reference: `reference/presentation.md`, `reference/server-actions.md`, `reference/di.md`, `reference/navigation.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Extension Point
 

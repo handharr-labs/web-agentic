@@ -23,6 +23,5 @@ export class [Feature]RepositoryImpl implements [Feature]Repository {
       throw this.errorMapper.map(error);
     }
   }
-  // repeat pattern for each method
 }
 ```
