@@ -12,7 +12,7 @@ Configure a freshly wired iOS project for software-dev-agentic. Called by `setup
 ### 1 — Copy CLAUDE-template.md
 
 ```bash
-cp .claude/software-dev-agentic/platforms/ios/CLAUDE-template.md CLAUDE.md
+cp .claude/software-dev-agentic/lib/platforms/ios/CLAUDE-template.md CLAUDE.md
 ```
 
 ### 2 — Prompt for placeholder values
@@ -32,7 +32,7 @@ Create `.claude/agents.local/extensions/arch-review-worker.md`:
 ```markdown
 # arch-review-worker — project-specific rules
 
-> Additive rules for this project. Baseline: `.claude/software-dev-agentic/core/agents/auditor/arch-review-worker.md`.
+> Additive rules for this project. Baseline: `.claude/software-dev-agentic/lib/core/agents/auditor/arch-review-worker.md`.
 
 <!-- Add project-specific audit rules below -->
 ```

@@ -15,11 +15,11 @@ Use this to translate session delta topics → affected doc sections.
 
 | Changed topic | Affected sections |
 |---|---|
-| New agents added to `core/agents/` | "What Goes Where" table, Repository Structure, Per-Project Layout |
+| New agents added to `lib/core/agents/` | "What Goes Where" table, Repository Structure, Per-Project Layout |
 | New persona group created | Key Design Decision 2 (Persona Grouping), "What Goes Where", Repository Structure, Setup & Installation |
 | New platform added | Key Design Decision 1 (DI at Skill Level), Repository Structure |
 | Scripts (`setup-packages.sh`, `setup-symlinks.sh`) changed | Setup & Installation |
-| New skills added to `platforms/<platform>/skills/` | "What Goes Where", Per-Project Layout |
+| New skills added to `lib/platforms/<platform>/skills/` | "What Goes Where", Per-Project Layout |
 | Internal tools added to root `agents/` or `skills/` | "What Goes Where", Convention Compliance System, Repository Structure |
 | Convention checklist updated | Convention Compliance System |
 | New design decision | Key Design Decisions (add new entry) |
@@ -32,7 +32,7 @@ Use this to translate session delta topics → affected doc sections.
 | Changed topic | Affected sections |
 |---|---|
 | New principle added | Principles list, "Why This Architecture" table |
-| Agent added or removed from `core/agents/` | Agent Count Summary, software-dev-agentic Structure, Implementation Reference |
+| Agent added or removed from `lib/core/agents/` | Agent Count Summary, software-dev-agentic Structure, Implementation Reference |
 | Agent moved to a different persona group | Agent Count Summary, software-dev-agentic Structure |
 | New skills added | Agent Count Summary (skill counts), Implementation Reference |
 | New platform skill added | Agent Count Summary, software-dev-agentic Structure |

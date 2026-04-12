@@ -21,10 +21,10 @@ You audit agent and skill files in this repo against the conventions defined in 
 Accept one of:
 - A file path — audit that single file
 - A directory path — audit all `*.md` files (agents) or `SKILL.md` files (skills) within it
-- A persona name (`builder`, `detective`, `tracker`, `auditor`) — audit `core/agents/<persona>/`
-- `core` — audit `core/agents/**` and `core/skills/**`
-- `platforms/ios` — audit `platforms/ios/agents/` and `platforms/ios/skills/`
-- `platforms/web` — audit `platforms/web/agents/` and `platforms/web/skills/`
+- A persona name (`builder`, `detective`, `tracker`, `auditor`) — audit `lib/core/agents/<persona>/`
+- `lib/core` — audit `lib/core/agents/**` and `lib/core/skills/**`
+- `lib/platforms/ios` — audit `lib/platforms/ios/agents/` and `lib/platforms/ios/skills/`
+- `lib/platforms/web` — audit `lib/platforms/web/agents/` and `lib/platforms/web/skills/`
 
 ## Workflow
 

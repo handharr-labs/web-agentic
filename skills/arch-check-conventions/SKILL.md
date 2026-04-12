@@ -30,7 +30,7 @@ For each `.md` agent file:
 - [ ] All `Reference:` lines use Grep-first pattern
 - [ ] Any `Reference:` line that lists multiple files also mentions `reference/index.md` as the discovery fallback (Fix F)
 
-**Core agents** (files under `core/agents/`) — Platform-Agnosticism
+**Core agents** (files under `lib/core/agents/`) — Platform-Agnosticism
 - [ ] Body contains no hardcoded platform-specific file paths — no `src/domain/`, `src/data/`, `src/presentation/`, `Talenta/Module/`, `lib/`, `app/`
 - [ ] Body contains no platform framework references used as rules — no `React`, `Next.js`, `RxSwift`, `UIKit`, `BLoC`, `axios`, `next-safe-action`
 - [ ] Body contains no platform language-specific syntax used as rules — no `'use client'`, `'use server'`, `readonly` (TypeScript), `BehaviorRelay`
@@ -38,7 +38,7 @@ For each `.md` agent file:
 
 How to check: `Grep` the file for any of the above patterns. A match in the body (outside of a `related_skills` reference or a comment acknowledging the skill) is a Critical violation.
 
-> **Why:** Core agents are consumed by all platforms via symlink. Platform-specific rules embedded in a core worker silently mislead workers on other platforms (iOS, Flutter) that call the same agent.
+> **Why:** `lib/core/` agents are consumed by all platforms via symlink. Platform-specific rules embedded in a core worker silently mislead workers on other platforms (iOS, Flutter) that call the same agent.
 
 **All agents**
 - [ ] Filename follows `<domain>-orchestrator.md` or `<domain>-worker.md` convention
@@ -56,7 +56,7 @@ For each `SKILL.md` skill file:
 **Reference doc reads**
 - [ ] No step says `Read .claude/reference/... completely`
 - [ ] Any step reading a reference doc uses `Grep` for section keyword first
-- [ ] All referenced file paths match actual filenames in `platforms/<platform>/reference/` or `core/reference/`
+- [ ] All referenced file paths match actual filenames in `lib/platforms/<platform>/reference/` or `lib/core/reference/`
 
 **Templates** (any `template.md` file inside a skill directory)
 - [ ] No explanatory/instructional comments that duplicate what `SKILL.md` already says (Fix G)
@@ -70,7 +70,7 @@ How to check: `Read` the template file; flag any comment that explains the skill
 
 ## Severity Levels
 
-- **Critical** — missing required frontmatter field, broken reference path, "Read completely" violation, orchestrator missing `isolation: worktree`, platform-specific content in a `core/agents/` file
+- **Critical** — missing required frontmatter field, broken reference path, "Read completely" violation, orchestrator missing `isolation: worktree`, platform-specific content in a `lib/core/agents/` file
 - **Warning** — wrong model for worker type, missing Search Rules, missing Extension Point, missing `reference/index.md` discovery hint on multi-file Reference lines, explanatory comments in template files
 - **Info** — naming convention deviation, description could be more specific
 

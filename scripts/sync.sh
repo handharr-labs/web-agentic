@@ -28,7 +28,7 @@ if [ -z "$PLATFORM" ]; then
   exit 1
 fi
 
-TEMPLATE="$SUBMODULE/platforms/$PLATFORM/CLAUDE-template.md"
+TEMPLATE="$SUBMODULE/lib/platforms/$PLATFORM/CLAUDE-template.md"
 BEGIN_MARKER="<!-- BEGIN software-dev-agentic:$PLATFORM -->"
 END_MARKER="<!-- END software-dev-agentic:$PLATFORM -->"
 

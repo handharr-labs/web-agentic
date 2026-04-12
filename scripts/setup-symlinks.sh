@@ -32,7 +32,7 @@ if [ -z "$PLATFORM" ]; then
   exit 1
 fi
 
-PLATFORM_DIR="$SUBMODULE/platforms/$PLATFORM"
+PLATFORM_DIR="$SUBMODULE/lib/platforms/$PLATFORM"
 if [ ! -d "$PLATFORM_DIR" ]; then
   echo "Error: platform '$PLATFORM' not found at $PLATFORM_DIR"
   exit 1
@@ -113,8 +113,8 @@ link_reference() {
 }
 
 # Relative paths from .claude/agents/ or .claude/skills/ to submodule
-REL_CORE="../software-dev-agentic/core"
-REL_PLATFORM="../software-dev-agentic/platforms/$PLATFORM"
+REL_CORE="../software-dev-agentic/lib/core"
+REL_PLATFORM="../software-dev-agentic/lib/platforms/$PLATFORM"
 
 # ── 1. Local overrides (highest priority) ────────────────────────────────────
 
@@ -135,9 +135,9 @@ link_reference "$PLATFORM_DIR/reference" "$REL_PLATFORM/reference"
 
 echo ""
 echo "3/3 Linking core..."
-link_agents "$SUBMODULE/core/agents" "$REL_CORE/agents"
-link_skills "$SUBMODULE/core/skills" "$REL_CORE/skills"
-link_reference "$SUBMODULE/core/reference/clean-arch" "$REL_CORE/reference/clean-arch"
+link_agents "$SUBMODULE/lib/core/agents" "$REL_CORE/agents"
+link_skills "$SUBMODULE/lib/core/skills" "$REL_CORE/skills"
+link_reference "$SUBMODULE/lib/core/reference/clean-arch" "$REL_CORE/reference/clean-arch"
 
 # ── Hooks ─────────────────────────────────────────────────────────────────────
 

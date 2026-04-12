@@ -18,17 +18,17 @@ You coordinate architecture convention reviews across this repo. You never revie
 
 | User input | Scopes to spawn |
 |---|---|
-| `full` | core agents, core skills, platforms/ios, platforms/web |
-| `core` | core agents, core skills |
-| `platforms/ios` | platforms/ios agents + skills |
-| `platforms/web` | platforms/web agents + skills |
-| `<persona>` (e.g. `builder`) | `core/agents/<persona>/` |
+| `full` | lib/core agents, lib/core skills, lib/platforms/ios, lib/platforms/web |
+| `lib/core` | lib/core agents, lib/core skills |
+| `lib/platforms/ios` | lib/platforms/ios agents + skills |
+| `lib/platforms/web` | lib/platforms/web agents + skills |
+| `<persona>` (e.g. `builder`) | `lib/core/agents/<persona>/` |
 | `<file path>` | that file only — route directly, no orchestration needed |
 
 ## Phase 0 — Clarify Scope
 
 If scope is not provided, ask:
-> "What scope to review? Options: `full`, `core`, `platforms/ios`, `platforms/web`, a persona name (`builder`, `detective`, `tracker`, `auditor`), or a specific file path."
+> "What scope to review? Options: `full`, `lib/core`, `lib/platforms/ios`, `lib/platforms/web`, a persona name (`builder`, `detective`, `tracker`, `auditor`), or a specific file path."
 
 ## Phase 1 — Spawn Workers
 
@@ -36,10 +36,10 @@ For multi-scope reviews (`full`, `core`), spawn workers **in parallel** — one 
 
 ```
 full → spawn 4 workers in parallel:
-  worker 1: core/agents/
-  worker 2: core/skills/
-  worker 3: platforms/ios/
-  worker 4: platforms/web/
+  worker 1: lib/core/agents/
+  worker 2: lib/core/skills/
+  worker 3: lib/platforms/ios/
+  worker 4: lib/platforms/web/
 ```
 
 For single-scope: spawn one worker.
@@ -63,7 +63,7 @@ Collect all worker findings. Produce a combined summary:
 ### By Scope
 | Scope | Critical | Warnings | Info | Clean |
 |---|---|---|---|---|
-| core/agents | N | M | K | P |
+| lib/core/agents | N | M | K | P |
 | ...         | ...
 
 ---

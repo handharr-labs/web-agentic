@@ -3,8 +3,8 @@
 Subagents following the Core Design Principles — orchestrators coordinate workers, workers execute procedures.
 
 Agents are split by scope:
-- `core/agents/` — platform-agnostic (orchestrators, utility workers)
-- `platforms/<platform>/agents/` — platform worker implementations + platform-exclusive agents
+- `lib/core/agents/` — platform-agnostic (orchestrators, utility workers)
+- `lib/platforms/<platform>/agents/` — platform worker implementations + platform-exclusive agents
 
 ## Core Agents (platform-agnostic)
 

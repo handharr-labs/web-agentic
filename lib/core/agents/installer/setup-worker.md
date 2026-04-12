@@ -38,9 +38,9 @@ If platform cannot be determined, ask: `"Which platform is this project? web / i
 ### 2 — Run platform setup skill
 
 Read and execute the appropriate skill file:
-- **web** → `.claude/software-dev-agentic/platforms/web/skills/setup-nextjs-project/SKILL.md`
-- **ios** → `.claude/software-dev-agentic/platforms/ios/skills/setup-ios-project/SKILL.md`
-- **flutter** → tell the user Flutter setup is not yet implemented; point to `platforms/flutter/README.md`
+- **web** → `.claude/software-dev-agentic/lib/platforms/web/skills/setup-nextjs-project/SKILL.md`
+- **ios** → `.claude/software-dev-agentic/lib/platforms/ios/skills/setup-ios-project/SKILL.md`
+- **flutter** → tell the user Flutter setup is not yet implemented; point to `lib/platforms/flutter/README.md`
 
 Follow the skill's Steps exactly.
 

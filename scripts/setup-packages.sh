@@ -31,7 +31,7 @@ if [ -z "$PLATFORM" ]; then
   exit 1
 fi
 
-PLATFORM_DIR="$SUBMODULE/platforms/$PLATFORM"
+PLATFORM_DIR="$SUBMODULE/lib/platforms/$PLATFORM"
 CORE_PACKAGES_DIR="$SUBMODULE/packages"
 PLATFORM_PACKAGES_DIR="$PLATFORM_DIR/packages"
 
@@ -70,7 +70,7 @@ find_agent() {
   local found
   found="$(find "$PLATFORM_DIR/agents" -name "$name.md" -type f 2>/dev/null | head -1)"
   if [ -n "$found" ]; then echo "$found"; return; fi
-  found="$(find "$SUBMODULE/core/agents" -name "$name.md" -type f 2>/dev/null | head -1)"
+  found="$(find "$SUBMODULE/lib/core/agents" -name "$name.md" -type f 2>/dev/null | head -1)"
   if [ -n "$found" ]; then echo "$found"; fi
 }
 
@@ -78,8 +78,8 @@ find_skill() {
   local name="$1"
   if [ -d "$PLATFORM_DIR/skills/$name" ]; then
     echo "$PLATFORM_DIR/skills/$name"
-  elif [ -d "$SUBMODULE/core/skills/$name" ]; then
-    echo "$SUBMODULE/core/skills/$name"
+  elif [ -d "$SUBMODULE/lib/core/skills/$name" ]; then
+    echo "$SUBMODULE/lib/core/skills/$name"
   fi
 }
 

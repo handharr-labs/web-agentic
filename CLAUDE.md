@@ -24,37 +24,40 @@ No build, lint, or test commands — all files are Markdown and Bash.
 ## Structure
 
 ```
-core/
-  agents/
-    builder/     # Feature builders — orchestrators + layer workers + test-worker
-    detective/   # Debug orchestrator + debug worker
-    tracker/     # Issue lifecycle management
-    auditor/     # Architecture review (future: security-review, perf-audit)
-    installer/   # Project setup + onboarding (setup-worker)
-    perf-worker.md  # Session performance analysis (ungrouped — meta/observability)
-  skills/        # Platform-agnostic skills (release, doctor, agentic-perf-review)
-  reference/
-    clean-arch/  # Universal CLEAN Architecture principles
+lib/                          # Everything shipped to downstream projects
+  core/
+    agents/
+      builder/     # Feature builders — orchestrators + layer workers + test-worker
+      detective/   # Debug orchestrator + debug worker
+      tracker/     # Issue lifecycle management
+      auditor/     # Architecture review (future: security-review, perf-audit)
+      installer/   # Project setup + onboarding (setup-worker)
+      perf-worker.md  # Session performance analysis (ungrouped — meta/observability)
+    skills/        # Platform-agnostic skills (release, doctor, agentic-perf-review)
+    reference/
+      clean-arch/  # Universal CLEAN Architecture principles
+  platforms/
+    web/           # Next.js 15 Clean Architecture
+      agents/      # Web worker implementations (domain, data, presentation, test)
+      skills/      # Web-specific skills
+      reference/   # Web-specific architecture docs
+      hooks/       # Web-specific Claude Code hooks
+      packages/    # Optional package definitions
+      CLAUDE-template.md
+      settings-template.json
+    ios/           # Swift/UIKit Clean Architecture
+      agents/      # iOS worker + orchestrator implementations
+      skills/      # iOS-specific skills
+      reference/   # iOS-specific architecture docs
+      CLAUDE-template.md
+    flutter/       # BLoC Clean Architecture (stub — see lib/platforms/flutter/README.md)
 
-platforms/
-  web/           # Next.js 15 Clean Architecture
-    agents/      # Web worker implementations (domain, data, presentation, test)
-    skills/      # Web-specific skills
-    reference/   # Web-specific architecture docs
-    hooks/       # Web-specific Claude Code hooks
-    packages/    # Optional package definitions
-    CLAUDE-template.md
-    settings-template.json
-  ios/           # Swift/UIKit Clean Architecture
-    agents/      # iOS worker + orchestrator implementations
-    skills/      # iOS-specific skills
-    reference/   # iOS-specific architecture docs
-    CLAUDE-template.md
-  flutter/       # BLoC Clean Architecture (stub — see platforms/flutter/README.md)
-
-packages/        # Core package definitions (always installed)
+agents/          # Internal tooling — NOT shipped downstream
+skills/          # Internal tooling — NOT shipped downstream
+packages/        # Core package definitions (consumed by setup scripts)
 scripts/         # setup-symlinks.sh, setup-packages.sh, sync.sh
-docs/            # Internal design docs (not consumed by agents)
+docs/            # Internal design docs
+evaluation/      # Serialized observations and investigations
 ```
 
 ## Workflow
@@ -66,7 +69,7 @@ issue-worker "add X"   → create GH issue + branch + backlog row
 issue-worker 42        → pick up existing GH issue + branch + backlog row
 ```
 
-Then work directly on the relevant files in `core/` or `platforms/<platform>/`.
+Then work directly on the relevant files in `lib/core/` or `lib/platforms/<platform>/`.
 
 ## Agent Conventions
 

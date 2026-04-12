@@ -33,7 +33,7 @@ This creates `.claude/agents/` and `.claude/skills/` as symlink-only directories
 ### 4 — Copy CLAUDE-template.md
 
 ```bash
-cp .claude/software-dev-agentic/platforms/web/CLAUDE-template.md CLAUDE.md
+cp .claude/software-dev-agentic/lib/platforms/web/CLAUDE-template.md CLAUDE.md
 ```
 
 ### 5 — Prompt for placeholder values
@@ -52,7 +52,7 @@ Create `.claude/agents.local/extensions/arch-review-worker.md`:
 ```markdown
 # arch-review-worker — project-specific rules
 
-> Additive rules for this project. Baseline: `.claude/software-dev-agentic/core/agents/auditor/arch-review-worker.md`.
+> Additive rules for this project. Baseline: `.claude/software-dev-agentic/lib/core/agents/auditor/arch-review-worker.md`.
 
 <!-- Add project-specific audit rules below -->
 ```
