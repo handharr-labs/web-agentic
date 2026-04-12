@@ -66,6 +66,11 @@ Then route based on context:
 | Tests have TODO markers or wrong mocks | `test-fix` skill — complete and verify |
 | Coverage gaps identified | `test-update` skill — add missing coverage |
 
+## Search Rules — Never Violate
+
+- **Grep before Read** — locate ViewModel class name, State fields, Event/Action cases with `Grep`; only `Read` the full file when complete structure is needed
+- When checking if a test file exists, use `Glob` before `Read`
+
 ## Phase 0 — Context Gathering
 
 Before spawning `test-worker`, collect:
@@ -108,3 +113,4 @@ Next: Run tests to verify:
 - Always read the ViewModel before spawning `test-worker` — never pass stale information
 - If the failure mode is unclear, ask the user for the exact error output before routing
 - Do not write test code yourself — delegate all code generation to `test-worker`
+- Spawn `test-worker` with `isolation: worktree`

@@ -41,6 +41,11 @@ description: |
   </example>
 ---
 
+## Search Rules — Never Violate
+
+- **Grep before Read** — locate class names, method signatures, and import violations with `Grep`; only `Read` a full file when its complete structure is needed
+- When scanning changed files for violations, `Glob` the diff paths then `Grep` for offending patterns before opening files in full
+
 ## Architecture Rule
 
 **New code → V2 patterns always. Existing code → keep its current pattern. Never migrate unless explicitly asked.**
