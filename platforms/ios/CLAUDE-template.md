@@ -38,7 +38,7 @@ issue-worker "add X"   → create GH issue + branch + backlog row
 issue-worker 42        → pick up existing GH issue + branch + backlog row
 ```
 
-Agents: `feature-orchestrator` · `backend-orchestrator` · `pres-orchestrator` · `debug-worker` · `test-worker` · `arch-review-worker` · `.claude/skills/`
+Agents: `feature-orchestrator` · `backend-orchestrator` · `pres-orchestrator` · `debug-worker` · `test-worker` · `arch-review-worker` · `setup-worker` · `.claude/skills/`
 
 Issue rule: On `fix/`|`feat/` branch → add feedback to current issue. On `main` → create new issue.
 

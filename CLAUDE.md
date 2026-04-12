@@ -30,6 +30,7 @@ core/
     detective/   # Debug orchestrator + debug worker
     tracker/     # Issue lifecycle management
     auditor/     # Architecture review (future: security-review, perf-audit)
+    installer/   # Project setup + onboarding (setup-worker)
     perf-worker.md  # Session performance analysis (ungrouped — meta/observability)
   skills/        # Platform-agnostic skills (release, doctor, agentic-perf-review)
   reference/

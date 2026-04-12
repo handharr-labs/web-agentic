@@ -7,6 +7,23 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.1.0] — 2026-04-12
+
+### Added
+- `core/agents/installer/` — installer persona group: `setup-worker` (platform-agnostic project setup + onboarding)
+- `platforms/ios/skills/setup-ios-project/` — iOS project setup skill (copies CLAUDE-template, prompts for placeholders, creates agents.local stub)
+
+### Changed
+- `platforms/web/skills/setup-nextjs-project/` — now `user-invocable: false`; called by `setup-worker`; orientation content removed (worker handles that); step numbering fixed; agents.local reference updated to `arch-review-worker`
+- `packages/core.pkg` — `setup-worker` added to always-installed agents
+- `platforms/web/CLAUDE-template.md` — `setup-worker` added to agents list
+- `platforms/ios/CLAUDE-template.md` — `setup-worker` added to agents list
+
+### Removed
+- `HINTS.md` — replaced by `setup-worker` orientation output and `CLAUDE-template.md` agents list
+
+---
+
 ## [2.0.0] — 2026-04-12
 
 ### Added
