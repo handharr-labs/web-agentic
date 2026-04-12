@@ -1,6 +1,6 @@
 ---
 name: agentic-perf-review
-description: Analyze the agentic performance of a Claude session — scores orchestration, worker/skill routing, token efficiency, workflow compliance, and one-shot rate. Writes a numeric-scored report to journey/ and commits it.
+description: Analyze the agentic performance of a Claude session — scores orchestration, worker/skill routing, token efficiency, workflow compliance, and one-shot rate. Writes a numeric-scored report to evaluation/ and commits it.
 user-invocable: true
 allowed-tools: Bash, Agent
 ---
@@ -54,7 +54,7 @@ EXTRACTED_JSON: <path from step 2>
 ISSUE_NUMBER: <ISSUE_NUMBER>
 PROJECT_PATH: <PROJECT_PATH>
 
-Follow the full perf-worker instructions to score all dimensions, write the report to journey/, and commit it.
+Follow the full perf-worker instructions to score all dimensions, write the report to evaluation/, and commit it.
 ```
 
 ## Step 4 — Report back

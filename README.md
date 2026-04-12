@@ -428,8 +428,8 @@ After setup, tell the user:
 - [Agentic Coding Assistant — Core Design Principles](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51126370416)
 - [Shared Agentic Submodule Architecture — Cross-Platform Scaling](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51129909710)
 
-**Journey** — serialized observations and improvements tracked against those principles:
-→ [`journey/`](./journey/README.md)
+**Evaluation** — serialized observations and improvements tracked against those principles:
+→ [`evaluation/`](./evaluation/README.md)
 
 ---
 

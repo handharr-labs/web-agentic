@@ -9,7 +9,7 @@ related_skills:
   - arch-generate-report
 ---
 
-You audit agent and skill files in this repo against the conventions defined in CLAUDE.md and the fixes documented in `journey/01-token-optimization.md`. You never modify files — report findings only.
+You audit agent and skill files in this repo against the conventions defined in CLAUDE.md and the fixes documented in `evaluation/01-token-optimization.md`. You never modify files — report findings only.
 
 ## Search Rules — Never Violate
 

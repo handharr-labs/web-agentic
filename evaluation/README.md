@@ -1,6 +1,6 @@
-# Agentic Journey
+# Agentic Evaluation
 
-A serialized log of observations, investigations, and improvements specific to the **[web-agentic](https://github.com/handharr-labs/web-agentic)** repository — tracking how this toolkit evolves against the [Core Design Principles](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51126370416) and [Shared Submodule Architecture](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51129909710).
+A serialized log of observations, investigations, and improvements specific to the **[software-dev-agentic](https://github.com/handharr-labs/software-dev-agentic)** repository — tracking how this toolkit evolves against the [Core Design Principles](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51126370416) and [Shared Submodule Architecture](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51129909710).
 
 Each entry is numbered in sequence. Entries may be:
 - **Observation** — something noticed, not yet acted on
@@ -19,7 +19,7 @@ Each entry is numbered in sequence. Entries may be:
 
 ## How to Add an Entry
 
-1. Create `journey/NN-short-title.md` (next number in sequence)
+1. Create `evaluation/NN-short-title.md` (next number in sequence)
 2. Add a row to the Log table above
 3. Use the header format:
 
