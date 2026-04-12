@@ -29,6 +29,16 @@ For each `.md` agent file:
 - [ ] No reference doc reads that say "Read ... completely"
 - [ ] All `Reference:` lines use Grep-first pattern
 
+**Core agents** (files under `core/agents/`) — Platform-Agnosticism
+- [ ] Body contains no hardcoded platform-specific file paths — no `src/domain/`, `src/data/`, `src/presentation/`, `Talenta/Module/`, `lib/`, `app/`
+- [ ] Body contains no platform framework references used as rules — no `React`, `Next.js`, `RxSwift`, `UIKit`, `BLoC`, `axios`, `next-safe-action`
+- [ ] Body contains no platform language-specific syntax used as rules — no `'use client'`, `'use server'`, `readonly` (TypeScript), `BehaviorRelay`
+- [ ] Platform-specific knowledge is delegated to a skill (`related_skills` field), not embedded inline
+
+How to check: `Grep` the file for any of the above patterns. A match in the body (outside of a `related_skills` reference or a comment acknowledging the skill) is a Critical violation.
+
+> **Why:** Core agents are consumed by all platforms via symlink. Platform-specific rules embedded in a core worker silently mislead workers on other platforms (iOS, Flutter) that call the same agent.
+
 **All agents**
 - [ ] Filename follows `<domain>-orchestrator.md` or `<domain>-worker.md` convention
 - [ ] If in a persona subdir (`builder/`, `detective/`, `tracker/`, `auditor/`), the persona assignment is correct
@@ -53,7 +63,7 @@ For each `SKILL.md` skill file:
 
 ## Severity Levels
 
-- **Critical** — missing required frontmatter field, broken reference path, "Read completely" violation, orchestrator missing `isolation: worktree`
+- **Critical** — missing required frontmatter field, broken reference path, "Read completely" violation, orchestrator missing `isolation: worktree`, platform-specific content in a `core/agents/` file
 - **Warning** — wrong model for worker type, missing Search Rules, missing Extension Point
 - **Info** — naming convention deviation, description could be more specific
 
