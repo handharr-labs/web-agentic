@@ -18,6 +18,7 @@ Each entry is numbered in sequence. Entries may be:
 | 03 | [Worker Routing and Validation Loop](./03-worker-routing-and-validation.md) | Improvement | 2026-04-13 | D2, D6, D7 | Done |
 | 04 | [Delegation Guard Hook](./04-delegation-guard-hook.md) | Improvement | 2026-04-13 | D2, D6 | Done |
 | 05 | [Delegation Flag TTL and Orchestrator Read Efficiency](./05-flag-ttl-and-read-efficiency.md) | Improvement | 2026-04-13 | D1, D4, D6 | Done |
+| 06 | [Delegation Guard — Autonomous Resolution and Worktree Isolation](./06-delegation-guard-autonomous-resolution.md) | Improvement | 2026-04-14 | D1, D2, D6 | Done |
 
 ---
 
