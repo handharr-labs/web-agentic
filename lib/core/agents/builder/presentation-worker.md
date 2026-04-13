@@ -72,6 +72,14 @@ For platform-specific skill variants (e.g. server actions, view components), che
 
 Reference: `reference/presentation.md`, `reference/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
+## Validation Protocol
+
+After writing all files, run the project's type checker **once**:
+- Capture the full output — do not truncate
+- Fix all reported errors in a single pass
+- Run the type checker **once more** to confirm clean
+- Never loop more than twice — if errors persist, surface them to the user
+
 ## Output
 
 Return this block as the final section of your response. One path per line, no prose:

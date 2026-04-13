@@ -153,15 +153,16 @@ Create the `perf-report/` directory inside the submodule if it doesn't exist:
 mkdir -p PROJECT_PATH/.claude/software-dev-agentic/perf-report
 ```
 
-**File naming:** `[project]-[YYYY-MM-DD]-[short-session-description].md`
+**File naming:** `[project]-[YYYY-MM-DD]-[session-id-short]-[short-session-description].md`
 
 - `project` — downstream project folder name (e.g. `wehire`, `talenta`)
 - `YYYY-MM-DD` — session date from `started_at`
+- `session-id-short` — first 8 characters of `session_id` (guarantees uniqueness when project, date, and description collide)
 - `short-session-description` — 3–5 word kebab-case summary of what the session worked on, derived from `git_branch` or `skill_calls[0].args` (e.g. `design-system-admin-ui`, `refactor-auth-middleware`)
 
-Example: `wehire-2026-04-11-design-system-admin-ui.md`
+Example: `wehire-2026-04-11-65e4df75-design-system-admin-ui.md`
 
-Write the report to: `PROJECT_PATH/.claude/software-dev-agentic/perf-report/[project]-[YYYY-MM-DD]-[short-session-description].md`
+Write the report to: `PROJECT_PATH/.claude/software-dev-agentic/perf-report/[project]-[YYYY-MM-DD]-[session-id-short]-[short-session-description].md`
 
 **Report title:** If `ISSUE_REF` is provided, use `# Agentic Performance Report — Issue #<ISSUE_REF>`. If empty, use `# Agentic Performance Report — <short-session-description>`.
 
@@ -239,7 +240,7 @@ The commit and push happen inside the software-dev-agentic submodule directory, 
 cd PROJECT_PATH/.claude/software-dev-agentic
 git fetch origin main
 git rebase origin/main
-git add perf-report/[project]-[YYYY-MM-DD]-[short-session-description].md
+git add perf-report/[project]-[YYYY-MM-DD]-[session-id-short]-[short-session-description].md
 # Commit message: include issue ref if provided, omit if not
 # With ISSUE_REF:    "perf(<project>): <short-session-description> #NNN"
 # Without ISSUE_REF: "perf(<project>): <short-session-description>"

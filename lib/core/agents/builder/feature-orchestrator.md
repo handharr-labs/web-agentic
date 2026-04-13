@@ -1,6 +1,6 @@
 ---
 name: feature-orchestrator
-description: Build a complete feature end-to-end across all Clean Architecture layers. Invoke when asked to create, add, implement, or scaffold a new feature, screen, or module — regardless of platform.
+description: Build or update a feature across Clean Architecture layers. Invoke when asked to create, add, implement, scaffold, update, modify, or extend a feature, screen, or module — regardless of platform.
 model: sonnet
 tools: Read, Glob, Grep
 agents:
@@ -20,8 +20,10 @@ Ask only what you need to coordinate layers. Do not gather platform-specific det
 
 Required:
 1. **Feature name** — used to coordinate between workers
-2. **Operations needed** — GET list / GET single / POST / PUT / DELETE (drives which layers have meaningful work)
-3. **Existing layers** — which layers already exist? Skip those phases
+2. **New or update?** — creating a new feature, or modifying an existing one?
+   - New → ask which layers to create (default: all)
+   - Update → ask which layers need changes; skip all others
+3. **Operations needed** — GET list / GET single / POST / PUT / DELETE (drives which layers have meaningful work)
 4. **Separate UI layer?** — does this platform have a UI layer distinct from the StateHolder? (yes for mobile/imperative UI, no for web/declarative)
 
 ## Phase 1 — Domain Layer
@@ -78,9 +80,11 @@ Spawn `ui-worker` with:
 
 Wait for completion.
 
-## Phase 5 — Summarize
+## Phase 5 — Wrap Up
 
-Report all created files grouped by layer. Suggest next step (e.g. tests: "run `write tests for [feature]` to generate the full test suite").
+1. Report all created/modified files grouped by layer.
+2. Run `gh pr create` if no open PR exists for this branch — title: `feat(<feature>): <short description> #<issue>`, body: `Closes #<issue>`.
+3. Suggest next step (e.g. tests: "run `write tests for [feature]` to generate the full test suite").
 
 ## Constraints
 
