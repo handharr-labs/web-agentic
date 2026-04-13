@@ -25,6 +25,8 @@ issue-worker 42        → pick up existing GH issue + branch + backlog row
 
 Agents: `feature-orchestrator` · `backend-orchestrator` · `debug-worker` · `test-worker` · `arch-review-worker` · `setup-worker` · `.claude/skills/`
 
+**Feature work (create or update, any scope) → always delegate to `feature-orchestrator`, never inline.**
+
 Issue rule: On `fix/`|`feat/` branch → add feedback to current issue. On `main` → create new issue.
 
 ## Code Principles

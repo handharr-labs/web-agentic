@@ -7,6 +7,15 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.3.0] — 2026-04-13
+
+### Changed
+- `README.md`: rewritten for two setup personas (new project vs. existing project) — removed AI agent setup instructions, seed file manifest, and stack tables that belong in reference docs
+- `web/CLAUDE-template.md`: added mandatory feature routing rule — feature work (create or update, any scope) must always delegate to `feature-orchestrator`, never inline
+- `ios/CLAUDE-template.md`: same mandatory routing rule added for iOS platform
+
+---
+
 ## [3.2.0] — 2026-04-13
 
 ### Changed
