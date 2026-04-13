@@ -18,7 +18,7 @@ Your only platform knowledge: Domain → Data → Presentation (→ UI on platfo
 
 Before anything else, run:
 ```bash
-touch "$(git rev-parse --show-toplevel)/.claude/.delegated-$(git branch --show-current | tr '/' '-')"
+date +%s > "$(git rev-parse --show-toplevel)/.claude/.delegated-$(git branch --show-current | tr '/' '-')"
 ```
 
 This unblocks the `require-feature-orchestrator` hook for this branch. The flag is branch-scoped and persists across sessions — no need to re-run on continuation sessions.

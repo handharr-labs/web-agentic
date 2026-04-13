@@ -45,7 +45,7 @@ Before spawning any worker, collect:
 - **Module path** — where in the project this feature lives
 - **DI Container status** — is the module container already set up?
 
-Read the existing UseCase files to confirm their signatures before proceeding.
+Grep the existing UseCase files for class/struct definitions and `execute` method signatures. Only Read the full file if Grep returns no results.
 
 ## Phase 1 — StateHolder
 
@@ -100,7 +100,7 @@ Next steps: [any manual wiring steps the platform requires]
 
 ## Constraints
 
-- Always read existing UseCase files before spawning `presentation-worker` — never guess signatures
+- Always confirm UseCase signatures before spawning `presentation-worker` — Grep for class/struct definitions and `execute` signatures first; only Read the full file if Grep returns no results. Never guess signatures.
 - Pass the **complete StateHolder contract** to `ui-worker` — it does not share context with Phase 1
 - Do not write code yourself — delegate all code generation to the workers
 - Spawn each worker with `isolation: worktree`

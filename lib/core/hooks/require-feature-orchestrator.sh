@@ -69,11 +69,17 @@ if [[ "$IS_FEATURE_FILE" == false ]]; then
   exit 0
 fi
 
-# Delegation flag set — allow (branch-scoped, survives across sessions)
+# Delegation flag set — allow if present and fresh (< 4h); treat stale flag as missing
 BRANCH_SLUG=$(echo "$BRANCH" | tr '/' '-')
 FLAG_FILE="$PROJECT_ROOT/.claude/.delegated-$BRANCH_SLUG"
 if [[ -f "$FLAG_FILE" ]]; then
-  exit 0
+  FLAG_TIME=$(cat "$FLAG_FILE" 2>/dev/null || echo 0)
+  NOW=$(date +%s)
+  AGE=$((NOW - FLAG_TIME))
+  if [[ "$AGE" -lt 14400 ]]; then
+    exit 0
+  fi
+  # Stale flag (> 4h) — fall through to block
 fi
 
 # Block — ask Claude to present a choice to the user
@@ -81,7 +87,7 @@ echo "BLOCKED: Feature directory edit on feat/* branch requires delegation."
 echo ""
 echo "  Branch : $BRANCH"
 echo "  File   : $FILE_PATH"
-echo "  Flag   : $FLAG_FILE (not found)"
+echo "  Flag   : $FLAG_FILE (not found or stale > 4h)"
 echo ""
 echo "Ask the user how to proceed — present exactly these two options:"
 echo "  1. Inline  — create the delegation flag now and continue with the edit directly"
