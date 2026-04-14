@@ -135,7 +135,52 @@ Score based on how many rules were followed.
 - Multiple `Write` calls to the same file path = rework signal
 - Deduct if `ExitPlanMode` appears with no clear reason (plan was rejected)
 
-## Step 3 — Compute overall score
+## Step 3 — Compute effort vs billing
+
+Using token counts from the JSON and standard Anthropic pricing, compute:
+
+### Token cost breakdown
+
+| Token type | Count | Unit price | Cost (USD) |
+|---|---|---|---|
+| Input | `tokens.input` | $3.00 / MTok | computed |
+| Cache creation | `tokens.cache_creation` | $3.75 / MTok | computed |
+| Cache reads | `tokens.cache_read` | $0.30 / MTok | computed |
+| Output | `tokens.output` | $15.00 / MTok | computed |
+| **Total** | **`tokens.total_billed_approx` billed-equiv** | | **~$X.XX** |
+
+Note the cache hit ratio impact: estimate what the session would have cost at full input rates (all tokens as input, no cache), then state the savings.
+
+### Where the tokens went
+
+Reconstruct a per-task token estimate by examining `agent_spawns`, `skill_calls`, and tool call sequences. For each identifiable task cluster (a group of tool calls / spawns that belong to the same logical work unit), estimate the token proportion and assign a productivity flag:
+
+- ✅ Productive — work that directly advanced the deliverable
+- ❌ Rework — work caused by an error, interruption, or earlier mistake
+- ⚠️ Overhead — necessary but non-productive (auth, tooling, perf review itself)
+
+| Task | Estimated tokens | % of total | Productive? |
+|---|---|---|---|
+| ... | ... | ... | ✅/❌/⚠️ |
+| **Total** | **~N** | **100%** | |
+
+Summarize at the bottom:
+- **Productive work: ~X% (~N tokens / ~$X.XX)**
+- **Wasted on rework: ~X% (~N tokens / ~$X.XX)**
+
+### Effort-to-value ratio
+
+For each concrete deliverable produced in the session (inferred from `agent_spawns` descriptions, `write_paths`, and `git_branch`), estimate:
+
+| Deliverable | Complexity | Tokens spent | Efficiency |
+|---|---|---|---|
+| ... | Low/Medium/High | ~N | Good/Fair/Poor — reason |
+
+Efficiency is Good if tokens are proportionate to complexity, Fair if slightly over, Poor if a simple task consumed disproportionate tokens (flag the reason).
+
+Identify the single highest-cost deliverable and explain why in a **Key insight** paragraph.
+
+## Step 4 — Compute overall score
 
 ```
 overall = average of all applicable dimensions (exclude N/A dimensions from denominator)
@@ -143,7 +188,7 @@ overall = average of all applicable dimensions (exclude N/A dimensions from deno
 
 Round to one decimal place.
 
-## Step 4 — Write the report
+## Step 5 — Write the report
 
 The report lives in the software-dev-agentic submodule, not in the downstream project. The submodule path in any downstream project is always `PROJECT_PATH/.claude/software-dev-agentic/`.
 
@@ -230,9 +275,44 @@ Read:Grep ratio: N (target < 3 — high ratio signals full-file reads over targe
 
 1. **Highest impact fix** — <specific change to make>
 2. ...
+
+---
+
+## Effort vs Billing
+
+### Token cost breakdown
+
+| Token type | Count | Unit price | Cost (USD) |
+|---|---|---|---|
+| Input | N | $3.00 / MTok | $X.XX |
+| Cache creation | N | $3.75 / MTok | $X.XX |
+| Cache reads | N | $0.30 / MTok | $X.XX |
+| Output | N | $15.00 / MTok | $X.XX |
+| **Total** | **N billed-equiv** | | **~$X.XX** |
+
+Cache hit ratio of **N%** was the primary cost saver — without it, the same session would have cost ~$X at full input rates.
+
+### Where the tokens went
+
+| Task | Estimated tokens | % of total | Productive? |
+|---|---|---|---|
+| ... | ~N | N% | ✅/❌/⚠️ |
+| **Total** | **~N** | **100%** | |
+
+**Productive work: ~X% (~N tokens / ~$X.XX)**
+**Wasted on rework: ~X% (~N tokens / ~$X.XX)**
+
+### Effort-to-value ratio
+
+| Deliverable | Complexity | Tokens spent | Efficiency |
+|---|---|---|---|
+| ... | Low/Medium/High | ~N | Good/Fair/Poor — reason |
+
+### Key insight
+<one paragraph identifying the single highest-cost item and why it was disproportionate, or confirming efficiency was well-distributed>
 ```
 
-## Step 5 — Commit and push inside the submodule
+## Step 6 — Commit and push inside the submodule
 
 The commit and push happen inside the software-dev-agentic submodule directory, not the downstream project root:
 
