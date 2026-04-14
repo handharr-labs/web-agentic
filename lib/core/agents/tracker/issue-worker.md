@@ -56,15 +56,17 @@ Extract: `number`, `title`, `body`, `url`.
 | Pattern | Type | Branch prefix |
 |---------|------|--------------|
 | bug / fix / broken / error | `fix` | `fix/` |
-| feat / add / new / create / implement | `feat` | `feat/` |
+| feat / add / new / create / implement | `feat` | `feat/` or `feature/` |
 | chore / cleanup / refactor / update / bump | `chore` | `chore/` |
 | docs / documentation | `docs` | `docs/` |
+
+Use `feature/` if that is the project's established convention (check existing branches via `git branch -a`); otherwise default to `feat/`.
 
 **3. Derive identifiers**
 
 - Zero-pad issue number to 3 digits → `NNN`
 - Build kebab-case slug from the title: lowercase, spaces → dashes, strip special chars
-- Branch name: `[type]/issue-NNN-slug` (e.g. `feat/issue-035-add-export-button`)
+- Branch name: `[type]/issue-NNN-slug` (e.g. `feat/issue-035-add-export-button` or `feature/issue-035-add-export-button`)
 
 **4. Create git branch** ← must happen before any code is written
 

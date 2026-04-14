@@ -6,7 +6,7 @@
 # Config: CLAUDE.md ## Feature Directories section (fenced code block) in project root.
 # Flag:   .claude/.delegated — created by feature-orchestrator at session start, cleared at end.
 #
-# Block condition: feat/* branch + file matches a feature dir + no delegation flag
+# Block condition: feat/* or feature/* branch + file matches a feature dir + no delegation flag
 
 set -euo pipefail
 
@@ -18,9 +18,9 @@ if [[ "$TOOL" != "Write" && "$TOOL" != "Edit" ]]; then
   exit 0
 fi
 
-# Not a feat/* branch — allow
+# Not a feat/* or feature/* branch — allow
 BRANCH=$(git branch --show-current 2>/dev/null || true)
-if [[ "$BRANCH" != feat/* ]]; then
+if [[ "$BRANCH" != feat/* && "$BRANCH" != feature/* ]]; then
   exit 0
 fi
 
