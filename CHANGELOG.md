@@ -7,6 +7,20 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.7.0] — 2026-04-14
+
+### Added
+- `lib/core/skills/clear-runs/`: new core skill for clearing `.claude/runs/` artifacts
+- `lib/platforms/ios/hooks/`: platform-specific iOS delegation guard hook
+
+### Changed
+- `feature-orchestrator`: added Search Protocol — forbids direct `Read` on production source files; orchestrator must remain a pure coordinator and delegate all source investigation to workers
+- `CLAUDE-template` (ios + web): delegation rule now requires `isolation: worktree` when invoking `feature-orchestrator`, preventing partial edits from polluting the working tree on failure
+- `setup-packages.sh`: improved hook installation (copy with chmod) and extended `.gitignore` patching to include `.session-id` and `runs/`
+- `packages/core.pkg`: added `clear-runs` to the default core skill set
+
+---
+
 ## [3.6.0] — 2026-04-14
 
 ### Added
