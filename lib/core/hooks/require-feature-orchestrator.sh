@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # Hook: Require delegation to feature-orchestrator for feature directory edits on feat/* branches
 # Event: PreToolUse on Write|Edit
-# Input: JSON on stdin with keys: tool_name, tool_input
+# Input: JSON on stdin with keys: session_id, tool_name, tool_input
 #
 # Config: CLAUDE.md ## Feature Directories section (fenced code block) in project root.
-# Flag:   .claude/agentic-state/.delegated — created by feature-orchestrator at session start, cleared at end.
+# Flag:   .claude/agentic-state/delegation.json — written by feature-orchestrator at session start,
+#         cleared at end. Session-scoped: a new session_id wipes all stale entries automatically.
+# Session: .claude/agentic-state/.session-id — tracks the active session; updated on session boundary.
 #
-# Block condition: feat/* or feature/* branch + file matches a feature dir + no delegation flag
+# Block condition: feat/* or feature/* branch + file matches a feature dir + no delegation entry
 
 set -euo pipefail
 
@@ -16,6 +18,28 @@ TOOL=$(echo "$INPUT" | python3 -c "import sys,json; d=json.load(sys.stdin); prin
 
 if [[ "$TOOL" != "Write" && "$TOOL" != "Edit" ]]; then
   exit 0
+fi
+
+# Session boundary detection — wipe stale delegation entries when session_id changes
+PROJECT_ROOT_EARLY=$(git rev-parse --show-toplevel 2>/dev/null || true)
+if [[ -n "$PROJECT_ROOT_EARLY" ]]; then
+  CURRENT_SESSION=$(echo "$INPUT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('session_id',''))" 2>/dev/null || true)
+  SESSION_FILE="$PROJECT_ROOT_EARLY/.claude/agentic-state/.session-id"
+  if [[ -n "$CURRENT_SESSION" ]]; then
+    STORED_SESSION=$(cat "$SESSION_FILE" 2>/dev/null || true)
+    if [[ "$CURRENT_SESSION" != "$STORED_SESSION" ]]; then
+      # New session — clear all entries in delegation.json
+      python3 -c "
+import json, os, sys
+f = sys.argv[1]
+if os.path.exists(f):
+    tmp = f + '.tmp'
+    json.dump({}, open(tmp, 'w'), indent=2)
+    os.replace(tmp, f)
+" "$PROJECT_ROOT_EARLY/.claude/agentic-state/delegation.json" 2>/dev/null || true
+      echo "$CURRENT_SESSION" > "$SESSION_FILE"
+    fi
+  fi
 fi
 
 # Not a feat/* or feature/* branch — allow
