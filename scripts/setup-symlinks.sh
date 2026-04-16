@@ -181,13 +181,43 @@ fi
 # ── Settings ──────────────────────────────────────────────────────────────────
 
 echo ""
-if [ -f "$CLAUDE_DIR/settings.local.json" ]; then
-  echo "skip  .claude/settings.local.json (already exists)"
-elif [ -f "$PLATFORM_DIR/settings-template.json" ]; then
-  cp "$PLATFORM_DIR/settings-template.json" "$CLAUDE_DIR/settings.local.json"
-  echo "copy  .claude/settings.local.json"
-  echo ""
-  echo "  ⚠  Edit .claude/settings.local.json — replace PROJECT_ROOT with your .claude path"
+SETTINGS_FILE="$CLAUDE_DIR/settings.local.json"
+if [ ! -f "$SETTINGS_FILE" ]; then
+  if [ -f "$PLATFORM_DIR/settings-template.json" ]; then
+    cp "$PLATFORM_DIR/settings-template.json" "$SETTINGS_FILE"
+    echo "copy  .claude/settings.local.json"
+    echo ""
+    echo "  ⚠  Edit .claude/settings.local.json — replace PROJECT_ROOT with your .claude path"
+  fi
+elif grep -q 'require-feature-orchestrator' "$SETTINGS_FILE"; then
+  echo "skip  settings.local.json (require-feature-orchestrator already present)"
+else
+  RESULT=$(python3 - "$SETTINGS_FILE" "$CLAUDE_DIR" <<'EOF'
+import sys, re
+
+settings_file, claude_dir = sys.argv[1], sys.argv[2]
+hook_cmd = claude_dir + "/hooks/require-feature-orchestrator.sh"
+content = open(settings_file).read()
+
+pattern = r'("matcher"\s*:\s*"Write\|Edit"(?:[^[]*?)"hooks"\s*:\s*\[)'
+match = re.search(pattern, content, re.DOTALL)
+if not match:
+    print("warn")
+    sys.exit(0)
+
+indent_match = re.match(r'\n(\s*)', content[match.end():])
+indent = indent_match.group(1) if indent_match else "          "
+new_hook = f'\n{indent}{{"type": "command", "command": "{hook_cmd}"}},'
+open(settings_file, "w").write(content[:match.end()] + new_hook + content[match.end():])
+print("patched")
+EOF
+  )
+  if [ "$RESULT" = "patched" ]; then
+    echo "patch settings.local.json (added require-feature-orchestrator hook)"
+  else
+    echo "warn  settings.local.json — could not auto-patch, add manually:"
+    echo "      { \"type\": \"command\", \"command\": \"$CLAUDE_DIR/hooks/require-feature-orchestrator.sh\" }"
+  fi
 fi
 
 # ── CLAUDE.md ─────────────────────────────────────────────────────────────────
