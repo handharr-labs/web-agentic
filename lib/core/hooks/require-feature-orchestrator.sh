@@ -112,7 +112,7 @@ fi
 # No entry or stale (> 4h) — fall through to block
 
 # Block — agent must stop and surface to user; must not resolve autonomously
-echo "BLOCKED: Feature directory edit on feat/* branch requires delegation."
+echo "BLOCKED: Feature directory edit on feat/* or feature/* branch requires delegation."
 echo ""
 echo "  Branch : $BRANCH"
 echo "  File   : $FILE_PATH"
