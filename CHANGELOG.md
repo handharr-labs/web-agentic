@@ -7,6 +7,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.13.0] — 2026-04-15
+
+### Added
+- `ui-worker`: Component Reuse Check protocol — Grep existing shared components before creating new ones; gates create vs. reuse vs. extend decision
+- `reference/presentation.md` (iOS, web, Flutter): `Shared Component Paths` section with platform-specific search paths for component reuse discovery
+- `feature-orchestrator`: Explore Agent Grep-first rule — when spawning Explore agents, must include explicit Grep-first instructions and return structured path list
+- `CLAUDE-template.md` (web): Agent Spawning Rules section with Explore Grep-first guidance
+- `CLAUDE-template.md` (web): Known Configurations section documenting Tailwind v4 `@source` directive fix
+
+### Changed
+- `feature-orchestrator`: Replaced single-line inline-write constraint with prominent `ZERO INLINE WORK` block — no Edit, Write, or file-writing Bash calls, regardless of scope
+- `domain-worker`, `data-worker`, `presentation-worker`, `ui-worker`: Added read-once rule to Search Protocol — read a file once, form a complete edit plan, apply in a single Edit call
+
+---
+
 ## [3.12.0] — 2026-04-16
 
 ### Added
