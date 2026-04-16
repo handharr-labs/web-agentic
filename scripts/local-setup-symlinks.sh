@@ -78,6 +78,7 @@ mkdir -p \
   "$CLAUDE_DIR/skills" \
   "$CLAUDE_DIR/reference" \
   "$CLAUDE_DIR/hooks" \
+  "$CLAUDE_DIR/config" \
   "$CLAUDE_DIR/agents.local/extensions" \
   "$CLAUDE_DIR/skills.local/extensions" \
   "$CLAUDE_DIR/agentic-state/runs"
@@ -236,13 +237,20 @@ elif [ -f "$PLATFORM_DIR/CLAUDE-template.md" ]; then
   fi
 fi
 
-# ── .claude/feature-dirs ──────────────────────────────────────────────────────
+# ── .claude/config/feature-dirs ──────────────────────────────────────────────
 
 echo ""
-FEATURE_DIRS_FILE="$CLAUDE_DIR/feature-dirs"
+FEATURE_DIRS_FILE="$CLAUDE_DIR/config/feature-dirs"
 if [ -f "$FEATURE_DIRS_FILE" ]; then
-  echo "skip  .claude/feature-dirs (already exists)"
+  echo "skip  .claude/config/feature-dirs (already exists)"
 else
+  # Migrate from old path if present (v3.9.x upgrade path)
+  if [ -f "$CLAUDE_DIR/feature-dirs" ]; then
+    mv "$CLAUDE_DIR/feature-dirs" "$FEATURE_DIRS_FILE"
+    echo "migrate .claude/config/feature-dirs (from .claude/feature-dirs)"
+  fi
+fi
+if [ ! -f "$FEATURE_DIRS_FILE" ]; then
   # Migrate from CLAUDE.md ## Feature Directories if present
   MIGRATED_DIRS=""
   if [ -f "$PROJECT_ROOT/CLAUDE.md" ] && grep -q '## Feature Directories' "$PROJECT_ROOT/CLAUDE.md" 2>/dev/null; then
@@ -260,7 +268,7 @@ if m:
 
   if [ -n "$MIGRATED_DIRS" ]; then
     printf '# Path fragments guarded by the delegation hook (one per line)\n%s\n' "$MIGRATED_DIRS" > "$FEATURE_DIRS_FILE"
-    echo "migrate .claude/feature-dirs (from CLAUDE.md ## Feature Directories)"
+    echo "migrate .claude/config/feature-dirs (from CLAUDE.md ## Feature Directories)"
   else
     case "$PLATFORM" in
       web)
@@ -276,11 +284,11 @@ if m:
         printf '# Path fragments guarded by the delegation hook (one per line)\n' > "$FEATURE_DIRS_FILE"
         ;;
     esac
-    echo "create .claude/feature-dirs"
+    echo "create .claude/config/feature-dirs"
   fi
 
   if grep -q '\[AppName\]' "$FEATURE_DIRS_FILE" 2>/dev/null; then
-    echo "  ⚠  Replace [AppName] in .claude/feature-dirs with your app target name"
+    echo "  ⚠  Replace [AppName] in .claude/config/feature-dirs with your app target name"
   fi
 fi
 

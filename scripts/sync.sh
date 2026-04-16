@@ -111,16 +111,16 @@ EOF
   fi
 fi
 
-# ── .claude/feature-dirs ──────────────────────────────────────────────────────
+# ── .claude/config/feature-dirs ──────────────────────────────────────────────
 # setup-symlinks.sh (called above) handles creation and migration.
 # This check just confirms the file is present after setup.
 
 echo ""
-FEATURE_DIRS_FILE="$PROJECT_ROOT/.claude/feature-dirs"
+FEATURE_DIRS_FILE="$PROJECT_ROOT/.claude/config/feature-dirs"
 if [ -f "$FEATURE_DIRS_FILE" ]; then
-  echo "skip  .claude/feature-dirs (already exists)"
+  echo "skip  .claude/config/feature-dirs (already exists)"
 else
-  echo "warn  .claude/feature-dirs — not found after setup, delegation hook will not guard any directories"
+  echo "warn  .claude/config/feature-dirs — not found after setup, delegation hook will not guard any directories"
   echo "      Run: .claude/software-dev-agentic/scripts/setup-symlinks.sh --platform=$PLATFORM"
 fi
 

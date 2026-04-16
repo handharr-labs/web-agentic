@@ -3,7 +3,7 @@
 # Event: PreToolUse on Write|Edit
 # Input: JSON on stdin with keys: session_id, tool_name, tool_input
 #
-# Config: .claude/feature-dirs — one path fragment per line, # comments ignored.
+# Config: .claude/config/feature-dirs — one path fragment per line, # comments ignored.
 # Flag:   .claude/agentic-state/delegation.json — written by feature-orchestrator at session start,
 #         cleared at end. Session-scoped: a new session_id wipes all stale entries automatically.
 # Session: .claude/agentic-state/.session-id — tracks the active session; updated on session boundary.
@@ -54,9 +54,9 @@ if [[ -z "$FILE_PATH" ]]; then
   exit 0
 fi
 
-# Parse feature directories from .claude/feature-dirs
+# Parse feature directories from .claude/config/feature-dirs
 PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || true)
-FEATURE_DIRS_FILE="$PROJECT_ROOT/.claude/feature-dirs"
+FEATURE_DIRS_FILE="$PROJECT_ROOT/.claude/config/feature-dirs"
 
 if [[ ! -f "$FEATURE_DIRS_FILE" ]]; then
   exit 0

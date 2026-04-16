@@ -89,22 +89,22 @@ grep -c "PROJECT_ROOT" .claude/settings.local.json || true
 - Warn: file exists but still contains `PROJECT_ROOT` placeholder
 - Fail: file missing
 
-### 6. .claude/feature-dirs
+### 6. .claude/config/feature-dirs
 
 ```bash
-[ -f .claude/feature-dirs ] && echo "exists" || echo "missing"
+[ -f .claude/config/feature-dirs ] && echo "exists" || echo "missing"
 ```
 
 If it exists, count non-comment, non-empty lines (active fragments):
 
 ```bash
-grep -v '^\s*#' .claude/feature-dirs | grep -v '^\s*$' | wc -l
+grep -v '^\s*#' .claude/config/feature-dirs | grep -v '^\s*$' | wc -l
 ```
 
 Also check for unfilled `[AppName]` placeholder:
 
 ```bash
-grep -c '\[AppName\]' .claude/feature-dirs || true
+grep -c '\[AppName\]' .claude/config/feature-dirs || true
 ```
 
 - Pass: file exists, at least 1 fragment, no `[AppName]` placeholder
