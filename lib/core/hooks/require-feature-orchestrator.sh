@@ -8,7 +8,7 @@
 #         cleared at end. Session-scoped: a new session_id wipes all stale entries automatically.
 # Session: .claude/agentic-state/.session-id — tracks the active session; updated on session boundary.
 #
-# Block condition: feat/* or feature/* branch + file matches a feature dir + no delegation entry
+# Block condition: any branch except main/develop + file matches a feature dir + no delegation entry
 
 # Disable guard — exits 0 immediately if listed in .claude/config/disabled-hooks
 _hook_name="$(basename "$0" .sh)"
@@ -50,7 +50,7 @@ fi
 
 # Not a feat/* or feature/* branch — allow
 BRANCH=$(git branch --show-current 2>/dev/null || true)
-if [[ "$BRANCH" != feat/* && "$BRANCH" != feature/* ]]; then
+if [[ "$BRANCH" == "main" || "$BRANCH" == "develop" ]]; then
   exit 0
 fi
 

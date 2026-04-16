@@ -19,6 +19,8 @@ Each entry is numbered in sequence. Entries may be:
 | 04 | [Delegation Guard Hook](./04-delegation-guard-hook.md) | Improvement | 2026-04-13 | D2, D6 | Done |
 | 05 | [Delegation Flag TTL and Orchestrator Read Efficiency](./05-flag-ttl-and-read-efficiency.md) | Improvement | 2026-04-13 | D1, D4, D6 | Done |
 | 06 | [Delegation Guard — Autonomous Resolution and Worktree Isolation](./06-delegation-guard-autonomous-resolution.md) | Improvement | 2026-04-14 | D1, D2, D6 | Done |
+| 07 | [Orchestrator Read Discipline and Worktree Isolation at Invocation](./07-orchestrator-read-discipline-and-invocation-isolation.md) | Improvement | 2026-04-14 | D1, D2, D4 | Done |
+| 08 | [Fix Branch Delegation Guard Gap](./08-fix-branch-delegation-guard-gap.md) | Improvement | 2026-04-16 | D2, D6 | Done |
 
 ---
 
