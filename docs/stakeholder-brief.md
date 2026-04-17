@@ -55,6 +55,18 @@ Each specialist knows exactly what they own, what they don't touch, and what qua
 
 Here is what building the **Leave Request** feature looks like with this system.
 
+### The team
+
+To keep this readable, here is how the AI specialists map to plain English roles:
+
+| Plain English | What it actually is | What it owns |
+|---|---|---|
+| Project Manager AI | `feature-orchestrator` | Coordinates the team, decides the order, opens the PR |
+| Backend Engineer AI | `domain-worker` | Business logic — entities, rules, use cases |
+| Data Engineer AI | `data-worker` | Data layer — API calls, database, mappers |
+| Frontend Engineer AI | `presentation-worker` | State management — what the UI shows and responds to |
+| UI Engineer AI | `ui-worker` | The actual screens and components the user sees |
+
 ### What the engineer types
 
 > *"Build the leave request feature. Employees can submit a request, managers can approve or reject it, and the submitter gets notified of the outcome."*
