@@ -51,6 +51,72 @@ Each specialist knows exactly what they own, what they don't touch, and what qua
 
 ---
 
+## See It In Action
+
+Here is what building the **Leave Request** feature looks like with this system.
+
+### What the engineer types
+
+> *"Build the leave request feature. Employees can submit a request, managers can approve or reject it, and the submitter gets notified of the outcome."*
+
+That is the entire input. One sentence of intent.
+
+### What happens next
+
+The Project Manager AI takes over. It asks three short clarifying questions — what data operations are needed, whether this is a new feature or an update, and whether the platform has a separate UI layer. Then it gets to work.
+
+```
+Project Manager AI
+│
+├── 1. Hands off to Backend Engineer AI
+│      → Creates the LeaveRequest entity (the data model)
+│      → Creates the repository interface (how data is stored and retrieved)
+│      → Creates three use cases:
+│           SubmitLeaveRequestUseCase
+│           ApproveLeaveRequestUseCase
+│           RejectLeaveRequestUseCase
+│      ✓ Done. Returns file paths.
+│
+├── 2. Hands off to Data Engineer AI
+│      → Creates the API response model (what the server sends back)
+│      → Creates the mapper (translates API data into our domain model)
+│      → Creates the data source (the actual API call)
+│      → Creates the repository implementation (wires everything together)
+│      ✓ Done. Returns file paths.
+│
+├── 3. Hands off to Presentation Team
+│      Frontend Engineer AI → Creates the StateHolder
+│                              (manages what the UI shows and responds to)
+│      UI Engineer AI       → Creates the screen
+│                              (the actual interface the user sees)
+│      ✓ Done. Returns file paths.
+│
+└── Project Manager AI compiles the result, opens a pull request.
+```
+
+### What comes out
+
+A complete, production-ready feature across all layers — ready for the engineer to review:
+
+| What was created | Who created it |
+|---|---|
+| `LeaveRequest` entity | Backend Engineer AI |
+| `LeaveRequestRepository` interface | Backend Engineer AI |
+| `SubmitLeaveRequestUseCase` | Backend Engineer AI |
+| `ApproveLeaveRequestUseCase` | Backend Engineer AI |
+| `RejectLeaveRequestUseCase` | Backend Engineer AI |
+| API response model + mapper | Data Engineer AI |
+| Data source + repository implementation | Data Engineer AI |
+| `LeaveRequestViewModel` | Frontend Engineer AI |
+| Leave request screen + navigation | UI Engineer AI |
+| Pull request opened, linked to ticket | Project Manager AI |
+
+Every file follows our architecture standards. Every layer only knows what it's supposed to know. No shortcuts, no drift.
+
+**Total engineer time invested: one sentence and a code review.**
+
+---
+
 ## The Results
 
 We ran this in production across three products — **wehire**, **xpnsio**, and **talenta-iOS** — over four days in April 2026.
