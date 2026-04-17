@@ -51,6 +51,40 @@ Each specialist knows exactly what they own, what they don't touch, and what qua
 
 ---
 
+## How the Team Is Built
+
+The AI team is organized into **personas** — purpose-built groups, each responsible for a specific kind of engineering work. A persona is not a single agent; it is a complete mini-team with its own specialists.
+
+| Persona | What it handles |
+|---|---|
+| **Builder** | Feature development — domain logic, data layer, state management, UI |
+| **Detective** | Debugging, performance analysis, root cause investigation |
+| **Auditor** | Architecture review, standards enforcement |
+| **Tracker** | Issue management, backlog, branch coordination |
+| **Installer** | Project setup, platform wiring |
+
+Within each persona, every agent has one of two roles:
+
+**Orchestrators** are the coordinators. When you describe a task, the orchestrator takes it — breaks it into steps, delegates to the right specialists in the right order, and compiles the result. It never writes code itself. Its job is to make sure the right work reaches the right expert.
+
+**Workers** are the specialists. Each worker owns exactly one layer of the codebase and nothing else. The Domain worker handles business logic. The Data worker handles APIs and databases. The State worker handles state management. The UI worker handles screens. A worker handed a task outside its layer will stop and hand it back — by design.
+
+**Skills** are the step-by-step procedures that workers follow. Each skill does exactly one thing: create a use case, build a data mapper, wire a screen to its state container. Skills are what make the output consistent — the same steps, in the same order, on every platform, every time.
+
+### Where the Knowledge Lives
+
+The team's knowledge is organized in three tiers:
+
+| Tier | What it holds | Lives in |
+|---|---|---|
+| **Universal rules** | Standards that apply to every task — architecture boundaries, naming conventions, quality gates | Skills — injected into workers at startup |
+| **Specialist logic** | Each agent's own decision-making — when to act, what to check, how to handle edge cases | Agent body — orchestrators and workers |
+| **Reference library** | Deep architectural knowledge loaded on demand — layer contracts, design patterns, platform conventions | Reference docs — consulted by workers when needed |
+
+This structure keeps the team consistent without making every interaction expensive. Universal rules are always active. Specialist logic is scoped to the agent that needs it. The reference library is consulted only when the task requires it.
+
+---
+
 ## See It In Action
 
 Here is what building the **Leave Request** feature looks like with this system.

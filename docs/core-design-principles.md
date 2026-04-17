@@ -1,5 +1,5 @@
 > Author: Puras Handharmahua · 2026-04-08
-> Updated: 2026-04-17 — v34: pres-orchestrator promoted to sub-orchestrator of feature-orchestrator; orchestrator hierarchy example added to Taxonomy Taxonomy gaps closed — Type U (Utility) skill added; Repo skill scope added; Type × Scope intersection matrix added; Toolkit skill scope clarified as downstream-facing
+> Updated: 2026-04-17 — v35: feature-planner agent added to builder persona; P7 placement decision rule added (reference vs agent body); layer-contracts.md extracted as shared reference; lib/core/reference/README.md taxonomy added
 > Synced with: software-dev-agentic v3.14.0
 > Related: Shared Agentic Submodule Architecture — Cross-Platform Scaling
 
@@ -121,6 +121,17 @@ This gives agents full procedural knowledge without embedding it in their body. 
 - `lib/core/reference/clean-arch/` — conceptual, language-agnostic principles. Linked to all platforms.
 - `lib/platforms/<platform>/reference/` — platform-specific code patterns. Linked only to matching platform.
 
+**Placement decision rule — reference vs agent body:**
+
+| Put it in reference if… | Keep it in the agent body if… |
+|---|---|
+| It is a fact true regardless of who reads it | It is an instruction specific to this agent's workflow |
+| It is an invariant, contract, or architectural principle | It is a decision: when to run, what to check, what to do on failure |
+| Multiple agents need the same knowledge | Only this agent needs it |
+| Removing it from the agent would lose shared truth | Removing it from the agent would lose execution behavior |
+
+> One-line test: can you state it as a rule without saying "you"? If yes — reference. If it only makes sense addressed to the agent — agent body.
+
 **Enforcement — Search Protocol (decision gate):**
 
 Before any `Read` call, workers answer: "Do I need the full file, or just a specific symbol/section?"
@@ -173,7 +184,7 @@ Agents have a second axis — where they live and what they know.
 
 | | Orchestrator | Worker |
 |---|---|---|
-| **Core** | `feature-orchestrator` → `pres-orchestrator`, `debug-orchestrator`, `backend-orchestrator` | `domain-worker`, `data-worker`, `presentation-worker`, `ui-worker`, `test-worker`, `debug-worker`, `prompt-debug-worker`, `arch-review-worker`, `issue-worker`, `setup-worker`, `perf-worker` |
+| **Core** | `feature-planner`, `feature-orchestrator` → `pres-orchestrator`, `debug-orchestrator`, `backend-orchestrator` | `domain-worker`, `data-worker`, `presentation-worker`, `ui-worker`, `test-worker`, `debug-worker`, `prompt-debug-worker`, `arch-review-worker`, `issue-worker`, `setup-worker`, `perf-worker` |
 | **Platform** | iOS `test-orchestrator` | iOS `pr-review-worker` |
 
 ---
@@ -448,7 +459,7 @@ prompt-debug-worker ← reads perf-report + domain-worker.md
 
 | Category | `lib/core/agents/` (shared) | `lib/platforms/ios/agents/` | `lib/platforms/web/agents/` |
 |---|---|---|---|
-| Orchestrators | 4 in `builder/` + 1 in `detective/` | 1 (`test-orchestrator`) | — |
+| Orchestrators | 5 in `builder/` + 1 in `detective/` | 1 (`test-orchestrator`) | — |
 | Workers | 8 in `builder/` + **2 in `detective/`** + 1 in `tracker/` + 1 in `auditor/`\* + 1 in `installer/` + 1 flat | 1 (`pr-review-worker`) | — |
 | Skills (Type A) | — | 29 | 29 |
 | Skills (Type B) | — | 2 | 0 |

@@ -122,7 +122,8 @@ Three-pass linking priority: `agents.local` > platform > core (first link wins)
 ### 4. Reference Docs Split by Scope
 
 **Decision:** Reference docs live in two locations within the submodule:
-- `lib/core/reference/clean-arch/` — conceptual, language-agnostic CLEAN Architecture principles (DI containers, domain purity)
+- `lib/core/reference/README.md` — taxonomy doc: placement rules for reference vs agent body vs skills (agentic use)
+- `lib/core/reference/clean-arch/` — conceptual, language-agnostic CLEAN Architecture principles (DI containers, domain purity, layer contracts)
 - `lib/platforms/<platform>/reference/` — platform-specific patterns with code examples (TypeScript, Swift, Dart)
 
 **Rationale:** Previously all reference docs lived flat in `reference/`. Some (like `di-containers.md`) describe pure CLEAN theory with no code. Others (like `domain.md`, `data.md`) contain TypeScript-specific examples that would confuse an iOS worker. Splitting by scope ensures each platform's skills only load reference docs relevant to their language.
