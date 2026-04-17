@@ -7,6 +7,17 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.18.0] — 2026-04-17
+
+### Fixed
+- `lib/core/hooks/require-feature-orchestrator.sh`: block message now outputs the exact `AskUserQuestion` parameter structure (with `questions`, `header`, `options[].label`, `options[].description`) — prose-only instructions caused Claude to fall back to free-text instead of a structured choice dialog
+- `lib/core/agents/perf-worker.md` D3: added work-nature classification step before skill-to-artifact alignment — flag/dead-code removal and file deletion now score N/A (8/10) automatically; skill requirements apply only to creation, restoration, and update work; mixed sessions evaluated per-portion
+
+### Added
+- `evaluation/09-d3-skill-scoring-and-hook-ask-user-question.md`: documents both fixes — root cause, changes made, and open questions for follow-up
+
+---
+
 ## [3.17.0] — 2026-04-17
 
 ### Added

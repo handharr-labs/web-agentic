@@ -102,6 +102,18 @@ Score each dimension **1–10**. Provide a one-line justification for each score
 - Deduct if a skill was skipped when it should have been used
 - Score N/A (8/10) if no skills were called and inline handling was appropriate
 
+**Work-nature classification** — before scoring, determine the primary work nature from `agent_spawns` descriptions, `git_branch`, and `write_paths`:
+
+| Work nature | Signal | Skill required? |
+|---|---|---|
+| New artifact creation (entity, DTO, view, stateholder) | New file in `write_paths` not previously in repo | Yes — deduct if skipped |
+| File restoration (deleted file re-created) | Description mentions "restore", worker re-writes a path that was deleted earlier in session | Yes — treat as creation |
+| Artifact update (adding/changing fields in existing file) | Existing file in `write_paths`, description mentions "update", "add field", "modify" | Yes |
+| Flag/dead-code removal (deleting conditional guards, unused branches) | Description mentions "remove", "delete", "flag", "cleanup"; no new files added | No — score N/A (8/10) |
+| File deletion only | No new `write_paths`, only Bash `rm` calls | No — score N/A (8/10) |
+
+If the session is **mixed** (e.g. flag removal + file restoration), apply skill requirements only to the creation/restoration portion and ignore removal work.
+
 **Skill-to-artifact alignment** — cross-reference each `skill_calls` entry against the canonical skill selection tables:
 
 *Domain layer:*

@@ -114,17 +114,30 @@ echo "  File   : $FILE_PATH"
 echo "  Reason : No active delegation for this branch (missing or stale > 4h)"
 echo ""
 echo "STOP. Do not proceed. Do not write the delegation entry yourself."
-echo "Use AskUserQuestion with exactly these three options and wait for the user's selection:"
 echo ""
-echo "  Option 1: \"Plan first with feature-planner (review before writing)\""
-echo "             Invoke feature-planner to produce a reviewable plan.md before any code is written."
-echo "             No files are modified. After review, run feature-orchestrator to execute."
+echo "Call the AskUserQuestion tool now with this exact structure:"
 echo ""
-echo "  Option 2: \"Delegate to feature-orchestrator (execute now)\""
-echo "             Invoke feature-orchestrator to coordinate this feature build across all layers."
+echo '  questions: ['
+echo '    {'
+echo '      question: "How should this feature edit be handled?",'
+echo '      header: "Delegation",'
+echo '      multiSelect: false,'
+echo '      options: ['
+echo '        {'
+echo '          label: "Plan first (feature-planner)",'
+echo '          description: "Produce a reviewable plan.md before any code is written. No files modified until you approve."'
+echo '        },'
+echo '        {'
+echo '          label: "Delegate now (feature-orchestrator)",'
+echo '          description: "Invoke feature-orchestrator to coordinate this feature build across all layers immediately."'
+echo '        },'
+echo '        {'
+echo '          label: "Proceed inline (bypass)",'
+echo '          description: "Continue without orchestrator delegation. Only choose if you explicitly want to skip the workflow."'
+echo '        }'
+echo '      ]'
+echo '    }'
+echo '  ]'
 echo ""
-echo "  Option 3: \"Proceed inline (bypass delegation)\""
-echo "             Only if the user explicitly wants to continue without the orchestrator."
-echo ""
-echo "Take no further action until the user selects an option."
+echo "Wait for the user's selection. Take no further action until they respond."
 exit 2
