@@ -7,6 +7,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.16.0] — 2026-04-17
+
+### Added
+- `agents/scaffold-worker`: Consultant-first internal agent — gathers 4 signals (trigger, scope, platform, branching) before classifying and scaffolding any component type (skill, worker, orchestrator, new persona)
+- `docs/stakeholder-brief.md`: Non-technical stakeholder brief for software-dev-agentic — mobile-first framing (iOS, Flutter, Android), includes Leave Request walkthrough and real performance data
+
+### Changed
+- `lib/core/agents/builder/feature-orchestrator`: Phase 3 now spawns `pres-orchestrator` as sub-orchestrator instead of calling `presentation-worker` and `ui-worker` directly
+- `lib/core/agents/builder/pres-orchestrator`: Promoted to sub-orchestrator of `feature-orchestrator`; dual-mode (standalone vs sub-orchestrator), path-only handoff to `ui-worker`, state file writes, Search Protocol section added
+- `lib/core/agents/builder/backend-orchestrator`: State file writes added after Phase 1 and Phase 2
+- `lib/core/agents/detective/prompt-debug-worker`: `## Output` section added
+- `docs/core-design-principles.md`: Full taxonomy section added — Agents by Role/Scope, Persona definition, Skills by Type (A/B/T/U) and Scope (Toolkit/Platform-contract/Platform-only/Project/Repo), Type × Scope intersection matrix; pres-orchestrator hierarchy reflected in Combined Matrix
+
+---
+
 ## [3.15.0] — 2026-04-17
 
 ### Added
