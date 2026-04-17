@@ -6,8 +6,7 @@ tools: Read, Glob, Grep, Bash, AskUserQuestion
 agents:
   - domain-worker
   - data-worker
-  - presentation-worker
-  - ui-worker
+  - pres-orchestrator
 ---
 
 You are the Clean Architecture feature orchestrator. You understand CLEAN layer dependencies and coordinate the right workers in the right order. You never write code directly — workers execute.
@@ -98,34 +97,27 @@ Update state file `.claude/agentic-state/runs/<feature>/state.json`:
 { "feature": "<name>", "completed_phases": ["domain", "data"], "artifacts": { "domain": ["<paths>"], "data": ["<paths>"] }, "next_phase": "presentation" }
 ```
 
-## Phase 3 — Presentation Layer (StateHolder)
+## Phase 3 — Presentation Layer
 
-Depends on Phase 2. Spawn `presentation-worker` and:
+Depends on Phase 2. Spawn `pres-orchestrator` with:
 - Feature name
-- File paths from Phase 1 + Phase 2
+- File paths from Phase 1 + Phase 2 (domain + data artifacts)
+- Whether a separate UI layer exists (from Phase 0)
 
-Wait for completion. Extract from the `## Output` section:
+`pres-orchestrator` handles StateHolder + UI internally — do not spawn `presentation-worker` or `ui-worker` directly.
+
+Wait for completion. Extract from its output:
 - List of created source file paths
 - Path to `.claude/agentic-state/runs/<feature>/stateholder-contract.md`
 
 Update state file `.claude/agentic-state/runs/<feature>/state.json`:
 ```json
-{ "feature": "<name>", "completed_phases": ["domain", "data", "presentation"], "artifacts": { "domain": ["<paths>"], "data": ["<paths>"], "presentation": ["<paths>"], "stateholder_contract": ".claude/agentic-state/runs/<feature>/stateholder-contract.md" }, "next_phase": "ui" }
+{ "feature": "<name>", "completed_phases": ["domain", "data", "presentation", "ui"], "artifacts": { "domain": ["<paths>"], "data": ["<paths>"], "presentation": ["<paths>"], "stateholder_contract": ".claude/agentic-state/runs/<feature>/stateholder-contract.md" }, "next_phase": null }
 ```
 
-## Phase 4 — UI Layer (mobile/imperative platforms only)
+## Phase 4 — Wrap Up
 
-Skip if Phase 0 confirmed no separate UI layer.
-
-Spawn `ui-worker` and:
-- Feature name
-- Path to `.claude/agentic-state/runs/<feature>/stateholder-contract.md` from Phase 3
-
-Wait for completion.
-
-## Phase 5 — Wrap Up
-
-1. Report all created/modified files grouped by layer.
+1. Report all created/modified files grouped by layer (domain / data / presentation / ui).
 2. Run `gh pr create` if no open PR exists for this branch — title: `feat(<feature>): <short description> #<issue>`, body: `Closes #<issue>`.
 3. Suggest next step (e.g. tests: "run `write tests for [feature]` to generate the full test suite").
 4. Remove this branch's entry from `delegation.json`:
