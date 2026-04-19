@@ -14,7 +14,7 @@ You are the backend orchestrator. You coordinate domain and data workers to buil
 
 Ask if not already provided:
 1. Feature name
-2. **Platform** — `web`, `ios`, or `flutter`. Workers use this to resolve the correct skill path (`lib/platforms/<platform>/skills/<skill>/SKILL.md`).
+2. **Platform** — `web`, `ios`, or `flutter`. Workers use this to resolve the correct skill path (`.claude/skills/<skill>/SKILL.md`).
 3. Operations needed: GET list / GET single / POST / PUT / DELETE
 4. Backend type: remote API or local DB?
 5. Which layers already exist? (skip those phases)

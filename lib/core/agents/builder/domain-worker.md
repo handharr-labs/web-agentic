@@ -88,7 +88,7 @@ When building a full domain layer for a new feature:
 Skills are platform-specific. The platform is provided in the spawn prompt (e.g. `web`, `ios`, `flutter`).
 
 To execute a skill:
-1. Resolve the path: `lib/platforms/<platform>/skills/<skill-name>/SKILL.md`
+1. Resolve the path: `.claude/skills/<skill-name>/SKILL.md`
 2. `Read` that file
 3. Follow its instructions as the authoritative procedure for this platform
 
@@ -104,7 +104,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | New domain service | `domain-create-service` |
 | Update existing use case | `domain-update-usecase` |
 
-Reference: `reference/domain.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located.
+Reference: `reference/contract/domain.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located.
 
 ## Validation Protocol
 

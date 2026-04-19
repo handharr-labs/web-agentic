@@ -92,7 +92,7 @@ DB Record → DB DataSource interface → DB DataSourceImpl → DB Mapper → DB
 Skills are platform-specific. The platform is provided in the spawn prompt (e.g. `web`, `ios`, `flutter`).
 
 To execute a skill:
-1. Resolve the path: `lib/platforms/<platform>/skills/<skill-name>/SKILL.md`
+1. Resolve the path: `.claude/skills/<skill-name>/SKILL.md`
 2. `Read` that file
 3. Follow its instructions as the authoritative procedure for this platform
 
@@ -110,7 +110,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 
 For DB-backed datasource variants, check `lib/platforms/<platform>/reference/index.md` first.
 
-Reference: `reference/data.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/data.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Validation Protocol
 

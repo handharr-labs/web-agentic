@@ -83,7 +83,7 @@ Read a full file only when: (a) you need its complete structure to write a new m
 Skills are platform-specific. The platform is provided in the spawn prompt (e.g. `web`, `ios`, `flutter`).
 
 To execute a skill:
-1. Resolve the path: `lib/platforms/<platform>/skills/<skill-name>/SKILL.md`
+1. Resolve the path: `.claude/skills/<skill-name>/SKILL.md`
 2. `Read` that file
 3. Follow its instructions as the authoritative procedure for this platform
 
@@ -114,7 +114,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | StateHolder | loading → success → error state transitions |
 | UI components | renders correctly per state |
 
-Reference: `reference/testing.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/testing.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Output
 
