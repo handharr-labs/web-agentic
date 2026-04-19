@@ -7,6 +7,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.26.0] — 2026-04-20
+
+### Fixed
+- `lib/core/agents/detective/debug-worker.md`: added "Third-Party Library Investigation" rule to Search Protocol — use `Grep -rn` before any `find`/`ls` in node_modules or vendor directories; Grep for a related symbol from the error message when the target pattern is unknown; never navigate a vendor directory speculatively with directory listings
+- `lib/core/agents/builder/feature-orchestrator.md`: extended Explore Agent Grep-First Rule with a dynamic pattern exception — Tailwind template strings and runtime-assembled identifiers cannot be matched by literal Grep; in those cases use Glob + targeted Read and require the exploration prompt to document the reason for skipping Grep
+
+### Changed
+- `perf-report/xpnsio-2026-04-19-305f9697-split-bill-dropdown-bg-fix.md`: D5 6→8, D6 4→5, Overall 6.7→7.1 — branch routing revised; user-initiated "create issue and pick up" from `main` is intentional; missing PR remains the sole D6 finding
+- `perf-report/xpnsio-2026-04-19-e6748dd1-fix-skeleton-height-classes.md`: D5 4→8, D6 3→7, Overall 6.1→7.3 — starting on `main` was correct for the workflow; mid-session branch switch + PR creation was the right sequence
+
+### Added
+- `evaluation/11-d5-workflow-intent-and-vendor-grep-first.md`: documents three observations from xpnsio sessions #97 and #99 — D5/D6 false penalisation for user-initiated main-branch workflow, node_modules `find`/`ls` token overhead (~31% of session), and the dynamic class name gap in the Grep-first rule
+
+---
+
 ## [3.25.1] — 2026-04-19
 
 ### Fixed
