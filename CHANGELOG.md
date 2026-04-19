@@ -7,6 +7,22 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.22.0] — 2026-04-19
+
+### Added
+- `lib/core/reference/clean-arch/domain.md`: first per-layer canonical template — platform-agnostic concept definitions for Entity, Repository, UseCase, DomainService, DomainError, creation order, and dependency rule; workers reference this for the "what"; platform contract files implement the "how"
+
+### Changed
+- `lib/core/reference/clean-arch/contract-schema.md`: core templates note added — documents that each contract file has a platform-agnostic counterpart in `clean-arch/`; `domain.md` listed as first available
+- `lib/core/reference/clean-arch/layer-contracts.md`: Domain Layer section slimmed to summary table + pointer to `clean-arch/domain.md`; full definitions now live in the canonical template
+- `lib/platforms/{web,ios,flutter}/reference/contract/domain.md`: stripped to syntax and platform-specific patterns only; generic concept intros and duplicate rule paragraphs removed; `> Concepts: reference/clean-arch/domain.md` header added to each file; canonical `##` headings preserved
+- `lib/core/agents/builder/domain-worker.md`: "Domain Layer Rules" now points to `reference/clean-arch/domain.md` (concepts) and `reference/contract/domain.md` (platform syntax); source paths replaced with downstream paths
+- `lib/core/agents/builder/{data-worker,presentation-worker,ui-worker,feature-planner}.md`: `lib/core/reference/clean-arch/layer-contracts.md` source paths replaced with `reference/clean-arch/layer-contracts.md` downstream paths
+- **`scripts/setup-symlinks.sh`, `scripts/local-setup-symlinks.sh`**: `link_reference` / `copy_reference` generalized — now loop all subdirs and preserve each as a subdir in `.claude/reference/`; previously only `contract/` was handled explicitly; core call updated from `lib/core/reference/clean-arch` to `lib/core/reference` so `clean-arch/` lands at `.claude/reference/clean-arch/` downstream
+- `docs/core-design-principles.md` v39, `docs/shared-submodule-arch.md` v18: reference knowledge tier structure documented — `clean-arch/` two-kind distinction (universal theory + layer templates), reference subdir rule, downstream path convention
+
+---
+
 ## [3.21.0] — 2026-04-19
 
 ### Added
