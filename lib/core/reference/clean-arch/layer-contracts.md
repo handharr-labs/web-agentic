@@ -16,7 +16,9 @@ Each layer may only import from the layer to its left. No exceptions.
 
 ## Domain Layer
 
-### Artifacts
+Full artifact definitions, invariants, and creation order: `reference/clean-arch/domain.md`
+
+**Summary:**
 
 | Artifact | Purpose |
 |---|---|
@@ -25,19 +27,7 @@ Each layer may only import from the layer to its left. No exceptions.
 | Use Case | Single business operation — one class, one public method |
 | Domain Service | Pure synchronous computation that spans multiple entities |
 
-### Creation Order
-
-```
-Entity → Repository Interface → Use Case(s) → Domain Service (if needed)
-```
-
-### Invariants
-
-- Zero imports from data, presentation, or any framework
-- Entities carry no business logic and no framework decorators
-- Repository interfaces return domain entities — never DTOs or raw API types
-- Use cases are single-responsibility — one business operation per class
-- Domain services are pure and synchronous — no async, no I/O, no side effects
+Creation order: `Entity → Repository Interface → Use Case(s) → Domain Service (if needed)`
 
 ---
 

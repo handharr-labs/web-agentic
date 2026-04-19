@@ -9,6 +9,8 @@ Every file follows this structure:
 
 Platforms may add platform-specific `##` sections and adapt content to their syntax — but every required keyword must be in a `##` heading.
 
+**Core templates** — each contract file has a platform-agnostic counterpart in `lib/core/reference/clean-arch/<filename>` that defines concepts and invariants. Platform files implement those concepts in their own syntax. Currently available: `domain.md`.
+
 ## How to validate
 
 ```bash
