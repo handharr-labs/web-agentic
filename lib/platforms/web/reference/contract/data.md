@@ -1,8 +1,9 @@
-## Data Layer
+# Web — Data Layer
+
 
 Implements Domain interfaces. Handles all I/O: network, storage, caching.
 
-### DTOs (Data Transfer Objects)
+## DTOs (Data Transfer Objects)
 
 Network response models. Separate from domain entities.
 
@@ -45,7 +46,7 @@ export interface APIResponse<T> {
 - DTOs never escape the Data layer
 - Nested API objects get their own DTO + Mapper pair
 
-### Mappers
+## Mappers
 
 Transform DTOs to domain entities and vice versa. **Each DTO-Entity pair gets its own dedicated mapper.** Mappers are interface-based and injectable — this lets you mock them in repository tests and swap mapping strategies when needed.
 
@@ -144,7 +145,7 @@ export class ErrorMapperImpl implements ErrorMapper {
 - Mappers compose via injection: `EmployeeMapperImpl` receives `DepartmentMapper` in its constructor
 - Default parameter injection: `constructor(departmentMapper = new DepartmentMapperImpl())` — overridable in tests
 
-### Data Sources
+## Data Sources
 
 Abstract the data origin (remote API, local storage, cache).
 
@@ -193,7 +194,7 @@ export class EmployeeRemoteDataSourceImpl implements EmployeeRemoteDataSource {
 }
 ```
 
-### Repository Implementation
+## Repository Implementation
 
 Repositories receive mappers through injection — this lets you mock mappers in tests and isolate repository logic.
 
@@ -262,7 +263,7 @@ export class EmployeeRepositoryImpl implements EmployeeRepository {
 }
 ```
 
-### HTTP Client
+## HTTP Client
 
 Uses **Axios** with **axios-retry**. The `HTTPClient` interface keeps the Data layer decoupled from Axios internals — swap the implementation without touching repositories or data sources.
 
@@ -303,7 +304,7 @@ export class NetworkError extends Error {
 }
 ```
 
-#### Token Provider & Refresher Interfaces
+### Token Provider & Refresher Interfaces
 
 ```typescript
 // data/networking/TokenProvider.ts
@@ -323,7 +324,7 @@ export interface TokenStorage extends TokenProvider {
 }
 ```
 
-#### Axios HTTP Client (with Auth Interceptor & Retry)
+### Axios HTTP Client (with Auth Interceptor & Retry)
 
 Axios interceptors replace the manual `AuthInterceptor` and `RetryPolicy` classes entirely. `axios-retry` handles exponential backoff in a single configuration call.
 
@@ -457,7 +458,7 @@ function mapAxiosError(error: AxiosError): NetworkError {
 }
 ```
 
-#### Token Refresh Service
+### Token Refresh Service
 
 ```typescript
 // data/networking/TokenRefreshService.ts
@@ -526,4 +527,3 @@ export class TokenRefreshService implements TokenRefresher {
 | **Token Refresh** | `TokenRefreshService` — serialized with a shared Promise |
 
 ---
-

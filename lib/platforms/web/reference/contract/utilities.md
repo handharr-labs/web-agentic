@@ -1,10 +1,11 @@
-## Core Services & Utilities
+# Web — Core Services & Utilities
+
 
 Shared infrastructure used across all layers. Interface-based for testability.
 
 ---
 
-### StorageService
+## StorageService
 
 Abstracts key-value storage. Used for auth tokens, user preferences, cached data.
 
@@ -124,7 +125,7 @@ export class SecureStorageService implements StorageService {
 
 ---
 
-### DateService
+## DateService
 
 Centralized date handling with timezone and formatting support. Wraps `date-fns` or the native `Intl` API.
 
@@ -233,7 +234,7 @@ export class DateServiceImpl implements DateService {
 
 ---
 
-### Null Safety Utilities
+## Null Safety Utilities
 
 Convenient fallbacks for nullable values. Use sparingly — prefer explicit null-handling for business logic.
 
@@ -273,7 +274,7 @@ export function firstNonNull<T>(...values: (T | null | undefined)[]): T | null {
 
 ---
 
-### Logger
+## Logger
 
 Structured logging abstraction. Swap implementation per environment.
 
@@ -316,7 +317,7 @@ export const logger: Logger = new ConsoleLogger();
 
 ---
 
-### NetworkMonitor
+## NetworkMonitor
 
 Connectivity state observation using the browser's `navigator.onLine` and `online`/`offline` events.
 
@@ -366,7 +367,7 @@ export function useNetworkStatus(monitor = new BrowserNetworkMonitor()) {
 
 ---
 
-### Validator
+## Validator
 
 Input validation for common form fields.
 
@@ -435,7 +436,7 @@ export function useFormField(validator: Validator) {
 
 ---
 
-### ImageCache
+## ImageCache
 
 Asynchronous image loading leveraging Next.js `<Image>` component and browser cache.
 
@@ -484,4 +485,3 @@ export function useImage(src: string) {
 ```
 
 ---
-

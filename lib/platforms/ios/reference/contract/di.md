@@ -1,10 +1,10 @@
-# Talenta iOS — Architecture V2: 7. Dependency Injection
+# iOS — Dependency Injection
 
-## Dependency Injection
+
 
 Talenta iOS uses **Manual DI Container + Constructor Injection** pattern — lightweight, explicit, and framework-free.
 
-### Architecture Overview
+## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -29,11 +29,11 @@ Talenta iOS uses **Manual DI Container + Constructor Injection** pattern — lig
         └─────────────────────┘
 ```
 
-### Manual DI Container Pattern
+## Manual DI Container Pattern
 
 **Recommendation:** Use a lightweight manual DI Container per module to centralize dependency creation.
 
-#### Shared DI Container
+### Shared DI Container
 
 ```swift
 // Talenta/Shared/DI/SharedDIContainer.swift
@@ -102,7 +102,7 @@ final class SharedDIContainer {
 }
 ```
 
-#### Feature Module DI Container
+### Feature Module DI Container
 
 ```swift
 // Talenta/Module/TalentaTM/DI/TalentaTMDIContainer.swift
@@ -220,7 +220,7 @@ final class TalentaTMDIContainer {
 }
 ```
 
-#### App Configuration
+### App Configuration
 
 ```swift
 // AppDelegate.swift
@@ -249,7 +249,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-#### Usage in Coordinator
+### Usage in Coordinator
 
 ```swift
 // Talenta/Module/TalentaTM/Presentation/Coordinator/CICOCoordinator.swift
@@ -273,7 +273,7 @@ extension CICOCoordinator: CICOLocationNavigator {
 }
 ```
 
-### Constructor Injection (Fallback Pattern)
+## Constructor Injection (Fallback Pattern)
 
 For classes **not** managed by DI Container (legacy code, simple utilities), use constructor injection with defaults:
 
@@ -298,7 +298,7 @@ class CICOLocationViewModel: BaseViewModelV2<...> {
 - ✅ **DI Container Factory:** New code, complex dependency graphs
 - ✅ **Constructor Injection with Defaults:** Legacy code, simple utilities, backward compatibility
 
-### Testing with DI Container
+## Testing with DI Container
 
 ```swift
 // TalentaTests/Module/TalentaTM/Presentation/ViewModel/CICOLocationViewModelTest.swift
@@ -354,7 +354,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 }
 ```
 
-### DI Principles
+## DI Principles
 
 | Component | Lifecycle | Managed By |
 |-----------|-----------|------------|
@@ -366,7 +366,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 | **Coordinators** | Factory (new instance) | Parent coordinator |
 | **ViewControllers** | Factory (new instance) | Coordinator |
 
-### Benefits of Manual DI Container
+## Benefits of Manual DI Container
 
 | Benefit | Description |
 |---------|-------------|
@@ -379,7 +379,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 | ✅ **Modular** | Each feature module has own container, clear boundaries |
 | ✅ **Lazy Initialization** | Dependencies created only when needed |
 
-### When to Use What?
+## When to Use What?
 
 ```swift
 // ✅ RECOMMENDED: DI Container factory for ViewModels
@@ -398,11 +398,11 @@ let useCase = PostSubmitCICOUseCase.sharedInstance
 let repository = LiveAttendanceRepositoryImpl()
 ```
 
-### DI Wrapper (Minimal Setup)
+## DI Wrapper (Minimal Setup)
 
 **Advanced Pattern:** Use property wrappers and a registry to minimize boilerplate while keeping type safety.
 
-#### Dependency Property Wrappers
+### Dependency Property Wrappers
 
 ```swift
 // Talenta/Shared/DI/PropertyWrappers/Injected.swift
@@ -436,7 +436,7 @@ struct Factory<T> {
 }
 ```
 
-#### Streamlined DI Container
+### Streamlined DI Container
 
 ```swift
 // Talenta/Module/TalentaTM/DI/TalentaTMDIContainer.swift
@@ -488,7 +488,7 @@ extension TalentaTMDIContainer {
 }
 ```
 
-#### Usage with @Injected Wrapper
+### Usage with @Injected Wrapper
 
 **In Coordinator:**
 ```swift
@@ -526,7 +526,7 @@ class CICOLocationViewModel: BaseViewModelV2<...> {
 }
 ```
 
-#### Alternative: Builder Pattern
+### Alternative: Builder Pattern
 
 For even more concise setup with type inference:
 
@@ -558,7 +558,7 @@ final class DIBuilder {
 }
 ```
 
-#### Recommended Approach: Lazy Properties (Simplest)
+### Recommended Approach: Lazy Properties (Simplest)
 
 **Best balance of simplicity and explicitness:**
 
@@ -596,7 +596,7 @@ final class TalentaTMDIContainer {
 - ✅ No protocol registration needed
 - ✅ Works with any Swift version
 
-#### Comparison
+### Comparison
 
 | Approach | Setup Lines | Type Safety | Testability | Readability |
 |----------|-------------|-------------|-------------|-------------|
@@ -607,7 +607,7 @@ final class TalentaTMDIContainer {
 
 **Recommendation:** Use **Lazy Properties** (7.8.5) for maximum clarity with minimal boilerplate.
 
-#### Simplified Example: Complete Module
+### Simplified Example: Complete Module
 
 ```swift
 // Talenta/Module/TalentaTM/DI/TalentaTMDIContainer.swift
@@ -655,4 +655,3 @@ final class TalentaTMDIContainer {
 - **Lazy** - dependencies created only when needed
 - **Testable** - constructor injection still works for tests
 - **Zero magic** - no code generation, no runtime reflection
-

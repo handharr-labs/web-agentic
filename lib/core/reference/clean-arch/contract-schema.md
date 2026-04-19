@@ -1,15 +1,20 @@
 # Contract Reference Schema
 
-Each file under `lib/platforms/<platform>/reference/contract/` must contain all required section headings listed below. The **canonical keyword** is the grep-able string that must appear verbatim as a substring of at least one `##` or `###` heading in the file.
+Each file under `lib/platforms/<platform>/reference/contract/` must contain all required section headings listed below. The **canonical keyword** is the grep-able string that must appear verbatim as a substring of at least one `##` heading in the file.
 
-Platforms may use different section numbers, add platform-specific sections, and adapt content to their syntax — but every required keyword must be grep-able.
+Every file follows this structure:
+- `#` — platform + topic title (e.g. `# Flutter — Domain Layer`)
+- `##` — canonical section headings (greppable by agents)
+- `###` and deeper — subsections within a canonical section
+
+Platforms may add platform-specific `##` sections and adapt content to their syntax — but every required keyword must be in a `##` heading.
 
 ## How to validate
 
 ```bash
 # Check one file — exits non-zero if any keyword is missing
 for keyword in "Entities" "Repository" "Use Cases" "Domain Errors"; do
-  grep -q "$keyword" lib/platforms/web/reference/contract/domain.md \
+  grep -q "^## .*$keyword" lib/platforms/web/reference/contract/domain.md \
     || echo "MISSING: $keyword"
 done
 ```
