@@ -77,7 +77,7 @@ Before writing:
 1. Identify what is needed: new StateHolder or update to existing?
 2. Check preconditions
 3. Style-match against existing StateHolders via `Glob` + `Grep`
-4. Load `reference/presentation.md` — `Grep` for State/Event/Action pattern
+4. Load `reference/contract/presentation.md` — `Grep` for State/Event/Action pattern
 5. Execute skill procedure
 6. Write the StateHolder contract to `.claude/agentic-state/runs/<feature-name>/stateholder-contract.md` — create the directory if needed. Include:
    - StateHolder class/hook name and file path
@@ -101,7 +101,7 @@ Before writing:
 Skills are platform-specific. The platform is provided in the spawn prompt (e.g. `web`, `ios`, `flutter`).
 
 To execute a skill:
-1. Resolve the path: `lib/platforms/<platform>/skills/<skill-name>/SKILL.md`
+1. Resolve the path: `.claude/skills/<skill-name>/SKILL.md`
 2. `Read` that file
 3. Follow its instructions as the authoritative procedure for this platform
 
@@ -114,7 +114,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | New StateHolder | `pres-create-stateholder` |
 | Update existing StateHolder | `pres-update-stateholder` |
 
-Reference: `reference/presentation.md`, `reference/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/presentation.md`, `reference/contract/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Validation Protocol
 

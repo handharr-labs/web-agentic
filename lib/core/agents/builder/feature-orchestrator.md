@@ -77,7 +77,7 @@ Ask only what you need to coordinate layers. Do not gather platform-specific det
 
 Required:
 1. **Feature name** — used to coordinate between workers
-2. **Platform** — `web`, `ios`, or `flutter`. Workers use this to resolve the correct skill path (`lib/platforms/<platform>/skills/<skill>/SKILL.md`).
+2. **Platform** — `web`, `ios`, or `flutter`. Workers use this to resolve the correct skill path (`.claude/skills/<skill>/SKILL.md`).
 3. **New or update?** — creating a new feature, or modifying an existing one?
    - New → ask which layers to create (default: all)
    - Update → ask which layers need changes; skip all others
