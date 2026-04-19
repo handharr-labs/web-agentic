@@ -1,4 +1,5 @@
-## Dependency Injection
+# Web — Dependency Injection
+
 
 Next.js App Router has a hard split between **Server Components** (run only on the server) and **Client Components** (run in the browser). This changes how DI should work:
 
@@ -20,7 +21,7 @@ The strategy: **two containers, two runtimes**.
 └────────────────────────────────────────────────────────┘
 ```
 
-### Server Container
+## Server Container
 
 Module-level exports are natural singletons in Node.js — the module is evaluated once and cached. No DI framework needed for server-side code.
 
@@ -50,7 +51,7 @@ export const getEmployeesUseCase = () => new GetEmployeesUseCaseImpl(employeeRep
 export const getEmployeeUseCase = () => new GetEmployeeUseCaseImpl(employeeRepository);
 ```
 
-### Client Container
+## Client Container
 
 Only client-interactive dependencies live here. Uses `NEXT_PUBLIC_` env vars because this code runs in the browser.
 
@@ -111,7 +112,7 @@ export function useDI(): ClientContainer {
 }
 ```
 
-### App Entry Point
+## App Entry Point
 
 `DIProvider` no longer needs to wrap the entire app — only the client subtrees that need it. The root layout stays a Server Component:
 
@@ -185,7 +186,7 @@ export function EmployeeListView({ initialData }: { initialData?: PaginatedResul
 }
 ```
 
-### Decision Rule
+## Decision Rule
 
 ```
 Is this component a Server Component?
@@ -197,7 +198,7 @@ Does this env var go to the browser?
   └── NO  → API_BASE_URL (container.server.ts)
 ```
 
-### DI Principles
+## DI Principles
 
 | Rule | Reason |
 |------|--------|
@@ -211,4 +212,3 @@ Does this env var go to the browser?
 | For large-scale: split into per-feature containers | See Section 11.5–11.6 |
 
 ---
-

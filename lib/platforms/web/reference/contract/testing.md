@@ -1,6 +1,7 @@
-## Testing Strategy
+# Web — Testing
 
-### Test Pyramid
+
+## Test Pyramid
 
 ```
          ┌──────────────────┐
@@ -24,7 +25,7 @@
 - **Manual mocks** for repositories and use cases in unit tests
 - **`vi.fn()`** for simple dependency mocking
 
-### Service Tests
+## Service Tests
 
 Highest priority. Pure input → output, no mocks needed.
 
@@ -79,7 +80,7 @@ describe('LeaveRequestValidatorService', () => {
 });
 ```
 
-### ViewModel Hook Tests
+## ViewModel Hook Tests
 
 ```typescript
 // __tests__/presentation/hooks/useEmployeeListViewModel.test.ts
@@ -131,7 +132,7 @@ describe('useEmployeeListViewModel', () => {
 });
 ```
 
-### Repository Tests
+## Repository Tests
 
 With injectable mappers, you can isolate repository logic from mapping logic:
 
@@ -176,7 +177,7 @@ describe('EmployeeRepositoryImpl', () => {
 });
 ```
 
-### Mapper Tests
+## Mapper Tests
 
 Pure input → output, no mocks needed:
 
@@ -229,4 +230,3 @@ describe('EmployeeMapperImpl', () => {
 ```
 
 ---
-

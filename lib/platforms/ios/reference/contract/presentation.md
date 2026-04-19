@@ -1,12 +1,12 @@
-# Talenta iOS — Architecture V2: 5. Presentation Layer
+# iOS — Presentation Layer
 
-## Presentation Layer
 
-### ViewModel State Management
+
+## ViewModel State Management
 
 Talenta iOS uses **BaseViewModelV2** with generic State/Event/Action pattern.
 
-#### State Protocol
+### State Protocol
 
 ```swift
 // Shared/Domain/Base/ViewModelState.swift
@@ -15,7 +15,7 @@ protocol ViewModelState {
 }
 ```
 
-#### State Implementation
+### State Implementation
 
 ```swift
 // Presentation/ViewModel/CICOLocation/CICOLocationViewModelState.swift
@@ -42,14 +42,14 @@ struct CICOLocationViewModelState: ViewModelState {
 }
 ```
 
-#### Event Protocol
+### Event Protocol
 
 ```swift
 // Shared/Domain/Base/ViewModelEvent.swift
 protocol ViewModelEvent {}
 ```
 
-#### Event Implementation
+### Event Implementation
 
 ```swift
 // Presentation/ViewModel/CICOLocation/CICOLocationViewModelEvent.swift
@@ -62,14 +62,14 @@ enum CICOLocationViewModelEvent: ViewModelEvent {
 }
 ```
 
-#### Action Protocol
+### Action Protocol
 
 ```swift
 // Shared/Domain/Base/ViewModelAction.swift
 protocol ViewModelAction {}
 ```
 
-#### Action Implementation
+### Action Implementation
 
 ```swift
 // Presentation/ViewModel/CICOLocation/CICOLocationViewModelAction.swift
@@ -83,7 +83,7 @@ enum CICOLocationViewModelAction: ViewModelAction {
 }
 ```
 
-### BaseViewModelV2
+## BaseViewModelV2
 
 Generic base class for all ViewModels with reactive state management.
 
@@ -172,7 +172,7 @@ class BaseViewModelV2<State: ViewModelState, Event: ViewModelEvent, Action: View
 - Subclasses override `emitEvent(_ event:)` for user interactions
 - Subclasses override `setBinders()` for RxSwift bindings
 
-### Concrete ViewModel
+## Concrete ViewModel
 
 ```swift
 // Presentation/ViewModel/CICOLocation/CICOLocationViewModel.swift
@@ -301,7 +301,7 @@ class CICOLocationViewModel: BaseViewModelV2<
 - Use `weak self` in closures
 - Dispose subscriptions via `disposeBag`
 
-### ViewController
+## ViewController
 
 ```swift
 // Presentation/View/CICOLocation/CICOLocationViewController.swift
@@ -436,7 +436,7 @@ class CICOLocationViewController: TalentaBaseViewController {
 
 ## Advanced Patterns
 
-### Complex Dependency Management
+## Complex Dependency Management
 
 When ViewModels have 20+ dependencies, organize them systematically using MARK comments:
 
@@ -494,7 +494,7 @@ final class CICOLocationViewModel: BaseViewModelV2<CICOLocationViewModelState, C
 - **Default singletons**: Every dependency has default parameter for testability
 - **Protocol types**: Use `any ProtocolName` for all dependencies to enable mocking
 
-### Navigator Protocol Pattern
+## Navigator Protocol Pattern
 
 ViewModels never perform navigation directly. Use Navigator protocol with weak reference:
 
@@ -533,7 +533,7 @@ final class CICOLocationViewModel {
 - Navigation methods can return `Observable<T>` for bidirectional data flow
 - Use `.orEmpty()` when calling optional navigator methods that return Observable
 
-### Coordinator Pattern
+## Coordinator Pattern
 
 ```swift
 protocol [Feature]Coordinator: AnyObject {
@@ -558,9 +558,9 @@ class [Feature]CoordinatorImpl: [Feature]Coordinator {
 }
 ```
 
-### Advanced RxSwift Patterns
+## Advanced RxSwift Patterns
 
-#### Observable.zip for Parallel Requests
+### Observable.zip for Parallel Requests
 
 When you need multiple API calls to complete before processing:
 
@@ -583,7 +583,7 @@ private func loadInitialData() -> Observable<Action> {
 }
 ```
 
-#### Background Processing with Scheduler
+### Background Processing with Scheduler
 
 For heavy computation, use background scheduler then switch back to main:
 
@@ -608,7 +608,7 @@ final class AttendanceScheduleViewModel {
 }
 ```
 
-#### Share with Replay for Multiple Subscribers
+### Share with Replay for Multiple Subscribers
 
 When multiple observers need the same expensive operation result:
 
@@ -633,7 +633,7 @@ private func loadAllData() -> Observable<Action> {
 }
 ```
 
-### UIModel Pattern with copyWith
+## UIModel Pattern with copyWith
 
 ViewModels expose UIModels for the presentation layer, not domain entities:
 
@@ -668,7 +668,7 @@ struct ClockInConfirmationUIModel {
 - **Separation**: Keeps presentation logic out of domain entities
 - **Type Safety**: Compiler ensures UI only receives formatted data
 
-### Advanced State Management
+## Advanced State Management
 
 Beyond the single State pattern, use specialized relays for specific flows:
 
@@ -700,7 +700,7 @@ final class CICOBottomSheetViewModel {
 - **PublishSubject**: One-time events or commands (navigation, user actions)
 - **Driver**: Safe UI binding (never errors, on main thread)
 
-### Memory Management & deinit
+## Memory Management & deinit
 
 Always implement `deinit` to clean up resources:
 
@@ -717,7 +717,7 @@ deinit {
 **What to clean up:** location managers, publish/behavior subjects (`.onCompleted()`), timers, file handles.
 Always log `deinit` to catch retain cycles.
 
-### Feature Flags Integration
+## Feature Flags Integration
 
 ```swift
 final class CICOLocationViewModel {

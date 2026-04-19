@@ -1,10 +1,10 @@
-# Talenta iOS — Architecture V2: 4. Data Layer
+# iOS — Data Layer
 
-## Data Layer
+
 
 Implements Domain protocols. Handles all I/O: network, storage, caching.
 
-### Response Models (DTOs)
+## Response Models (DTOs)
 
 API response models. Separate from domain entities.
 
@@ -71,7 +71,7 @@ struct RequestLiveAttendanceResponseData: Decodable {
 - Response models never escape Data layer
 - Standard wrapper: `status`, `message`, `data` structure
 
-### Data Sources
+## Data Sources
 
 Abstract the data origin (remote API, local storage, cache).
 
@@ -130,11 +130,11 @@ class LiveAttendanceRemoteDataSourceImpl: LiveAttendanceRemoteDataSource {
 - Uses Moya for HTTP requests
 - Error handling: catch decode + network errors
 
-### Mappers
+## Mappers
 
 **CRITICAL:** Mappers belong in the **Data Layer**, not Domain Layer.
 
-#### Why Mappers Are in Data Layer
+### Why Mappers Are in Data Layer
 
 Mappers transform API Response models (Data Layer DTOs) into Domain Entities (Domain Layer models).
 
@@ -145,7 +145,7 @@ Mappers transform API Response models (Data Layer DTOs) into Domain Entities (Do
 | **Framework Dependency** | Mappers use `Codable`, optional unwrapping extensions (`.orEmpty()`, `.orZero()`), and API-specific parsing — these are infrastructure concerns. |
 | **Domain Independence** | Domain layer must be pure Swift with zero framework dependencies. Domain shouldn't know about Response models or JSON parsing. |
 
-#### Clean Architecture Flow
+### Clean Architecture Flow
 
 ```
 API Response (Data) ──Mapper (Data)──> Domain Entity (Domain) ──> UseCase (Domain)
@@ -154,7 +154,7 @@ API Response (Data) ──Mapper (Data)──> Domain Entity (Domain) ──> Us
 **Correct:** Data layer imports Domain entities, uses Mappers to convert Response → Entity
 **Wrong:** Domain layer imports Response models from Data layer (violates dependency rule!)
 
-#### Basic Mapper Pattern
+### Basic Mapper Pattern
 
 ```swift
 // Data/Mapper/RequestLiveAttendanceModelMapper.swift
@@ -199,7 +199,7 @@ class RequestLiveAttendanceModelMapper: RequestLiveAttendanceModelMapperType {
 }
 ```
 
-#### Composable Mappers
+### Composable Mappers
 
 Mappers compose via injection — a parent mapper depends on child mappers for nested objects:
 
@@ -237,7 +237,7 @@ class EmployeeMapper: EmployeeMapping {
 }
 ```
 
-#### When Business Logic Appears in Mapping
+### When Business Logic Appears in Mapping
 
 ❌ **Wrong:** Complex validation in Mapper
 ```swift
@@ -292,7 +292,7 @@ class CustomFormValidator {
 | ✅ Consistent with architecture (injectable) | Simpler for trivial mappers |
 | ✅ Testable in isolation | More boilerplate |
 
-### Repository Implementation
+## Repository Implementation
 
 Repositories inject **mappers** and **datasources**, implement **domain protocols**.
 
@@ -366,7 +366,7 @@ class LiveAttendanceRepositoryImpl: LiveAttendanceRepository {
 - Map errors to `BaseErrorModel`
 - Return `Result<Model, BaseErrorModel>` via completion
 
-### Networking (Moya)
+## Networking (Moya)
 
 Talenta iOS uses **Moya** for type-safe networking.
 
@@ -428,9 +428,9 @@ extension TimeManagementAPI: TargetType {
 - Headers include auth tokens from storage
 - MoyaProvider handles HTTP requests
 
-### Advanced Repository Patterns
+## Advanced Repository Patterns
 
-#### Offline Support with Cache Fallback
+### Offline Support with Cache Fallback
 
 Use `NWPathMonitor` to check connectivity, fall back to cache when offline:
 
@@ -477,7 +477,7 @@ final class AttendanceRepositoryImpl: AttendanceRepository {
 - Cache on successful fetch; serve cache when offline
 - Return a clear error only when offline AND no cache exists
 
-#### Parallel Requests with DispatchGroup
+### Parallel Requests with DispatchGroup
 
 Combine multiple independent API calls into a single repository method:
 
@@ -526,4 +526,3 @@ final class DashboardRepositoryImpl: DashboardRepository {
 - `defer { group.leave() }` ensures leave is always called
 - Decide on failure strategy: fail-fast (any error fails all) or partial success (return what you have)
 - Call `group.notify(queue: .main)` to deliver result on main thread
-

@@ -72,7 +72,7 @@ How to check: `Read` the template file; flag any comment that explains the skill
 
 For each `lib/platforms/<platform>/reference/contract/` directory being audited, verify all 8 files contain their required canonical heading keywords. Required keywords are defined in `lib/core/reference/clean-arch/contract-schema.md`.
 
-**How to check:** For each file, `Grep` for each required keyword within that file. A keyword must appear as a substring in at least one `##` or `###` heading line.
+**How to check:** For each file, `Grep` for pattern `^## .*<keyword>` within that file. A keyword must appear as a substring of a `##` heading — `###` or deeper does not satisfy the requirement.
 
 | File | Required keywords |
 |---|---|

@@ -1,121 +1,9 @@
-# Talenta iOS — Architecture V2: 1. Overview
+# iOS — Domain Layer
 
-## Overview
-
-### What This Is
-
-The **Talenta iOS** application is an enterprise HR/attendance tracking platform built with **UIKit** and **Clean Architecture**. It implements **MVVM-Coordinator** pattern with **RxSwift** for reactive programming, designed to scale across multiple HR domains with strong separation of concerns, testability, and maintainability.
-
-### Core Principles
-
-| Principle | Implementation |
-|-----------|----------------|
-| **Clean Architecture** | Strict layering: Data → Domain → Presentation |
-| **Separation of Concerns** | Each layer has a single, well-defined responsibility |
-| **Protocol-Driven** | All boundaries defined by protocols for testability |
-| **Reactive Programming** | RxSwift/RxCocoa for data binding and async operations |
-| **Testability First** | Injectable dependencies, mockable interfaces |
-| **Single Responsibility** | UseCases do one thing; ViewModels orchestrate |
-| **Domain Independence** | Domain layer knows nothing about frameworks |
-
-### Minimum Requirements
-
-- iOS 13.0+
-- Swift 5.0+
-- Xcode 14+
-- CocoaPods for dependency management
-
-### Key Architecture Choices
-
-| Concern | Approach | Rationale |
-|---------|----------|-----------|
-| UI Framework | UIKit (programmatic + XIB) | Mature, fine-grained control, team expertise |
-| Reactive | RxSwift/RxCocoa | Proven, iOS 13+ support, rich ecosystem |
-| Navigation | Coordinator pattern | Decoupled navigation logic, deep linking ready |
-| ViewModel | BaseViewModelV2<State, Event, Action> | Type-safe state management, standardized interface |
-| DI | Lightweight manual DI Container | Explicit, debuggable, no framework overhead |
-| Business Logic | UseCases (single-responsibility) | Testable, reusable, composable |
-| Networking | Moya + RxSwift | Type-safe, mockable, built-in Rx support |
-| State | BehaviorRelay<State> | Thread-safe, observable, reactive |
-| Mappers | Protocol-based, injectable | Composable, swappable, testable |
-
----
-
-## Architecture Layers
-
-```
-┌─────────────────────────────────────────────────────┐
-│                 PRESENTATION LAYER                   │
-│  ViewControllers → ViewModels → Coordinators        │
-│  (Knows about: Domain)                              │
-│  ─────────────────────────────────────────────────  │
-│  • UIKit-based views and controllers                │
-│  • RxSwift bindings (Driver, Observable)            │
-│  • State management (BehaviorRelay<State>)          │
-│  • User interaction → Events                        │
-│  • Actions → UI updates                             │
-└──────────────────────┬──────────────────────────────┘
-                       │ depends on ↓
-┌──────────────────────▼──────────────────────────────┐
-│                   DOMAIN LAYER                       │
-│  Entities, Repository protocols, UseCases            │
-│  Params (Query/Path), Services, Enums               │
-│  (Knows about: nothing — innermost layer)           │
-│  ─────────────────────────────────────────────────  │
-│  • Pure Swift structs/protocols                     │
-│  • Business logic (UseCases, Services)              │
-│  • Domain entities (Model structs)                  │
-│  • Repository contracts (protocols only)            │
-│  • NO UIKit, NO RxSwift, NO Moya, NO Codable        │
-│  • Framework-independent, pure business logic       │
-└──────────────────────┬──────────────────────────────┘
-                       │ implemented by ↓
-┌──────────────────────▼──────────────────────────────┐
-│                    DATA LAYER                        │
-│  Repository impls, DataSources, Response models      │
-│  Mappers (Response → Domain Entity)                 │
-│  (Knows about: Domain protocols, Moya, Codable)     │
-│  ─────────────────────────────────────────────────  │
-│  • API response models (DTOs)                       │
-│  • Data sources (Remote/Local)                      │
-│  • Repository implementations                       │
-│  • Moya network layer                               │
-│  • Mapper implementations (Data → Domain)           │
-└─────────────────────────────────────────────────────┘
-```
-
-### Dependency Rule
-
-**CRITICAL: Inner layers never depend on outer layers.**
-
-- **Domain** depends on **nothing** (no imports except Foundation types)
-- **Data** implements Domain protocols, uses Domain entities
-- **Presentation** depends on Domain (calls UseCases, receives Models)
-
-```swift
-// ❌ WRONG: Domain importing UIKit or RxSwift
-import UIKit  // Domain layer should NEVER import UI frameworks
-import RxSwift // Domain layer should NEVER import reactive frameworks
-
-// ✅ CORRECT: Domain with minimal imports
-import Foundation // OK for Date, Codable, etc.
-```
-
-### Layer Responsibilities
-
-| Layer | Responsibility | Never Contains |
-|-------|----------------|----------------|
-| **Domain** | Business rules, entities, contracts | UI code, networking, RxSwift |
-| **Data** | External data access, API calls | Business logic, UI code |
-| **Presentation** | UI rendering, user interaction | Direct network calls, business logic |
-
----
-
-## Domain Layer
 
 The innermost layer. Defines **what** the app does, not **how**.
 
-### Entities
+## Entities
 
 Pure business models. No framework dependencies.
 
@@ -187,7 +75,7 @@ extension RequestLiveAttendanceModel {
 - ❌ No `import UIKit` or heavy framework dependencies
 - ❌ No business logic (pure data)
 
-### Repository Protocols
+## Repository Protocols
 
 Define data access contracts. Implementations live in Data layer.
 
@@ -220,11 +108,11 @@ protocol LiveAttendanceRepository {
 - ✅ Params are domain Param objects, not raw dictionaries
 - ❌ No implementation details (no Moya, no network code)
 
-### Use Cases
+## Use Cases
 
 Single-responsibility operations. Each UseCase does **one thing**.
 
-#### UseCase Mandatory Rule
+### UseCase Mandatory Rule
 
 **ViewModels NEVER call Repositories directly. ALWAYS through UseCases.**
 
@@ -233,7 +121,7 @@ Single-responsibility operations. Each UseCase does **one thing**.
  ViewModel → Repository              ❌ WRONG - breaks Clean Architecture
 ```
 
-#### Modern UseCase Protocol (Simplified)
+### Modern UseCase Protocol (Simplified)
 
 Talenta iOS V2 uses **ONE** clean protocol with nested Params:
 
@@ -263,9 +151,9 @@ protocol UseCaseProtocol {
 - ✅ **Self-documenting** - All inputs clearly defined in one place
 - ✅ **Consistent API** - All use cases have the same `execute(params:completion:)` signature
 
-#### UseCase Implementation Patterns
+### UseCase Implementation Patterns
 
-##### Pattern 1: GET with Single ID
+#### Pattern 1: GET with Single ID
 
 ```swift
 // Domain/UseCase/Employee/GetEmployeeUseCase.swift
@@ -311,7 +199,7 @@ getEmployeeUseCase.execute(params: params) { result in
 }
 ```
 
-##### Pattern 2: GET with Multiple Query Parameters
+#### Pattern 2: GET with Multiple Query Parameters
 
 ```swift
 // Domain/UseCase/Employee/GetEmployeesUseCase.swift
@@ -382,7 +270,7 @@ let params = GetEmployeesUseCase.Params(page: 2, limit: 50, departmentId: "eng-0
 getEmployeesUseCase.execute(params: params) { result in ... }
 ```
 
-##### Pattern 3: POST/PUT with Path ID + Body (Nested Payload)
+#### Pattern 3: POST/PUT with Path ID + Body (Nested Payload)
 
 **Key Pattern:** Separate path identifiers from payload body using nested structs.
 
@@ -490,7 +378,7 @@ postSubmitCICOUseCase.execute(params: params) { [weak self] result in
 }
 ```
 
-##### Pattern 4: UseCase Without Parameters
+#### Pattern 4: UseCase Without Parameters
 
 **Key Pattern:** Use `typealias Params = Void` for use cases that don't need parameters.
 
@@ -541,7 +429,7 @@ getCurrentUserUseCase.execute(params: ()) { [weak self] result in
 }
 ```
 
-#### Params Pattern Summary
+### Params Pattern Summary
 
 | Operation | Params Structure | Example |
 |-----------|-----------------|---------|
@@ -564,13 +452,13 @@ getCurrentUserUseCase.execute(params: ()) { [weak self] result in
 - Discoverable — autocomplete shows params right from the UseCase type
 - Colocated — params definition lives next to the code that uses it
 
-### Services
+## Services
 
 Pure business decision functions. **No I/O, no side effects, no async.**
 
 Services consolidate complex business logic that doesn't fit cleanly in UseCases or ViewModels. They can be called by **BOTH UseCases AND ViewModels**.
 
-#### Service Patterns
+### Service Patterns
 
 Talenta iOS uses **two service patterns** depending on complexity:
 
@@ -579,7 +467,7 @@ Talenta iOS uses **two service patterns** depending on complexity:
 | **Struct-based** | Simple, stateless calculations | `LeaveBalanceCalculator` |
 | **Protocol + Class** | Complex logic, needs mocking, shared state | `InboxApproveAllService` |
 
-#### Pattern 1: Simple Struct-Based Service
+### Pattern 1: Simple Struct-Based Service
 
 For straightforward calculations and validations:
 
@@ -607,7 +495,7 @@ struct LeaveBalanceCalculator {
 - ✅ Default parameter injection for composition
 - ❌ No shared state or dependencies
 
-#### Pattern 2: Protocol + Class Service (Recommended for Complex Logic)
+### Pattern 2: Protocol + Class Service (Recommended for Complex Logic)
 
 For complex business logic that needs mocking, dependency injection, or shared infrastructure:
 
@@ -764,7 +652,7 @@ struct InboxProgressDisplayValues {
 - ✅ Testable via protocol mocking
 - ✅ Naming: `[Feature]Service` (protocol) + `[Feature]ServiceImpl` (class)
 
-#### Services Called from UseCases
+### Services Called from UseCases
 
 ```swift
 // Domain/UseCases/Leave/SubmitLeaveRequestUseCase.swift
@@ -808,7 +696,7 @@ final class SubmitLeaveRequestUseCase: UseCaseProtocol {
 }
 ```
 
-#### Services Called from ViewModels
+### Services Called from ViewModels
 
 **IMPORTANT:** ViewModels can call Services directly for pure business logic (no I/O).
 
@@ -888,7 +776,7 @@ class InboxApprovalListViewModel: BaseViewModelV2<State, Event, Action> {
 - ✅ Services help ViewModels stay focused on orchestration
 - ❌ Services never do I/O (that's UseCase territory)
 
-#### When to Use Services
+### When to Use Services
 
 | Scenario | Approach |
 |----------|----------|
@@ -899,7 +787,7 @@ class InboxApprovalListViewModel: BaseViewModelV2<State, Event, Action> {
 | Pure calculation/decision logic | Extract to Service |
 | Shared configuration/policies | Extract to Service |
 
-#### Service Pattern Decision Matrix
+### Service Pattern Decision Matrix
 
 | Requirement | Use Struct | Use Protocol + Class |
 |-------------|------------|----------------------|
@@ -914,7 +802,7 @@ class InboxApprovalListViewModel: BaseViewModelV2<State, Event, Action> {
 
 **Key Principle:** Services contain pure business logic. UseCases orchestrate I/O. ViewModels orchestrate UI.
 
-### Domain Errors
+## Domain Errors
 
 ```swift
 // Shared/Domain/Entities/BaseErrorModel.swift
@@ -929,7 +817,7 @@ struct BaseErrorModel: Error {
 
 ---
 
-### Domain Enums
+## Domain Enums
 
 ```swift
 // Domain/enum/CICOType.swift
@@ -960,4 +848,3 @@ enum TimeOffMenuType {
 - Use meaningful names tied to business domain
 - Prefer `String` raw values for API interop when needed
 - Location: `Domain/enum/`
-
