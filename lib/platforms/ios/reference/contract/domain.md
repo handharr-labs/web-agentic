@@ -1,11 +1,8 @@
 # iOS — Domain Layer
 
-
-The innermost layer. Defines **what** the app does, not **how**.
+> Concepts and invariants: `reference/clean-arch/domain.md`. This file covers Swift syntax and iOS-specific patterns.
 
 ## Entities
-
-Pure business models. No framework dependencies.
 
 ```swift
 // Domain/Entities/CICO/RequestLiveAttendanceModel.swift
@@ -77,8 +74,6 @@ extension RequestLiveAttendanceModel {
 
 ## Repository Protocols
 
-Define data access contracts. Implementations live in Data layer.
-
 ```swift
 // Domain/Repository/LiveAttendanceRepository.swift
 protocol LiveAttendanceRepository {
@@ -109,17 +104,6 @@ protocol LiveAttendanceRepository {
 - ❌ No implementation details (no Moya, no network code)
 
 ## Use Cases
-
-Single-responsibility operations. Each UseCase does **one thing**.
-
-### UseCase Mandatory Rule
-
-**ViewModels NEVER call Repositories directly. ALWAYS through UseCases.**
-
-```
- ViewModel → UseCase → Repository    ✅ Correct
- ViewModel → Repository              ❌ WRONG - breaks Clean Architecture
-```
 
 ### Modern UseCase Protocol (Simplified)
 
@@ -454,9 +438,7 @@ getCurrentUserUseCase.execute(params: ()) { [weak self] result in
 
 ## Services
 
-Pure business decision functions. **No I/O, no side effects, no async.**
-
-Services consolidate complex business logic that doesn't fit cleanly in UseCases or ViewModels. They can be called by **BOTH UseCases AND ViewModels**.
+Pure business decisions — no I/O, no side effects, no async. Can be called by both UseCases and ViewModels. See extraction rules in `reference/clean-arch/domain.md`.
 
 ### Service Patterns
 

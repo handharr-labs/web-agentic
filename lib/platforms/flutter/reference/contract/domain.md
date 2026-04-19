@@ -1,22 +1,10 @@
 # Flutter — Domain Layer
 
-The innermost layer. Defines **what** the app does, not **how**.
-
-## Dependency Rule
-
-**Domain has zero dependencies on outer layers.**
-
-```
-Presentation  →  Domain  ←  Data
-```
-
-Domain imports only `dart:core` and functional packages (`fpdart`). Never imports flutter, Dio, freezed `@JsonKey`, or any data-layer type.
-
----
+> Concepts and invariants: `reference/clean-arch/domain.md`. This file covers Dart syntax and Flutter-specific patterns.
 
 ## Entities
 
-Immutable business objects. **No `fromJson` — ever.**
+Immutable business objects with `@freezed`. **No `fromJson` — ever.**
 
 ```dart
 // domain/entities/employee_entity.dart
@@ -45,8 +33,6 @@ class EmployeeEntity with _$EmployeeEntity {
 ---
 
 ## Repository Interfaces
-
-Define data access contracts. Implementations live in the Data layer.
 
 ```dart
 // domain/repositories/employee_repository.dart
@@ -79,15 +65,6 @@ abstract class EmployeeRepository {
 ---
 
 ## Use Cases
-
-Single-responsibility operations. One use case per business operation.
-
-**Mandatory rule:** Presentation layer never calls repositories directly. Always through a use case.
-
-```
-BLoC → UseCase → Repository    ✅
-BLoC → Repository              ❌
-```
 
 ### UseCase Base Class
 
@@ -234,9 +211,7 @@ class GetCurrentUserUseCase
 
 ## Domain Services
 
-Pure synchronous functions. No I/O, no async, no side effects.
-
-Extract to a service when logic is too complex for a use case, or reused across multiple use cases/BLoCs.
+Pure synchronous functions — no I/O, no async, no side effects. See extraction rules in `reference/clean-arch/domain.md`.
 
 ```dart
 // domain/services/leave_balance_calculator.dart

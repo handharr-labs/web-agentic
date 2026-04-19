@@ -1,11 +1,8 @@
 # Web — Domain Layer
 
-
-The innermost layer. Defines **what** the app does, not **how**.
+> Concepts and invariants: `reference/clean-arch/domain.md`. This file covers TypeScript syntax and web-specific patterns.
 
 ## Entities
-
-Pure data models representing business concepts. No framework imports.
 
 ```typescript
 // domain/entities/Employee.ts
@@ -41,8 +38,6 @@ export interface PaginatedResult<T> {
 
 ## Repository Interfaces
 
-Define data access contracts. Implementations live in the Data layer.
-
 ```typescript
 // domain/repositories/EmployeeRepository.ts
 export interface EmployeeRepository {
@@ -64,15 +59,6 @@ export interface EmployeeRepository {
 - Interface must be in the Domain layer — implementations go in Data
 
 ## Use Cases
-
-Single-responsibility operations that orchestrate repositories. Each UseCase does **one thing**.
-
-**UseCases are mandatory.** ViewModel hooks never call repositories directly — every data operation goes through a UseCase. Even thin pass-through UseCases. This keeps a consistent pattern and makes it easy to add validation, caching, or logging later without touching the presentation layer.
-
-```
-ViewModel Hook → UseCase → Repository    ✅ Always
-ViewModel Hook → Repository              ❌ Never
-```
 
 Each UseCase has a **Params** type that bundles all input parameters:
 
@@ -166,7 +152,7 @@ export class UpdateEmployeeUseCaseImpl implements UpdateEmployeeUseCase {
 
 ## Services
 
-Services handle **pure business decisions** — no I/O, no side effects, no async. Use them when business logic is complex enough to warrant extraction from a UseCase or ViewModel hook.
+Pure business decisions — no I/O, no side effects, no async. See extraction rules in `reference/clean-arch/domain.md`.
 
 ```typescript
 // domain/services/LeaveBalanceCalculator.ts
