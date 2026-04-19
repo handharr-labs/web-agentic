@@ -1,15 +1,15 @@
 > Author: Puras Handharmahua · 2026-04-19
-> Status: Backlog — pending platform file alignment before each item can be registered in `docs/contract/arch-check.md`
+> Status: Backlog — pending platform file alignment before each item can be registered in `docs/contract/builder-auditor-schema.md`
 
 # Contract Schema — Convention Improvement Backlog
 
-Gaps identified by comparing `docs/contract/arch-check.md` against CLEAN Architecture, SOLID, and DRY theory. Each item below was confirmed **not yet safe to register** because one or more platform contract files are missing the required `##` heading.
+Gaps identified by comparing `docs/contract/builder-auditor-schema.md` against CLEAN Architecture, SOLID, and DRY theory. Each item below was confirmed **not yet safe to register** because one or more platform contract files are missing the required `##` heading.
 
-Adding a keyword to `docs/contract/arch-check.md` before the platform files are updated causes immediate `arch-check-conventions` violations. The correct sequence is:
+Adding a keyword to `docs/contract/builder-auditor-schema.md` before the platform files are updated causes immediate `arch-check-conventions` violations. The correct sequence is:
 
 ```
 1. Add ## heading to all 3 platform contract files (web, iOS, flutter)
-2. Register the keyword in docs/contract/arch-check.md
+2. Register the keyword in docs/contract/builder-auditor-schema.md
 3. Update the core template if not already covered
 ```
 

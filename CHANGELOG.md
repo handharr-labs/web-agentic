@@ -7,6 +7,18 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.24.2] — 2026-04-19
+
+### Added
+- `docs/contract/README.md`: index and structural rules for `docs/contract/` — heading format, validation snippet, adding a new platform; extracted from `builder-auditor-schema.md`
+
+### Changed
+- `docs/contract/arch-check.md` → `docs/contract/builder-auditor-schema.md`: renamed to reflect dual ownership (builder greps, auditor enforces); keyword tables only — structural rules moved to README
+- `skills/arch-check-conventions/SKILL.md`: schema path updated to `docs/contract/builder-auditor-schema.md`
+- `docs/contract-schema-improvement-backlog.md`: path references updated
+
+---
+
 ## [3.24.1] — 2026-04-19
 
 ### Changed

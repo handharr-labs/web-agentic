@@ -1,27 +1,11 @@
-# Contract Reference Schema
+# Builder + Auditor — Reference Contract Schema
 
-Each file under `lib/platforms/<platform>/reference/contract/` must contain all required section headings listed below. The **canonical keyword** is the grep-able string that must appear verbatim as a substring of at least one `##` heading in the file.
+Canonical keyword registry for all 8 platform reference contract files under `lib/platforms/<platform>/reference/contract/`.
 
-Every file follows this structure:
-- `#` — platform + topic title (e.g. `# Flutter — Domain Layer`)
-- `##` — canonical section headings (greppable by agents)
-- `###` and deeper — subsections within a canonical section
+**Builder** persona greps these keywords when reading platform reference files.
+**Auditor** persona (`arch-check-conventions`) enforces their presence on all platforms.
 
-Platforms may add platform-specific `##` sections and adapt content to their syntax — but every required keyword must be in a `##` heading.
-
-**Core templates** — each contract file has a platform-agnostic counterpart in `lib/core/reference/clean-arch/<filename>` that defines concepts and invariants. Platform files implement those concepts in their own syntax. Currently available: `domain.md`, `data.md`, `presentation.md`, `ui.md`, `di.md`, `testing.md`, `error-handling.md`.
-
-## How to validate
-
-```bash
-# Check one file — exits non-zero if any keyword is missing
-for keyword in "Entities" "Repository" "Use Cases" "Services" "Domain Errors"; do
-  grep -q "^## .*$keyword" lib/platforms/web/reference/contract/domain.md \
-    || echo "MISSING: $keyword"
-done
-```
-
-`arch-check-conventions` enforces this automatically for all three platforms.
+See `docs/contract/README.md` for heading structure rules, validation, and adding a new platform.
 
 ---
 
@@ -105,12 +89,3 @@ At least one of the three keywords must be present.
 | `DateService` | Date formatting and parsing |
 | `Logger` | Structured logging |
 | `Null Safety` | Null/optional fallback utilities |
-
----
-
-## Adding a new platform
-
-When adding a 4th platform:
-1. Create `lib/platforms/<platform>/reference/contract/` with all 8 files
-2. Each file must contain the required keywords above
-3. Run `arch-check-conventions` on the new platform's contract directory to verify compliance before merging
