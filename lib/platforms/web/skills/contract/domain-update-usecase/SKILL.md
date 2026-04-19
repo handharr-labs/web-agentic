@@ -5,7 +5,7 @@ user-invocable: false
 tools: Read, Edit, Glob
 ---
 
-Update an existing UseCase following `reference/contract/domain.md § 3.3`.
+Update an existing UseCase following `reference/contract/domain.md` — Grep `## Use Cases`.
 
 ## Steps
 

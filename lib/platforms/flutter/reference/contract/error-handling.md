@@ -1,5 +1,7 @@
 # Flutter — Error Handling
 
+> Concepts and invariants: `reference/clean-arch/error-handling.md`. This file covers Dart syntax and Flutter-specific patterns.
+
 Errors flow inward: HTTP → `AppException` → `Failure` → `ViewDataState.error`. Each layer converts, never forwards raw exceptions.
 
 ---

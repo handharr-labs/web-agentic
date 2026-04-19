@@ -1,5 +1,6 @@
 # Web — Testing
 
+> Concepts and invariants: `reference/clean-arch/testing.md`. This file covers TypeScript syntax and web-specific patterns.
 
 ## Test Pyramid
 

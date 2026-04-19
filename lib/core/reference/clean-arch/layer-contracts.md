@@ -33,7 +33,9 @@ Creation order: `Entity → Repository Interface → Use Case(s) → Domain Serv
 
 ## Data Layer
 
-### Artifacts
+Full artifact definitions, invariants, and creation order: `reference/clean-arch/data.md`
+
+**Summary:**
 
 | Artifact | Purpose |
 |---|---|
@@ -43,31 +45,15 @@ Creation order: `Entity → Repository Interface → Use Case(s) → Domain Serv
 | DataSource implementation | Concrete HTTP/DB calls — injected, never instantiated directly |
 | Repository implementation | Implements domain repository interface using datasource + mapper |
 
-### Creation Order
-
-**Remote API:**
-```
-DTO → Mapper → DataSource interface → DataSource impl → Repository impl
-```
-
-**Local DB:**
-```
-DB Record → DB DataSource interface → DB DataSource impl → DB Mapper → Repository impl
-```
-
-### Invariants
-
-- Imports from domain layer only — never from presentation
-- DTOs mirror the raw API/DB shape exactly — no computed fields, no domain logic
-- Mappers are always interface + implementation — never plain utility functions
-- Repository implementations wrap all calls with error handling — never let raw errors propagate
-- DataSources are abstract interfaces — implementations are injected, never created directly
+Creation order (remote): `DTO → Mapper → DataSource interface → DataSource impl → Repository impl`
 
 ---
 
 ## Presentation Layer (StateHolder)
 
-### Artifacts
+Full artifact definitions, invariants, and creation order: `reference/clean-arch/presentation.md`
+
+**Summary:**
 
 | Artifact | Purpose |
 |---|---|
@@ -76,25 +62,15 @@ DB Record → DB DataSource interface → DB DataSource impl → DB Mapper → R
 | Event / Input | User intentions flowing in (button tapped, form submitted) |
 | Action / Output | Side effects flowing out (navigate, show toast) |
 
-The StateHolder contract (written to `.claude/agentic-state/runs/<feature>/stateholder-contract.md`) includes:
-- StateHolder class/hook name and file path
-- State fields
-- Event and Action cases
-- Navigator/coordinator protocol name and methods
-- DI factory method or binding key
-
-### Invariants
-
-- StateHolder depends on domain use cases only — never on data layer implementations
-- Use cases are injected via DI — never instantiated directly
-- State is read-only from the UI's perspective — UI observes, never mutates
-- StateHolder has no knowledge of the UI framework rendering it — no view imports
+Creation order: `Use Cases → StateHolder → StateHolder contract → Screen (ui-worker)`
 
 ---
 
 ## UI Layer
 
-### Artifacts
+Full artifact definitions, invariants, and creation order: `reference/clean-arch/ui.md`
+
+**Summary:**
 
 | Artifact | Purpose |
 |---|---|
@@ -103,19 +79,7 @@ The StateHolder contract (written to `.claude/agentic-state/runs/<feature>/state
 | Navigator / Coordinator | Owns navigation logic — UI delegates destination decisions here |
 | DI wiring | Registers StateHolder and dependencies in the container |
 
-### Creation Order
-
-```
-Screen → Navigator/Coordinator (if needed) → DI wiring (if needed)
-```
-
-### Invariants
-
-- UI observes state read-only — never mutates state directly
-- UI sends events to the StateHolder — never calls use cases directly
-- UI instantiates StateHolder via DI — never with direct init / `new`
-- Navigation is delegated to a coordinator/router — UI never knows the destination implementation
-- UI has no knowledge of the data layer
+Creation order: `Screen → Navigator/Coordinator (if needed) → DI wiring (if needed)`
 
 ---
 

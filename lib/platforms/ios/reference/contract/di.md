@@ -1,6 +1,6 @@
 # iOS — Dependency Injection
 
-
+> Concepts and invariants: `reference/clean-arch/di.md`. This file covers Swift syntax and iOS-specific patterns.
 
 Talenta iOS uses **Manual DI Container + Constructor Injection** pattern — lightweight, explicit, and framework-free.
 

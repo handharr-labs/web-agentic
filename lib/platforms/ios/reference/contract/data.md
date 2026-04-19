@@ -1,6 +1,6 @@
 # iOS — Data Layer
 
-
+> Concepts and invariants: `reference/clean-arch/data.md`. This file covers Swift syntax and iOS-specific patterns.
 
 Implements Domain protocols. Handles all I/O: network, storage, caching.
 

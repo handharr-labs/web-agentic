@@ -37,19 +37,10 @@ You write **presentation layer files only** — the StateHolder and its contract
 
 If you find yourself about to write a screen or navigation file, STOP — that belongs in `ui-worker`.
 
-## StateHolder Concept (platform-agnostic)
-
-The StateHolder is the single source of truth for UI state. Regardless of platform name (ViewModel, BLoC, Presenter), it follows the same contract:
-
-- **State** — immutable snapshot of what the UI should render (loading, data, error)
-- **Event/Input** — user intentions flowing in (button tapped, form submitted)
-- **Action/Output** — side effects flowing out (navigate, show toast)
-
-The StateHolder consumes use cases. It never touches repositories or data sources directly.
-
 ## Presentation Layer Rules — Never Violate
 
-Reference: `reference/clean-arch/layer-contracts.md` § Presentation Layer — all artifact types, StateHolder contract shape, and invariants are defined there.
+Concepts, invariants, and creation order: `reference/clean-arch/presentation.md`
+Platform syntax: `reference/contract/presentation.md` — Grep for the relevant `## Section` keyword.
 
 ## Search Protocol — Never Violate
 

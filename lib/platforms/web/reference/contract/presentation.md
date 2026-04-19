@@ -1,5 +1,6 @@
 # Web — Presentation Layer
 
+> Concepts and invariants: `reference/clean-arch/presentation.md`. This file covers TypeScript syntax and web-specific patterns.
 
 ## QueryState
 

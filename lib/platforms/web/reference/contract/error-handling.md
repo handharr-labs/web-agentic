@@ -1,5 +1,6 @@
 # Web — Error Handling
 
+> Concepts and invariants: `reference/clean-arch/error-handling.md`. This file covers TypeScript syntax and web-specific patterns.
 
 ## Error Flow
 

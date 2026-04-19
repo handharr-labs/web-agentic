@@ -35,7 +35,8 @@ If you find yourself writing state management or business logic, STOP — that b
 
 ## UI Layer Rules — Never Violate
 
-Reference: `reference/clean-arch/layer-contracts.md` § UI Layer — all artifact types, creation order, and invariants are defined there.
+Concepts, invariants, and creation order: `reference/clean-arch/ui.md`
+Platform syntax: `reference/contract/presentation.md` — Grep for the relevant `## Section` keyword.
 
 ## Search Protocol — Never Violate
 

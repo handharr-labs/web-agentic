@@ -1,5 +1,7 @@
 # Flutter — Presentation Layer
 
+> Concepts and invariants: `reference/clean-arch/presentation.md`. This file covers Dart syntax and Flutter-specific patterns.
+
 BLoC pattern for state management. Widgets are dumb — they react to state and dispatch events. Business logic lives in BLoCs via use cases.
 
 ---

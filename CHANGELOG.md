@@ -7,6 +7,33 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.23.0] — 2026-04-19
+
+### Added
+- `lib/core/reference/clean-arch/data.md`: canonical template for the Data layer — platform-agnostic definitions for DTO, Mapper, DataSource, RepositoryImpl, creation order (remote + local), and layer invariants
+- `lib/core/reference/clean-arch/presentation.md`: canonical template for the Presentation layer — StateHolder, State, Events/Input, Actions/Output, StateHolder contract shape, creation order, and layer invariants
+- `lib/core/reference/clean-arch/ui.md`: canonical template for the UI layer — Screen, Component/Sub-view, Navigator/Coordinator, DI wiring, creation order, and layer invariants
+- `lib/core/reference/clean-arch/di.md`: canonical template for Dependency Injection — five universal DI principles, registration order, scope rules (singleton/feature-scoped/transient), and testing with DI
+- `lib/core/reference/clean-arch/testing.md`: canonical template for Testing — test pyramid, what to test per layer, Repository Tests, Mapper Tests, mock-vs-real decision rule, and test naming convention
+- `lib/core/reference/clean-arch/error-handling.md`: canonical template for Error Handling — error flow diagram, error types per layer, error mapping table (HTTP → DomainError), error UI patterns, and layer invariants
+
+### Changed
+- `lib/core/agents/builder/data-worker.md`: "Data Layer Rules" now points to `reference/clean-arch/data.md` (concepts) and `reference/contract/data.md` (platform syntax); replaced stale `layer-contracts.md § Data Layer` reference
+- `lib/core/agents/builder/presentation-worker.md`: removed inline StateHolder concept block (moved to `presentation.md`); "Presentation Layer Rules" now points to `reference/clean-arch/presentation.md` and `reference/contract/presentation.md`
+- `lib/core/agents/builder/ui-worker.md`: "UI Layer Rules" now points to `reference/clean-arch/ui.md` and `reference/contract/presentation.md`; replaced stale `layer-contracts.md § UI Layer` reference
+- `lib/core/reference/clean-arch/layer-contracts.md`: Data, Presentation, and UI Layer sections slimmed to pointer + summary table — full definitions now live in per-layer canonical templates
+- `lib/core/reference/clean-arch/contract-schema.md`: "Currently available" list updated — `data.md`, `presentation.md`, `ui.md`, `di.md`, `testing.md`, `error-handling.md` added
+- `lib/platforms/{web,ios,flutter}/reference/contract/data.md`: `> Concepts: reference/clean-arch/data.md` pointer header added to all three platforms
+- `lib/platforms/{web,ios,flutter}/reference/contract/presentation.md`: `> Concepts: reference/clean-arch/presentation.md` pointer header added to all three platforms
+- `lib/platforms/{web,ios,flutter}/reference/contract/di.md`: `> Concepts: reference/clean-arch/di.md` pointer header added to all three platforms
+- `lib/platforms/{web,ios,flutter}/reference/contract/testing.md`: `> Concepts: reference/clean-arch/testing.md` pointer header added to all three platforms
+- `lib/platforms/{web,ios,flutter}/reference/contract/error-handling.md`: `> Concepts: reference/clean-arch/error-handling.md` pointer header added to all three platforms
+
+### Fixed
+- `lib/platforms/web/skills/contract/domain-create-entity`, `domain-create-repository`, `domain-create-usecase`, `domain-create-service`, `domain-update-usecase`: replaced legacy `§ N.N` section references with canonical `## Heading` Grep pointers — aligns with v3.21.0 convention (iOS and Flutter were already clean)
+
+---
+
 ## [3.22.0] — 2026-04-19
 
 ### Added

@@ -1,5 +1,7 @@
 # iOS — Error Handling
 
+> Concepts and invariants: `reference/clean-arch/error-handling.md`. This file covers Swift syntax and iOS-specific patterns.
+
 ## Error Flow
 
 ```
