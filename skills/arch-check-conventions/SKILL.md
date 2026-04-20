@@ -19,7 +19,6 @@ For each `.md` agent file:
 
 **Orchestrators** (files with `agents:` frontmatter field)
 - [ ] `agents:` field lists only workers it actually spawns
-- [ ] Constraints section contains `isolation: worktree`
 - [ ] Body passes only file path lists between phases — never file contents
 - [ ] No Phase 2 codebase reads on behalf of workers
 
@@ -104,7 +103,7 @@ Severity: Warning for any prompt clarity finding.
 
 ## Severity Levels
 
-- **Critical** — missing required frontmatter field, broken reference path, "Read completely" violation, orchestrator missing `isolation: worktree`, platform-specific content in a `lib/core/agents/` file
+- **Critical** — missing required frontmatter field, broken reference path, "Read completely" violation, platform-specific content in a `lib/core/agents/` file
 - **Warning** — wrong model for worker type, missing Search Rules, missing Extension Point, missing `reference/index.md` discovery hint on multi-file Reference lines, explanatory comments in template files
 - **Info** — naming convention deviation, description could be more specific
 

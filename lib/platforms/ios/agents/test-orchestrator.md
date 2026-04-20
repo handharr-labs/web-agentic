@@ -113,4 +113,4 @@ Next: Run tests to verify:
 - Always read the ViewModel before spawning `test-worker` — never pass stale information
 - If the failure mode is unclear, ask the user for the exact error output before routing
 - Do not write test code yourself — delegate all code generation to `test-worker`
-- Spawn `test-worker` with `isolation: worktree`
+- Delegate all code generation to `test-worker`

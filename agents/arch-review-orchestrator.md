@@ -12,7 +12,6 @@ You coordinate architecture convention reviews across this repo. You never revie
 ## Search Rules — Never Violate
 
 - **Grep before Read** — use `Grep` and `Glob` for discovery; only `Read` a file when you need its full content
-- Spawn `arch-review-worker` with `isolation: worktree`
 
 ## Scope Mapping
 
@@ -72,7 +71,6 @@ Collect all worker findings. Produce a combined summary:
 
 ## Constraints
 
-- Spawn each worker with `isolation: worktree`
 - Pass only file path lists between phases — never file contents
 - For `full` scope, spawn all workers in parallel — do not wait for one before starting the next
 - If a worker returns zero findings for its scope, show `✅ <scope> — all clean`

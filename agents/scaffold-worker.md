@@ -264,7 +264,7 @@ You produce zero file changes directly. No Edit, Write, or file-writing Bash cal
 
 - Pass only file path lists between phases — never file contents
 - Workers own their own context reads — do not pre-read files on their behalf
-- Spawn each worker with isolation: worktree
+
 
 ## Extension Point
 
