@@ -242,23 +242,32 @@ fi
 # ── CLAUDE.md ─────────────────────────────────────────────────────────────────
 
 echo ""
-if [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
-  echo "skip  CLAUDE.md (already exists)"
-elif [ -f "$PLATFORM_DIR/CLAUDE-template.md" ]; then
+if [ ! -f "$PLATFORM_DIR/CLAUDE-template.md" ]; then
+  echo "skip  CLAUDE.md (no template for $PLATFORM)"
+elif [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
+  MARKER="<!-- BEGIN software-dev-agentic:$PLATFORM -->"
+  if grep -qF "$MARKER" "$PROJECT_ROOT/CLAUDE.md"; then
+    echo "skip  CLAUDE.md ($PLATFORM block already present)"
+  else
+    BLOCK=$(sed -n "/<!-- BEGIN software-dev-agentic:$PLATFORM -->/,/<!-- END software-dev-agentic:$PLATFORM -->/p" "$PLATFORM_DIR/CLAUDE-template.md")
+    printf '\n%s\n' "$BLOCK" >> "$PROJECT_ROOT/CLAUDE.md"
+    echo "append CLAUDE.md ($PLATFORM block)"
+  fi
+else
   cp "$PLATFORM_DIR/CLAUDE-template.md" "$PROJECT_ROOT/CLAUDE.md"
   echo "copy  CLAUDE.md (from $PLATFORM CLAUDE-template.md)"
+fi
 
-  if grep -q '\[AppName\]' "$PROJECT_ROOT/CLAUDE.md"; then
-    if [ -z "$APP_NAME" ]; then
-      printf "  App name (replaces [AppName] in CLAUDE.md): "
-      read -r APP_NAME
-    fi
-    if [ -n "$APP_NAME" ]; then
-      sed -i.bak "s/\[AppName\]/$APP_NAME/g" "$PROJECT_ROOT/CLAUDE.md" && rm "$PROJECT_ROOT/CLAUDE.md.bak"
-      echo "  ✓  Replaced [AppName] with '$APP_NAME'"
-    else
-      echo "  ⚠  Fill in [AppName] placeholders in CLAUDE.md"
-    fi
+if [ -f "$PROJECT_ROOT/CLAUDE.md" ] && grep -q '\[AppName\]' "$PROJECT_ROOT/CLAUDE.md"; then
+  if [ -z "$APP_NAME" ]; then
+    printf "  App name (replaces [AppName] in CLAUDE.md): "
+    read -r APP_NAME
+  fi
+  if [ -n "$APP_NAME" ]; then
+    sed -i.bak "s/\[AppName\]/$APP_NAME/g" "$PROJECT_ROOT/CLAUDE.md" && rm "$PROJECT_ROOT/CLAUDE.md.bak"
+    echo "  ✓  Replaced [AppName] with '$APP_NAME'"
+  else
+    echo "  ⚠  Fill in [AppName] placeholders in CLAUDE.md"
   fi
 fi
 

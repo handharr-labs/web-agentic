@@ -7,6 +7,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.29.0] — 2026-04-21
+
+### Changed
+- `scripts/setup-symlinks.sh`, `scripts/setup-packages.sh`, `scripts/local-setup-symlinks.sh`, `scripts/local-setup-packages.sh`: CLAUDE.md handling changed from skip-if-exists to append-if-absent — when a `CLAUDE.md` already exists, the platform-specific `<!-- BEGIN software-dev-agentic:<platform> -->` / `<!-- END software-dev-agentic:<platform> -->` block is appended instead of skipped; re-running is idempotent (skips if marker already present); works for all platforms via the `$PLATFORM` variable
+
+---
+
 ## [3.28.0] — 2026-04-20
 
 ### Changed
