@@ -1,5 +1,4 @@
 > Author: Puras Handharmahua · 2026-04-08
-> Updated: 2026-04-19 — v39: P7 reference doc organization expanded — `clean-arch/` now holds two kinds of files (universal theory + per-layer canonical templates); `clean-arch/` subdir preserved downstream; all agent reference pointers use downstream paths (`reference/clean-arch/`, `reference/contract/`)
 > Synced with: software-dev-agentic v3.21.0
 > Related: Shared Agentic Submodule Architecture — Cross-Platform Scaling
 
@@ -15,9 +14,15 @@ A coding assistant where Claude autonomously routes, decides, and executes based
 
 ### 1. Natural Language as the Entry Point
 
-Agents are routed automatically by description matching — not by slash commands. Users describe what they want; Claude decides which agent handles it.
+There are two valid entry points into the agentic system:
 
-> Implication: Agent descriptions must be precise and use vocabulary developers naturally say. Routing is only as good as the description.
+**A — Natural language routing (default):** Users describe what they want; Claude matches the intent to an agent's description and spawns it automatically. No slash commands, no manual chaining.
+
+**B — Trigger skill:** A user-invocable skill (`user-invocable: true`) that explicitly spawns an agent workflow. Use this when the entry point is a specific, named operation — not open-ended intent. The skill handles the invocation; the agent handles the work.
+
+> Agent descriptions must be precise and use vocabulary developers naturally say. Routing is only as good as the description.
+
+> Not every request needs an agent. If a change is simple and localized (rename a variable, fix a typo, add an import), act directly — the cost of delegation exceeds the task itself.
 
 ---
 
@@ -32,6 +37,44 @@ Agents are intelligent specialists, not task executors. Each agent:
 
 Agents stay lean — they don't embed step-by-step instructions. That belongs in skills.
 
+**Orchestrators — Multi-Worker Coordinators:**
+
+Orchestrators coordinate multiple worker agents using the `agents` field in frontmatter. Key rules:
+
+- Spawn only relevant workers — never all of them
+- Pass file paths between phases, never file contents
+- Use `isolation: worktree` unless phases share uncommitted files
+- Validate each worker's `## Output` before proceeding — STOP if missing or paths don't exist
+- Never read the codebase directly — workers own their own context reads
+
+**Agent Scope — Core vs Platform-specific:**
+
+Agents have a second axis — where they live and what they know.
+
+- **Core** (`lib/core/agents/`) — platform-agnostic. Work on any platform. Add here when the behaviour is identical across all platforms.
+- **Platform-specific** (`lib/platforms/<platform>/agents/`) — exist only when the workflow diverges enough from core to need its own agent. Examples: iOS `test-orchestrator` (knows `xcodebuild`), iOS `pr-review-worker` (knows Swift/UIKit conventions). Do not add a platform agent unless a core agent + platform skills cannot handle it.
+
+> For the full agent roster, see [persona-builder.md](persona-builder.md).
+
+**Agent Memory Governance:**
+
+**What to remember:** Confirmed patterns, module-specific conventions not in reference docs, recurring mistakes, user-confirmed preferences.
+
+**What NOT to remember:** Current task details, anything already in `CLAUDE.md` or `reference/`, unverified single-file observations, git history.
+
+**Hygiene rules:** Keep `MEMORY.md` under 200 lines; use topic files for detailed notes; review and prune stale memories.
+
+**Agent Naming Convention:**
+
+| Type | Suffix | Example |
+|---|---|---|
+| Orchestrator | `-orchestrator` | `feature-orchestrator.md`, `pres-orchestrator.md` |
+| Worker | `-worker` | `domain-worker.md`, `data-worker.md` |
+
+Format: `<domain>-<role>.md`
+
+> The filename suffix tells you the agent type instantly — no need to open the file.
+
 ---
 
 ### 3. Skills = Hands (Thin Procedures)
@@ -44,60 +87,18 @@ Skills are focused, reusable workflow procedures. Each skill:
 
 Target: under 30 lines per skill
 
-> Split by intent: `create-*` for new components, `update-*` for existing ones. Naming convention: `<layer>-<action>-<target>` — platform-contract skills live under `skills/contract/` to make the cross-platform mandate explicit; platform-only skills remain flat under `skills/`. Both land flat in `.claude/skills/<name>/` in downstream projects — the `contract/` grouping is transparent at runtime.
+> Naming: `<layer>-<action>-<target>`. Split by intent: `create-*` for new, `update-*` for existing. Keep `SKILL.md` under 500 lines. Skills are either **core-dependency** (same name on all platforms) or **platform-specific** (one platform only) — see [persona-builder.md](persona-builder.md).
 
-> Keep `SKILL.md` under 500 lines. Move detailed reference material to separate files within the skill directory.
+**Preloading skills:**
 
-**By Caller — two categories:**
-
-**Core-dependency skills** — called by core workers or orchestrators. Must be implemented by every platform that wants core agent support. Same name across platforms, different syntax per platform. Located in `lib/platforms/<platform>/skills/contract/` — the `contract/` subfolder signals the mandatory cross-platform contract.
-
-| Skill name | Called by | Must exist in |
-|---|---|---|
-| `domain-create-entity` | `domain-worker` (core) | all platforms |
-| `domain-create-repository` | `domain-worker` (core) | all platforms |
-| `domain-create-usecase` | `domain-worker` (core) | all platforms |
-| `data-create-mapper` | `data-worker` (core) | all platforms |
-| `data-create-datasource` | `data-worker` (core) | all platforms |
-| `data-create-repository-impl` | `data-worker` (core) | all platforms |
-| `pres-create-stateholder` | `presentation-worker` (core) | all platforms |
-| `pres-create-screen` | `ui-worker` (core) | all platforms |
-| `test-create-domain` | `test-worker` (core) | all platforms |
-| `test-create-data` | `test-worker` (core) | all platforms |
-| `test-create-presentation` | `test-worker` (core) | all platforms |
-
-**Platform-specific skills** — called by platform agents only. Implemented only by the platform that owns the calling agent. Located flat under `lib/platforms/<platform>/skills/`. Examples: iOS `review-pr` (called by iOS `pr-review-worker`), iOS `arch-check-ios`.
-
----
-
-### 4. Context Isolation = Efficiency
-
-Every agent runs in its own isolated context window — completely separate from the main session. This is the primary mechanism for token efficiency.
-
-From the official docs:
-> *"Preserve context by keeping exploration and implementation out of your main conversation"*
-
-When `domain-worker` reads reference docs, scans existing files, and writes code — none of that touches your main session context. The main session only sees the result.
-
----
-
-### 5. Preloaded Skills = Modular Agent Knowledge
-
-Agents load their procedure skills at startup via the `skills` field.
-
-From the official docs:
-> *"Subagents with preloaded skills: full skill content is injected at startup"*
-
-This gives agents full procedural knowledge without embedding it in their body. Same procedures are reusable across multiple agents. One definition, updated once.
+Agents load their procedure skills at startup via the `skills` field — full skill content is injected at startup. This gives agents full procedural knowledge without embedding it in their body. Same procedures are reusable across multiple agents. One definition, updated once.
 
 **Token budget guideline:**
 - Preload skills the agent needs in >50% of its invocations
 - Load on demand (via `Read`) skills needed rarely or only in edge cases
 - Monitor total preloaded size — if it exceeds ~500 lines, split the agent or move low-frequency skills to on-demand
 
----
-
-### 6. Three Skill Types
+**Invocation types:**
 
 | Type | Config | Who triggers | Context cost | Use for |
 |---|---|---|---|---|
@@ -109,7 +110,99 @@ This gives agents full procedural knowledge without embedding it in their body. 
 
 ---
 
-### 7. Three-Tier Knowledge Architecture
+### 4. Taxonomy
+
+#### Persona
+
+A named group of related agents serving a coherent workflow.
+
+Requirements:
+- Lives in `lib/core/agents/<persona>/`
+- Has at least one worker or orchestrator
+- Agents within the group relate to and can depend on each other
+- Requires a `.pkg` file for selective installation
+
+Shared to all downstream projects via symlink. Current personas: `builder`, `detective`, `tracker`, `auditor`, `installer`.
+
+> A persona is not just a folder. It represents a coherent workflow. Do not group unrelated agents into a persona subdirectory.
+
+#### Agents — By Role
+
+| Role | Subordinates | Can write files? | Has `agents` field? | Has `skills` field? |
+|---|---|---|---|---|
+| Orchestrator | Other orchestrators or workers | No — delegates all writes to workers | Yes | Typically no |
+| Worker | Skills via `related_skills` | Yes | No | Yes — skills injected at startup |
+
+> Orchestrators may spawn other orchestrators when the inner orchestrator represents a fully bounded sub-workflow. The outer orchestrator owns the top-level state file and final report. Example: `feature-orchestrator` spawns `pres-orchestrator` for the presentation+UI phase — `pres-orchestrator` skips state file writes when called as a sub-orchestrator.
+
+#### Agents — By Scope
+
+| Scope | Location | Ships downstream? |
+|---|---|---|
+| **Persona agent** | `lib/core/agents/<persona>/` | Yes — all platforms |
+| **Platform agent** | `lib/platforms/<platform>/agents/` | Yes — matching platform only |
+| **Project agent** | `.claude/agents.local/` | No — project-owned, not in this repo |
+
+> Persona agents must be platform-agnostic — no platform paths, framework references, or language syntax in the body (Critical per P6).
+
+#### Skills — By Invocation Type
+
+| Type | Config | Who triggers | Use for |
+|---|---|---|---|
+| **A — Regular** | `user-invocable: false` | Worker (agent) only | Standard build/update procedures |
+| **B — Destructive** | `disable-model-invocation: true` | User only | Destructive or side-effect operations |
+| **T — Trigger** | `user-invocable: true` + uses `Agent` tool | User only | Entry point that spawns an agent workflow |
+| **U — Utility** | `user-invocable: true`, no `Agent` tool | User only | Self-contained interactive tool — runs with model, does not spawn agents |
+
+> **Type T vs Type U:** Both are user-invocable and model-run. Type T spawns an agent workflow (`agentic-perf-review` → `perf-worker`). Type U does its own work directly (`doctor`, `clear-runs`, `release`).
+>
+> **Type B vs Type U:** Both are user-only. Type B disables model invocation entirely (pure bash, no reasoning). Type U runs with model invocation for interactive behaviour.
+
+**Why no Type C (default — both user and agent):** Every default skill's description loads into the main session context on every turn. Types A, B, T, and U all eliminate this overhead.
+
+#### Skills — By Scope
+
+| Scope | Location | Ships downstream? |
+|---|---|---|
+| **Toolkit skill** | `lib/core/skills/` | Yes — all platforms. Platform-agnostic, intended for use in downstream projects. |
+| **Platform-contract skill** | `lib/platforms/<platform>/skills/contract/` | Yes — matching platform. Same name across all platforms; each implements for its syntax — called by persona workers. Lands flat in `.claude/skills/<name>/` downstream. |
+| **Platform-only skill** | `lib/platforms/<platform>/skills/` (flat) | Yes — matching platform only. Called by platform agents. |
+| **Project skill** | `.claude/skills.local/` | No — project-owned, not in this repo. |
+| **Repo skill** | `skills/` (root) | No — internal tooling only. Used by this repo's internal agents; never symlinked to downstream projects. |
+
+> "Core-dependency skill" used in earlier sections of this doc refers to platform-contract skills — skills all platforms must implement under the same name (`domain-create-entity`, `data-create-mapper`, etc.).
+
+#### Skills — Valid Type × Scope Combinations
+
+Not all combinations are meaningful. Use this as the decision gate when adding a new skill:
+
+| Scope | A — Regular | B — Destructive | T — Trigger | U — Utility |
+|---|---|---|---|---|
+| Toolkit | — | — | ✓ | ✓ |
+| Platform-contract | ✓ | — | — | — |
+| Platform-only | ✓ | ✓ | — | — |
+| Project | ✓ | ✓ | ✓ | ✓ |
+| Repo | ✓ | — | ✓ | ✓ |
+
+> Toolkit skills are always user-facing (Type T or U) — agents don't call them, workers call platform-contract skills instead. Platform-contract skills are always Type A — they're called by workers programmatically, never by users directly.
+
+---
+
+
+### 5. Context Isolation = Efficiency
+
+Every agent runs in its own isolated context window — completely separate from the main session. This is the primary mechanism for token efficiency.
+
+From the official docs:
+> *"Preserve context by keeping exploration and implementation out of your main conversation"*
+
+When a worker reads reference docs, scans existing files, and writes code — none of that touches your main session context. The main session only sees the result.
+
+---
+
+### 6. Knowledge Architecture
+
+**Three-tier structure:**
 
 | Tier | Location | What goes here |
 |---|---|---|
@@ -117,14 +210,7 @@ This gives agents full procedural knowledge without embedding it in their body. 
 | 2 | Agent body | Decision logic for that agent only — what to do, when to do it |
 | 3 | `.claude/reference/` | Shared deep reference — patterns, examples, conventions. Loaded on demand via Grep-first |
 
-**Reference doc organization in software-dev-agentic:**
-- `lib/core/reference/clean-arch/` — two kinds of files, both preserved as `clean-arch/` subdir downstream (`.claude/reference/clean-arch/<name>.md`):
-  - **Universal theory** (`layer-contracts.md`, `domain-purity.md`, `di-containers.md`) — cross-cutting CLEAN Architecture principles, not layer-specific.
-  - **Layer canonical templates** (`domain.md`, and `data.md`, `presentation.md` in progress) — platform-agnostic concept definitions per CLEAN layer: what each artifact IS, its invariants, when to use it. Workers reference these for concepts; platform contract files implement the same headings in platform syntax.
-- `lib/platforms/<platform>/reference/contract/` — cross-platform standard patterns (same 8 filenames on every platform: `domain.md`, `data.md`, `presentation.md`, `navigation.md`, `di.md`, `testing.md`, `error-handling.md`, `utilities.md`). Each file: `#` platform+topic title, `##` canonical keyword sections (agent-greppable), `###` subsections. Preserved as `contract/` subdir in downstream (`.claude/reference/contract/<name>.md`). Syntax and platform-specific patterns only — conceptual definitions belong in the corresponding `lib/core/reference/clean-arch/<layer>.md` template.
-- `lib/platforms/<platform>/reference/` (flat) — platform-specific code patterns unique to that platform. Linked only to matching platform as `.claude/reference/<name>.md`.
-
-**Reference subdir rule:** All subdirectories under any reference source dir are preserved downstream — `contract/` and `clean-arch/` both land as-is. Agents use downstream paths: `reference/clean-arch/<name>.md` for concepts, `reference/contract/<name>.md` for platform syntax. Unlike agents and skills, reference docs are never flattened across subdirs.
+> Folder structure for reference docs: see [shared-submodule-arch.md](shared-submodule-arch.md).
 
 **Placement decision rule — reference vs agent body:**
 
@@ -150,62 +236,13 @@ Before any `Read` call, workers answer: "Do I need the full file, or just a spec
 
 Read a full file only when: (a) you need its complete structure to write a new matching file, or (b) Grep returned no results. Check `reference/index.md` first if uncertain which file covers a topic.
 
-> Read:Grep ratio should stay below 3. A ratio above 6 is a P7 violation.
+> Read:Grep ratio should stay below 3. A ratio above 6 is a P6 violation.
 
 ---
 
-### 8. Orchestrators = Multi-Worker Coordinators
 
-Orchestrators coordinate multiple worker agents using the `agents` field in frontmatter.
 
-**How orchestrators work:**
-1. User describes intent
-2. Main session matches the orchestrator's description and spawns it
-3. Orchestrator gathers intent from the user — including `platform` (`web`/`ios`/`flutter`) passed to every worker spawn
-4. Orchestrator spawns only the relevant workers; uses `isolation: worktree` only when workers do not need to share uncommitted files between phases
-5. Workers execute — each reads its own project context independently
-6. Orchestrator validates each worker's `## Output`: section must exist and all listed paths must exist on disk — STOP and surface to user if not
-7. Orchestrator receives only the list of created file paths — never file contents
-8. Orchestrator writes a state file (`.claude/runs/<run-id>/state.json`) after each phase — tracks completed phases and artifact paths so long sessions can recover without re-reading source files
-9. For presentation→UI handoffs: `presentation-worker` writes the StateHolder contract to `.claude/runs/<run-id>/stateholder-contract.md` and returns only the path — the orchestrator passes the path (not the content) to `ui-worker`, which reads the file directly
-10. Orchestrator synthesizes results and reports
-
-| | Feature Orchestrator | Worker |
-|---|---|---|
-| `agents` field | Yes — lists available workers | No |
-| Can spawn subagents? | Yes — only those in `agents` list | No — leaf node |
-| Body content | Coordination + delegation | Domain expertise + execution logic |
-| Model | `sonnet` | `sonnet` (default); `haiku` only for truly mechanical leaf tasks with no architectural judgment |
-| Codebase reads | None — workers own their context | Yes — per worker's workflow |
-| `isolation` on spawn | `worktree` when phases don't share uncommitted files; omit when contract files must be shared (e.g. `pres-orchestrator`) | N/A |
-
-**Agent Scope — Core vs Platform-specific:**
-
-Agents have a second axis — where they live and what they know.
-
-- **Core** (`lib/core/agents/`) — platform-agnostic. Work on any platform. Add here when the behaviour is identical across all platforms.
-- **Platform-specific** (`lib/platforms/<platform>/agents/`) — exist only when the workflow diverges enough from core to need its own agent. Examples: iOS `test-orchestrator` (knows `xcodebuild`), iOS `pr-review-worker` (knows Swift/UIKit conventions). Do not add a platform agent unless a core agent + platform skills cannot handle it.
-
-**Combined Matrix (Role × Scope):**
-
-| | Orchestrator | Worker |
-|---|---|---|
-| **Core** | `feature-planner`, `feature-orchestrator` → `pres-orchestrator`, `debug-orchestrator`, `backend-orchestrator` | `domain-worker`, `data-worker`, `presentation-worker`, `ui-worker`, `test-worker`, `debug-worker`, `prompt-debug-worker`, `arch-review-worker`, `issue-worker`, `setup-worker`, `perf-worker` |
-| **Platform** | iOS `test-orchestrator` | iOS `pr-review-worker` |
-
----
-
-### 9. Delegation Threshold — Direct Action vs Agent Delegation
-
-**Delegate when:** Task requires specialized knowledge or involves multiple files/cross-layer concerns. Always delegate to `feature-orchestrator` when a task touches >3 architectural layers — inline execution at that scope is a P9 violation.
-
-**Act directly when:** Simple, localized change (rename a variable, fix a typo, add an import). Cost of delegation exceeds cost of the task itself.
-
-> Rule: If the task takes fewer tokens to DO than to DELEGATE, do it directly.
-
----
-
-### 10. Fail-Fast Precondition Validation
+### 7. Fail-Fast Precondition Validation
 
 Agents validate preconditions before executing procedures — they never guess or proceed with assumptions.
 
@@ -232,17 +269,8 @@ When any check fails: return a clear, actionable message — never partially exe
 
 ---
 
-### 11. Agent Memory Governance
 
-**What to remember:** Confirmed patterns, module-specific conventions not in reference docs, recurring mistakes, user-confirmed preferences.
-
-**What NOT to remember:** Current task details, anything already in `CLAUDE.md` or `reference/`, unverified single-file observations, git history.
-
-**Hygiene rules:** Keep `MEMORY.md` under 200 lines; use topic files for detailed notes; review and prune stale memories.
-
----
-
-### 12. Official Docs Compliance
+### 8. Official Docs Compliance
 
 Every design decision must comply with Claude Code's official documentation.
 
@@ -256,39 +284,8 @@ Known undocumented but functional fields: `agents` field — empirically verifie
 
 ---
 
-### 13. Agent Naming Convention
 
-| Type | Suffix | Example |
-|---|---|---|
-| Orchestrator | `-orchestrator` | `feature-orchestrator.md`, `pres-orchestrator.md` |
-| Worker | `-worker` | `domain-worker.md`, `data-worker.md` |
-
-Format: `<domain>-<role>.md`
-
-> The filename suffix tells you the agent type instantly — no need to open the file.
-
----
-
-### 14. CLEAN Architecture, SOLID, and DRY — Cross-Platform Enforcement
-
-**CLEAN Architecture — Layer-Aligned Agents**
-
-| Layer | Worker | Skills |
-|---|---|---|
-| Domain | `domain-worker` | `domain-create-entity`, `domain-create-usecase`, `domain-create-repository`, `domain-create-service`, `domain-update-usecase` |
-| Data | `data-worker` | `data-create-datasource`, `data-create-mapper`, `data-create-response`, `data-create-repository-impl`, `data-update-mapper` |
-| Presentation | `presentation-worker`, `ui-worker` | `pres-create-stateholder`, `pres-update-stateholder`, `pres-create-screen`, `pres-create-component`, `pres-create-navigator`, `pres-update-screen` |
-| Test | `test-worker` | `test-create-domain`, `test-create-data`, `test-create-presentation`, `test-update`, `test-fix` |
-
-**SOLID via Agent Design:**
-- **SRP:** Each worker handles exactly one layer; each skill does exactly one task
-- **OCP:** New features add new agents/skills without modifying existing ones
-- **DIP:** Workers define the protocol; platform skills are the implementations
-- **DRY via Architecture:** Reference docs are the single source of truth — skills Grep section pointers, never embed content.
-
----
-
-### 15. Convention Enforcement — Self-Auditing Architecture
+### 9. Convention Enforcement — Self-Auditing Architecture
 
 The agentic system enforces its own conventions through automated review — the same principle applied recursively.
 
@@ -334,83 +331,6 @@ The agentic system enforces its own conventions through automated review — the
 
 ---
 
-## Taxonomy
-
-### Agents — By Role
-
-| Role | Subordinates | Can write files? | Has `agents` field? | Has `skills` field? |
-|---|---|---|---|---|
-| Orchestrator | Other orchestrators or workers | No — delegates all writes to workers | Yes | Typically no |
-| Worker | Skills via `related_skills` | Yes | No | Yes — skills injected at startup |
-
-> Orchestrators may spawn other orchestrators when the inner orchestrator represents a fully bounded sub-workflow. The outer orchestrator owns the top-level state file and final report. Example: `feature-orchestrator` spawns `pres-orchestrator` for the presentation+UI phase — `pres-orchestrator` skips state file writes when called as a sub-orchestrator.
-
-### Agents — By Scope
-
-| Scope | Location | Ships downstream? |
-|---|---|---|
-| **Persona agent** | `lib/core/agents/<persona>/` | Yes — all platforms |
-| **Platform agent** | `lib/platforms/<platform>/agents/` | Yes — matching platform only |
-| **Project agent** | `.claude/agents.local/` | No — project-owned, not in this repo |
-
-> Persona agents must be platform-agnostic — no platform paths, framework references, or language syntax in the body (Critical per P15).
-
-### Persona
-
-A named group of related agents serving a coherent workflow.
-
-Requirements:
-- Lives in `lib/core/agents/<persona>/`
-- Has at least one worker or orchestrator
-- Agents within the group relate to and can depend on each other
-- Requires a `.pkg` file for selective installation
-
-Shared to all downstream projects via symlink. Current personas: `builder`, `detective`, `tracker`, `auditor`, `installer`.
-
-> A persona is not just a folder. It represents a coherent workflow. Do not group unrelated agents into a persona subdirectory.
-
-### Skills — By Invocation Type
-
-| Type | Config | Who triggers | Use for |
-|---|---|---|---|
-| **A — Regular** | `user-invocable: false` | Worker (agent) only | Standard build/update procedures |
-| **B — Destructive** | `disable-model-invocation: true` | User only | Destructive or side-effect operations |
-| **T — Trigger** | `user-invocable: true` + uses `Agent` tool | User only | Entry point that spawns an agent workflow |
-| **U — Utility** | `user-invocable: true`, no `Agent` tool | User only | Self-contained interactive tool — runs with model, does not spawn agents |
-
-> **Type T vs Type U:** Both are user-invocable and model-run. Type T spawns an agent workflow (`agentic-perf-review` → `perf-worker`). Type U does its own work directly (`doctor`, `clear-runs`, `release`).
->
-> **Type B vs Type U:** Both are user-only. Type B disables model invocation entirely (pure bash, no reasoning). Type U runs with model invocation for interactive behaviour.
-
-**Why no Type C (default — both user and agent):** Every default skill's description loads into the main session context on every turn. Types A, B, T, and U all eliminate this overhead.
-
-### Skills — By Scope
-
-| Scope | Location | Ships downstream? |
-|---|---|---|
-| **Toolkit skill** | `lib/core/skills/` | Yes — all platforms. Platform-agnostic, intended for use in downstream projects. |
-| **Platform-contract skill** | `lib/platforms/<platform>/skills/contract/` | Yes — matching platform. Same name across all platforms; each implements for its syntax — called by persona workers. Lands flat in `.claude/skills/<name>/` downstream. |
-| **Platform-only skill** | `lib/platforms/<platform>/skills/` (flat) | Yes — matching platform only. Called by platform agents. |
-| **Project skill** | `.claude/skills.local/` | No — project-owned, not in this repo. |
-| **Repo skill** | `skills/` (root) | No — internal tooling only. Used by this repo's internal agents; never symlinked to downstream projects. |
-
-> "Core-dependency skill" used in earlier sections of this doc refers to platform-contract skills — skills all platforms must implement under the same name (`domain-create-entity`, `data-create-mapper`, etc.).
-
-### Skills — Valid Type × Scope Combinations
-
-Not all combinations are meaningful. Use this as the decision gate when adding a new skill:
-
-| Scope | A — Regular | B — Destructive | T — Trigger | U — Utility |
-|---|---|---|---|---|
-| Toolkit | — | — | ✓ | ✓ |
-| Platform-contract | ✓ | — | — | — |
-| Platform-only | ✓ | ✓ | — | — |
-| Project | ✓ | ✓ | ✓ | ✓ |
-| Repo | ✓ | — | ✓ | ✓ |
-
-> Toolkit skills are always user-facing (Type T or U) — agents don't call them, workers call platform-contract skills instead. Platform-contract skills are always Type A — they're called by workers programmatically, never by users directly.
-
----
 
 ## Decision Rules
 
@@ -423,82 +343,7 @@ Not all combinations are meaningful. Use this as the decision gate when adding a
 | Architecture reference knowledge (cross-platform standard) | `lib/platforms/<platform>/reference/contract/` — same filename on every platform; accessible as `.claude/reference/contract/<name>.md` downstream |
 | Architecture reference knowledge (platform-specific) | `lib/platforms/<platform>/reference/` (flat) |
 
----
-
-## Execution Examples
-
-**Case 1: Direct Action** — "Add import RxSwift to this file" → single-line edit, no agent needed
-
-**Case 2: Single-Layer Task** — "Create GetLeaveRequestListUseCase" → `domain-worker` spawned directly, assesses preconditions, sequences skills
-
-**Case 3: Multi-Layer Task** — "Build the leave request feature" → `feature-orchestrator` coordinates 4 workers with `isolation: worktree`; passes file paths only; writes state file after each phase
-
-**Case 4: Intelligent Selection** — "Create StateHolder, the UseCase already exists" → orchestrator spawns only `presentation-worker`
-
-**Case 5: Type B Skill** — `/migrate-presentation CustomFormScreen` → explicit user trigger; prevents accidental migration
-
-**Case 6: Debug Flow** — "Why is form submission silently failing?" → `debug-orchestrator` gathers context, spawns `debug-worker`
-
-**Case 7: Cross-Platform Feature** — same CLEAN pattern, each codebase's `domain-worker` applies platform-specific skill
-
-**Case 8: Standalone Worker** — "Review my branch before PR" → `pr-review-worker` directly, no orchestrator
-
-**Case 9: Convention Audit** — "Run arch-review-orchestrator for lib/core" → spawns workers per scope with `isolation: worktree`; `arch-generate-report` formats findings
-
-**Case 10: Doc Sync** — "Sync the docs — we added X and Y this session" → `docs-sync-worker` fetches current pages, runs `docs-identify-changes`, applies targeted updates
-
-**Case 11: Project Setup** — "Set up this project with the starter kit" → `setup-worker` detects platform, runs `setup-nextjs-project` or `setup-ios-project` skill, provides orientation
-
-**Case 12: Flutter Domain Entity Creation** — "Create a LeaveRequest entity for Flutter"
-
-```
-feature-orchestrator (core orchestrator)
-  └─ domain-worker   (core worker)       ← knows the rules
-        └─ domain-create-entity          ← flutter skill, knows the syntax
-```
-
-The worker knows the rules (no framework imports, single responsibility). The skill knows the syntax (Dart, `@freezed`, file naming).
-
-**Case 13: iOS PR Review** — "Review my PR before merging"
-
-```
-pr-review-worker    (iOS platform worker)  ← iOS-specific workflow
-  └─ review-pr      (iOS platform skill)   ← Swift/UIKit conventions
-```
-
-`review-pr` is not a core-dependency skill — only the iOS platform worker calls it, so it only needs to exist for iOS.
-
-**Case 14: Agent Prompt Debugging** — "Why did domain-worker create an implementation instead of an interface?"
-
-```
-perf-worker        ← scores session D1–D7
-  D2: 5/10         ← worker invocation anomaly flagged
-prompt-debug-worker ← reads perf-report + domain-worker.md
-  → surfaces ambiguous "create the repository" instruction
-  → suggests rewrite with explicit scope
-```
-
----
-
-## Agent Count Summary
-
-| Category | `lib/core/agents/` (shared) | `lib/platforms/ios/agents/` | `lib/platforms/web/agents/` |
-|---|---|---|---|
-| Orchestrators | 5 in `builder/` + 1 in `detective/` | 1 (`test-orchestrator`) | — |
-| Workers | 8 in `builder/` + **2 in `detective/`** + 1 in `tracker/` + 1 in `auditor/`\* + 1 in `installer/` + 1 flat | 1 (`pr-review-worker`) | — |
-| Skills (Type A) | — | 29 | 29 |
-| Skills (Type B) | — | 2 | 0 |
-
-\* `arch-review-worker` in `lib/core/agents/auditor/` is platform-agnostic — delegates web rules to `arch-check-web` (W1–W6) and iOS rules to `arch-check-ios` (I1–I4).
-
-**Detective persona workers:** `debug-worker`, `prompt-debug-worker`
-
-**Internal repo tooling** (NOT symlinked to downstream projects):
-
-| Component | Location | Purpose |
-|---|---|---|
-| `arch-review-orchestrator`, `arch-review-worker`, `docs-sync-worker` | `agents/` (root) | Convention review + design doc sync |
-| `arch-check-conventions`, `arch-generate-report`, `docs-identify-changes` | `skills/` (root) | Convention checklist, report formatter, delta mapper |
+> For execution examples and the current agent roster, see [persona-builder.md](persona-builder.md).
 
 ---
 
@@ -511,7 +356,7 @@ prompt-debug-worker ← reads perf-report + domain-worker.md
 | `perf-worker.md` stays flat | No persona peers yet |
 | Root `agents/` and `skills/` | Internal tooling — not downstream API surface |
 | `lib/` boundary | Explicit distributable surface — everything under `lib/` ships, everything outside is tooling |
-| `arch-review-worker` platform-agnostic (P15) | Core workers must not embed platform knowledge |
+| `arch-review-worker` platform-agnostic (P6) | Core workers must not embed platform knowledge |
 | `docs-sync-worker` in root `agents/` | Maintains this repo's design docs — not relevant to downstream consumers |
 | `setup-worker` in `lib/core/agents/installer/` | Platform-agnostic setup logic; delegates mechanical steps to platform skills |
 
@@ -552,100 +397,6 @@ prompt-debug-worker ← reads perf-report + domain-worker.md
 
 ---
 
-## Implementation Reference
-
-- **talenta-ios** — 4 orchestrators, 7 workers, 27 skills. Content mirrored in `lib/platforms/ios/`.
-- **mobile-talenta (Flutter)** — 7 agents, 9 skills. BLoC-based, get_it + injectable DI.
-- **talenta-mobile-android** — 7 agents, 7 skills. MVP-based, Dagger 2 DI, RxJava 3.
-- **software-dev-agentic v3.14.0** — Core: 15 agents across 5 persona groups (builder, detective, tracker, auditor, installer) under `lib/core/`. Platforms: web (29 Type A skills), ios (2 platform agents, 29 Type A + 2 Type B skills), all under `lib/platforms/`. Internal: 3 agents, 3 skills at repo root.
-- **wehire, xpnsio** — web projects consuming software-dev-agentic as a git submodule.
-
-> **Breaking:** downstream projects must re-run setup scripts after updating the submodule pointer.
-
----
-
 ## Changelog
 
-**v37 — 2026-04-19 · software-dev-agentic v3.21.0**
-- P3: Platform-contract skills moved to `lib/platforms/<platform>/skills/contract/` subfolder — makes the mandatory cross-platform contract explicit in folder structure; platform-only skills remain flat; both land flat in `.claude/skills/<name>/` downstream (transparent at runtime)
-- P3: Reference doc organization updated — `lib/platforms/<platform>/reference/contract/` introduced for six cross-platform standard files (domain, data, presentation, navigation, di, testing); preserved as `contract/` subdir downstream (`.claude/reference/contract/<name>.md`); platform-specific refs remain flat
-- P7: Reference doc organization note expanded with three-tier breakdown: `lib/core/reference/clean-arch/`, `lib/platforms/<platform>/reference/contract/`, and flat platform-specific refs
-- Taxonomy Skills by Scope: Platform-contract skill location updated to `lib/platforms/<platform>/skills/contract/`; downstream behavior noted (lands flat); Platform-only clarified as flat
-- Decision Rules: Architecture reference knowledge split into two rows — contract/ for cross-platform, flat for platform-specific; platform-contract skill row updated with `contract/` path
-
-**v39 — 2026-04-19 · software-dev-agentic v3.21.0**
-- P7: `lib/core/reference/clean-arch/` now holds two kinds of files — universal theory (existing: `layer-contracts.md`, `domain-purity.md`, `di-containers.md`, `contract-schema.md`) and per-layer canonical templates (new: `domain.md`; `data.md`, `presentation.md` in progress). Both kinds preserved as `clean-arch/` subdir downstream (`.claude/reference/clean-arch/<name>.md`)
-- P7: Platform `reference/contract/` files now carry syntax only — conceptual definitions stripped to the corresponding `clean-arch/<layer>.md` template. Files retain canonical `##` headings; pointer header added at top of each file
-- P7: "Reference subdir rule" added — all reference source subdirs preserved downstream (not flattened); agents reference `reference/clean-arch/<name>.md` and `reference/contract/<name>.md` using downstream paths, never source paths
-- Setup scripts: `link_reference` / `copy_reference` made generic — all subdirs preserved (previously only `contract/` was); core call updated to `lib/core/reference` so `clean-arch/` is picked up as a preserved subdir
-
-**v38 — 2026-04-19 · software-dev-agentic v3.21.0**
-- P3/P7: Contract expanded from 6 to 8 files — `error-handling.md` and `utilities.md` added to all three platforms; `lib/core/reference/clean-arch/contract-schema.md` added as the canonical keyword registry
-- P7: Heading structure normalized across all 24 contract files: `#` platform+topic title, `##` canonical keyword sections, `###` subsections — agents now grep with `^## Keyword` for deterministic lookup without depth guessing
-- All skills and agents updated to replace `§N.N` section references with canonical `## Heading` names; legacy numbered headings removed from all reference files
-
-**v36 — 2026-04-18 · software-dev-agentic v3.20.0**
-- P8: Orchestrator step 3 updated — `platform` parameter now gathered in Phase 0 and passed to every worker spawn; step 4 updated — `isolation: worktree` conditional, not universal; step 6 added — orchestrator validates worker `## Output` (section exists + paths on disk) before proceeding; P8 table updated: model row changed from haiku/sonnet split to sonnet default; isolation row clarified with exception note
-- P10: Fail-Fast expanded into four structured gates — Input (worker entry), Preconditions (before writing), Output (before returning), Orchestrator (after each spawn)
-- P15: Convention table updated — Model assignment row updated (sonnet default); Orchestrators row: `isolation: worktree` exception noted, output validation added (Critical); Workers: four new required sections added (`## Input`, `## Scope Boundary`, `## Task Assessment`, `## Skill Execution`) and `## Output` Glob+Grep verification promoted to Critical
-
-**v35 — 2026-04-17 · software-dev-agentic v3.19.0**
-- `pres-orchestrator` promoted to sub-orchestrator of `feature-orchestrator` — `feature-orchestrator` now delegates Phase 3 entirely to `pres-orchestrator` instead of spawning `presentation-worker`/`ui-worker` directly
-- `feature-orchestrator`: `agents:` field updated (removed `presentation-worker`, `ui-worker`; added `pres-orchestrator`); Phase 3 rewritten; Phase 4 (UI) removed; Phase 5 renumbered to Phase 4
-- `pres-orchestrator`: dual-mode added — standalone (full gather + state file) vs sub-orchestrator (Grep provided paths, skip state file); P8 Combined Matrix updated to show `feature-orchestrator → pres-orchestrator` hierarchy
-- Taxonomy: orchestrator-of-orchestrators note updated with concrete example
-
-**v33 — 2026-04-17 · software-dev-agentic v3.15.0**
-- Taxonomy gaps closed: Type U (Utility) skill added — user-invocable, model-run, self-contained, no agent spawning; `doctor`, `clear-runs`, `release` classified as Type U
-- Repo skill scope added — root `skills/` internal tooling, never ships downstream; `arch-check-conventions`, `arch-generate-report`, `docs-identify-changes` classified here
-- Skill Type × Scope intersection matrix added — decision gate for valid combinations when adding new skills
-- Toolkit skill scope clarified: ships downstream, intended for use in downstream projects (not this repo's internal operations)
-- `release` skill description fixed: was "software-dev-agentic starter kit" specific, now generic downstream-project release tool
-
-**v32 — 2026-04-17 · software-dev-agentic v3.15.0**
-- Taxonomy section added — replaces the minimal "Agent & Skill Hierarchy" table with full formal definitions
-- Agents by Role: Orchestrator / Worker with subordinate clarification; orchestrator-of-orchestrators constraint added
-- Agents by Scope: Persona agent / Platform agent / Project agent formally named
-- Persona: formal definition — coherent workflow requirement, `.pkg` file requirement, minimum one worker/orchestrator
-- Skills by Invocation Type: Type T (Trigger) formalized — `user-invocable: true` + `Agent` tool, distinct from Type B; `agentic-perf-review` cited as canonical example
-- Skills by Scope: Toolkit skill / Platform-contract skill / Platform-only skill / Project skill named; "core-dependency skill" cross-referenced as alias for platform-contract skill
-
-**v31 — 2026-04-17 · software-dev-agentic v3.14.0**
-- `prompt-debug-worker` added to `lib/core/agents/detective/` — diagnoses why an agent underperformed by analyzing its system prompt against the trajectory from a perf-worker report; surfaces ambiguous instructions, missing context, and contradicting rules
-- `perf-worker` updated: new Step 5 flags low D1–D7 scores and points to `prompt-debug-worker` with the exact agent file path to debug
-- P15 `arch-check-conventions`: Prompt Clarity Check category added (Warning severity) — flags ambiguous scope, missing stop conditions, contradicting rules, undefined failure paths
-- Agent Count Summary updated: detective workers 1→2 (total core workers 13→14)
-- P8 Combined Matrix updated: `prompt-debug-worker` added to Core workers
-- Execution Example Case 14 added: agent prompt debugging flow
-
-**v30 — 2026-04-16 · software-dev-agentic v3.4.6**
-- P3: "By Caller" skill dependency classification added — core-dependency skills (must exist on all platforms) vs platform-specific skills (platform-agent-only); explicit table mapping skill → caller → platform coverage required
-- P8: Agent Scope (Core vs Platform-specific) added with rule "Do not add a platform agent unless a core agent + skills cannot handle it"; Combined Matrix (Role × Scope) added
-- Decision Rules table added (before Execution Examples)
-- Execution Examples: Cases 12 (Flutter entity creation) and 13 (iOS PR review) added
-
-**v29 — 2026-04-14 · software-dev-agentic v3.4.6**
-- P15 arch-check-conventions table — Orchestrators row updated: `isolation: worktree` in Constraints → `isolation: worktree` inline with each Spawn directive (Critical); new Critical rule added: After delegation flag set, no direct Edit or Write — all file changes through workers
-- "Synced with" updated to v3.4.6
-
-**v28 — 2026-04-13 · software-dev-agentic v3.0.1**
-- P7: "Search Rules" bullet replaced with Search Protocol decision gate table
-- P8: Added steps 7–8 — orchestrator writes state file; `presentation-worker` writes StateHolder contract to handoff file
-- P15 arch-check-conventions: Workers row updated; Orchestrators row updated
-
-**v27 — 2026-04-12 · software-dev-agentic v3.0.0**
-- `lib/` boundary introduced; all path references updated
-
-**v26 — 2026-04-12 · software-dev-agentic v2.1.0**
-- `installer/` persona group added; `setup-ios-project` skill added
-
-**v25 — 2026-04-12 · software-dev-agentic v2.0.0**
-- `docs-sync-worker` + `docs-identify-changes` added to internal tooling
-
-**v24 — 2026-04-12 · software-dev-agentic v2.0.0**
-- Principle 15 added: Convention Enforcement — self-auditing architecture
-
-**v23 — 2026-04-12 · software-dev-agentic v1.2.x**
-- `core/agents/` grouped into persona subdirectories
-
-**v22 and earlier** — See git history in the software-dev-agentic repository.
+See [changelog-core-design-principles.md](changelog-core-design-principles.md).

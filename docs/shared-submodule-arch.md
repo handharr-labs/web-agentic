@@ -5,16 +5,13 @@
 
 ## Relationship to Core Design Principles
 
-This document extends the Core Design Principles — it does not replace them. All 15 principles remain in effect. This doc specifically modifies how certain principles are applied in a cross-platform shared submodule:
+This document extends the Core Design Principles — it does not replace them. All 9 principles remain in effect. This doc specifically modifies how certain principles are applied in a cross-platform shared submodule:
 
 | Principle | What Changes |
 |---|---|
-| 5 — Preloaded Skills | Shared skills remain preloaded. Platform-contract skills live in `lib/platforms/<platform>/skills/contract/`; platform-only skills flat under `lib/platforms/<platform>/skills/` — all linked at setup time, land flat in `.claude/skills/<name>/`. |
-| 7 — Three-Tier Knowledge | Tier 3 reference docs now live in the shared submodule: `lib/core/reference/clean-arch/` for universal CLEAN principles; `lib/platforms/<platform>/reference/contract/` for eight cross-platform standard files (same name on all platforms, preserved as `contract/` subdir downstream); `lib/platforms/<platform>/reference/` (flat) for platform-unique patterns. Accessed via Grep-first. |
-| 8 — Orchestrators Coordinate | Orchestrators AND workers live in `lib/core/agents/` — both platform-agnostic. Platform knowledge lives exclusively in `lib/platforms/<platform>/skills/`. Platform-specific agents (e.g., iOS `test-orchestrator`) live in `lib/platforms/<platform>/agents/` only when the agent itself is inherently platform-specific. |
-| 9 — Delegation Threshold | Tasks touching >3 architectural layers must delegate to `feature-orchestrator` with `isolation: worktree`. Inline execution at that scope is a P9 violation. |
-| 13 — Naming Convention | Flutter and Android must adopt the `-orchestrator` / `-worker` suffix convention as a prerequisite for migration into the shared submodule. |
-| 15 — Convention Enforcement | The repo enforces its own conventions through automated review. Running `arch-review-orchestrator` audits all agents and skills in this repo against the full convention checklist. |
+| 6 — Knowledge Architecture | Tier 3 reference docs now live in the shared submodule: `lib/core/reference/clean-arch/` for universal CLEAN principles; `lib/platforms/<platform>/reference/contract/` for eight cross-platform standard files (same name on all platforms, preserved as `contract/` subdir downstream); `lib/platforms/<platform>/reference/` (flat) for platform-unique patterns. Accessed via Grep-first. |
+| 2 — Agents = Brain | Orchestrators AND workers live in `lib/core/agents/` — both platform-agnostic. Platform knowledge lives exclusively in `lib/platforms/<platform>/skills/`. Platform-specific agents (e.g., iOS `test-orchestrator`) live in `lib/platforms/<platform>/agents/` only when the agent itself is inherently platform-specific. |
+| 11 — Convention Enforcement | The repo enforces its own conventions through automated review. Running `arch-review-orchestrator` audits all agents and skills in this repo against the full convention checklist. |
 
 ---
 
@@ -135,7 +132,7 @@ Three-pass linking priority: `agents.local` > platform > core (first link wins)
 
 Every contract file follows a strict heading structure: `#` platform+topic title, `##` canonical sections (agent-greppable keywords), `###` subsections. This makes `grep "^## Keyword"` deterministic across all platforms.
 
-**Grep-first rule (P7 enforcement):** Workers Grep reference files by section keyword before reading in full. If uncertain which file covers a topic, check `reference/index.md` first.
+**Grep-first rule (P6 enforcement):** Workers Grep reference files by section keyword before reading in full. If uncertain which file covers a topic, check `reference/index.md` first.
 
 ---
 
@@ -293,31 +290,7 @@ Flow:
 
 > Rule of thumb: if it describes CLEAN architecture theory → `lib/core/`. If it's platform implementation details → `lib/platforms/<platform>/skills/`. If it's project-specific quirks → `.claude/agents.local/`. If it only applies to reviewing or maintaining this repo's own files → root `agents/` or `skills/`.
 
----
-
-## Examples
-
-**Flutter domain entity creation** — "Create a LeaveRequest entity for Flutter"
-
-```
-feature-orchestrator   (core orchestrator)
-  └─ domain-worker     (core worker)       ← knows the rules
-        └─ domain-create-entity            ← flutter skill, knows the syntax
-             source:     lib/platforms/flutter/skills/contract/domain-create-entity/SKILL.md
-             downstream: .claude/skills/domain-create-entity/SKILL.md
-```
-
-The worker knows the rules (no framework imports, single responsibility). The skill knows the syntax (Dart, `@freezed`, file naming). `domain-create-entity` is a core-dependency skill — it lives in every platform's `lib/platforms/<platform>/skills/contract/` and resolves at runtime via `.claude/skills/domain-create-entity/SKILL.md`.
-
-**iOS PR review** — "Review my PR before merging"
-
-```
-pr-review-worker       (iOS platform worker)   ← iOS-specific workflow
-  └─ review-pr         (iOS platform skill)    ← Swift/UIKit conventions
-       lib/platforms/ios/skills/review-pr/SKILL.md
-```
-
-`review-pr` is a platform-specific skill — only the iOS platform worker calls it, so it only needs to exist for iOS. No other platform needs to implement it.
+> For execution examples, agent roster, and migration status, see [persona-builder.md](persona-builder.md).
 
 ---
 
@@ -422,18 +395,6 @@ Both scripts are idempotent — re-running never overwrites existing files (`lin
 
 ---
 
-## Open Items
-
-| # | Topic | Status |
-|---|---|---|
-| 1 | Migration: talenta-ios | Agents/skills/reference content copied to `lib/platforms/ios/`. talenta-ios still uses its own copy. Full submodule wiring = separate session. |
-| 2 | Versioning | ✅ Resolved — semantic versioning established: v2.0.0 tagged. Confluence pages track `Synced with: software-dev-agentic vX.Y.Z` in header. |
-| 3 | Naming alignment | Flutter/Android adopt `-orchestrator` / `-worker` suffix convention — Required before migration |
-| 4 | Reference doc splitting | Structural split of `lib/platforms/web/reference/contract/data.md` and `lib/platforms/web/reference/utilities.md` by operation type |
-| 5 | Flutter implementation | `lib/platforms/flutter/` is a stub — needs agents, skills, reference docs |
-
----
-
 ## Related Links
 
 - [Agentic Coding Assistant — Core Design Principles](https://jurnal.atlassian.net/wiki/spaces/~611df3da650a26006e44928d/pages/51126370416)
@@ -441,61 +402,7 @@ Both scripts are idempotent — re-running never overwrites existing files (`lin
 
 ---
 
+
 ## Changelog
 
-**v18 — 2026-04-19 · software-dev-agentic v3.21.0**
-- Decision 4: `lib/core/reference/clean-arch/` now holds two kinds of files — universal theory (existing) and per-layer canonical templates (new, starting with `domain.md`). Both preserved as `clean-arch/` subdir downstream. Platform `contract/` files retain syntax only; conceptual definitions moved to core templates.
-- Decision 4: "Reference subdir rule" added — all reference source subdirs preserved downstream; any new subdir automatically preserved; agents use downstream paths (`reference/clean-arch/`, `reference/contract/`)
-- Decision 6: Symlink table updated — new row for `lib/core/reference/clean-arch/<name>.md` → `.claude/reference/clean-arch/<name>.md` (preserved); note added explaining why reference preserves subdirs while agents/skills do not
-- Setup scripts: `link_reference` / `copy_reference` generalized — loop all subdirs (previously hardcoded `contract/` only); core call changed from `lib/core/reference/clean-arch` to `lib/core/reference` so `clean-arch/` is treated as a preserved subdir
-
-**v16 — 2026-04-19 · software-dev-agentic v3.21.0**
-- Decision 1: Core-dependency skills now in `lib/platforms/<platform>/skills/contract/` subfolder — makes the mandatory cross-platform contract explicit; platform-only skills remain flat; setup scripts handle both transparently
-- Decision 3: Worker skill resolution updated — workers resolve via `.claude/skills/<name>/SKILL.md` (downstream symlink), not `lib/platforms/<platform>/skills/<name>/SKILL.md` source path; runtime platform param still passed for workers needing platform context
-- Decision 4: Reference docs split into three tiers — `lib/core/reference/clean-arch/`, `lib/platforms/<platform>/reference/contract/` (six cross-platform files, preserved as `contract/` subdir downstream), flat platform-specific refs; downstream behavior difference from skills documented
-- Decision 6: Added table documenting different downstream symlink behavior — skills land flat regardless of `contract/` source grouping; references preserve `contract/` subdir because skill files hard-code that path
-- "What Goes Where" table: Platform-contract skill and Platform-only skill rows split; cross-platform contract reference and platform-specific reference rows split
-- Examples: Flutter entity creation updated to show both source path (`lib/platforms/flutter/skills/contract/...`) and downstream resolution (`.claude/skills/.../SKILL.md`)
-- Principle modifications table: P5 and P7 rows updated with `contract/` subfolder and downstream behavior
-
-**v15 — 2026-04-18 · software-dev-agentic v3.20.0**
-- Decision 3: Updated — platform now passed at runtime in every worker spawn prompt, not just resolved via setup-time symlinks; rationale updated to explain dual safety net
-- Decision 8a: Updated — all workers now use `model: sonnet`; haiku reserved only for truly mechanical leaf tasks; rationale: skill execution requires architectural judgment (path resolution, SKILL.md reading, output verification)
-- Decision 8b: Updated — `isolation: worktree` is conditional, not universal; `pres-orchestrator` and `backend-orchestrator` omit isolation to allow contract file sharing between phases; blackboard violation note added
-- Convention Compliance table: Workers row expanded — `## Input`, `## Scope Boundary`, `## Task Assessment`, `## Skill Execution` added as required sections; `## Output` Glob+Grep verification promoted to Critical; Orchestrators row — output validation after each spawn added (Critical); model row updated to sonnet default
-
-**v14 — 2026-04-17 · software-dev-agentic v3.14.0**
-- `prompt-debug-worker` added to `lib/core/agents/detective/` — diagnoses why an agent underperformed by analyzing its system prompt against the trajectory from a perf-worker report
-- "What Goes Where" table updated: `prompt-debug-worker` listed under detective persona alongside `debug-worker`; `perf-worker` moved from "Meta/observability flat" entry to detective group entry
-- Convention Compliance table: Prompt Clarity Check row added (🟡 Warning severity) — flags ambiguous scope, missing stop conditions, contradicting rules, undefined failure paths; points to `prompt-debug-worker` for deeper analysis
-- Decision 8a updated: `prompt-debug-worker` listed alongside other `sonnet` reasoning-heavy workers
-
-**v13 — 2026-04-16 · software-dev-agentic v3.4.6**
-- Decision 1: Core-dependency skill table added — maps each skill to its calling worker and required platform coverage; Platform-specific skills category defined
-- Examples section added: Flutter entity creation (core-dependency skill flow) and iOS PR review (platform-specific skill flow)
-
-**v12 — 2026-04-14 · software-dev-agentic v3.4.6**
-- Convention Compliance Internal Reviewer table — Orchestrators row updated: `isolation: worktree` now described as inline with each Spawn directive (not a trailing Constraints entry); new rule added: after delegation flag is set, no direct Edit or Write — file changes through workers only
-
-**v11 — 2026-04-13 · software-dev-agentic v3.0.1**
-- Decision 8c: Added orchestrator state file pattern (`.claude/runs/<run-id>/state.json` written after each phase); added stateholder handoff file pattern (`presentation-worker` writes contract to disk, orchestrator passes path only to `ui-worker`)
-- Convention Compliance Internal Reviewer table: Workers row updated
-- Context Cost Analysis: orchestrator row updated to mention state file
-
-**v10 — 2026-04-12 · software-dev-agentic v3.0.0**
-- `lib/` boundary introduced; all paths updated
-- Decision 5 added: "`lib/` Boundary — Distributable vs Internal Content"
-
-**v9 — 2026-04-12 · software-dev-agentic v2.1.0**
-- `installer/` persona group added; `setup-worker` added to core.pkg
-
-**v8 — 2026-04-12 · software-dev-agentic v2.0.0**
-- Added `docs-sync-worker` + `docs-identify-changes` to internal tooling
-
-**v7 — 2026-04-12 · software-dev-agentic v2.0.0**
-- Convention Compliance System section added; `arch-review-worker` rewritten as platform-agnostic
-
-**v6 — 2026-04-12 · software-dev-agentic v1.2.x**
-- `core/agents/` grouped by persona subdirectories; `.pkg` files added
-
-**v5 and earlier** — See git history in the software-dev-agentic repository.
+See [changelog-shared-submodule-arch.md](changelog-shared-submodule-arch.md).
