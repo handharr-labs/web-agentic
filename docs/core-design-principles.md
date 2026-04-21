@@ -1,5 +1,4 @@
 > Author: Puras Handharmahua · 2026-04-08
-> Synced with: software-dev-agentic v3.21.0
 > Related: Shared Agentic Submodule Architecture — Cross-Platform Scaling
 
 ## What is an Agentic Coding Assistant?
@@ -17,23 +16,6 @@ A coding assistant where Claude autonomously routes, decides, and executes based
 3. **Open contribution model** — all engineers can explore, create, and PR new agents/skills
 4. **Context efficiency** — no wasted tokens on irrelevant content
 5. **Encouraging initiatives** — low barrier to propose new "personas" (orchestrators)
-
----
-
-## Delivery Mechanism — Shared Submodule
-
-`software-dev-agentic` is consumed as a git submodule inside each project's `.claude/` directory:
-
-```
-/
-  .claude/
-    software-dev-agentic/    ← submodule
-    agents/                  ← symlinks only (core + platform)
-    skills/                  ← symlinks only (platform)
-    reference/               ← symlinks only (clean-arch + platform)
-```
-
-All principles in this doc apply through this delivery mechanism. The submodule is the single source of truth — downstream projects get agents, skills, and reference docs via symlinks. For the full symlink architecture and folder layout, see [submodule-repo-structure.md](submodule-repo-structure.md).
 
 ---
 
@@ -370,20 +352,6 @@ For the full convention checklist, severity levels, and doc sync system, see [su
 | Architecture reference knowledge (platform-specific) | `lib/platforms/<platform>/reference/` (flat) |
 
 > For execution examples and the current agent roster, see [persona-builder.md](persona-builder.md).
-
----
-
-## Folder Design Rationale
-
-| Decision | Why |
-|---|---|
-| All workers in `lib/core/agents/` | DI at skill level — platform-agnostic brains |
-| Persona subdirectories | Workflow cohesion; selective installation; self-documenting |
-| `perf-worker.md` stays flat | No persona peers yet |
-| Root `agents/` and `skills/` | Internal tooling — not downstream API surface |
-| `lib/` boundary | Explicit distributable surface — everything under `lib/` ships, everything outside is tooling |
-| `arch-review-worker` platform-agnostic (P6) | Core workers must not embed platform knowledge |
-| `setup-worker` in `lib/core/agents/installer/` | Platform-agnostic setup logic; delegates mechanical steps to platform skills |
 
 ---
 

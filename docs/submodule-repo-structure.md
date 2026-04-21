@@ -1,7 +1,22 @@
 > Author: Puras Handharmahua · 2026-04-09
-> Updated: 2026-04-19 — v18: Decision 4 updated — `clean-arch/` now holds layer canonical templates in addition to universal theory; Decision 6 symlink table updated — `clean-arch/` preserved downstream; `link_reference`/`copy_reference` made generic (all subdirs preserved)
-> Synced with: software-dev-agentic v3.21.0
 > Related: Agentic Coding Assistant — Core Design Principles
+
+## Delivery Mechanism
+
+`software-dev-agentic` is consumed as a git submodule inside each project's `.claude/` directory:
+
+```
+/
+  .claude/
+    software-dev-agentic/    ← submodule
+    agents/                  ← symlinks only (core + platform)
+    skills/                  ← symlinks only (platform)
+    reference/               ← symlinks only (clean-arch + platform)
+```
+
+The submodule is the single source of truth — downstream projects get agents, skills, and reference docs via symlinks. For the agent design principles that govern what goes into these files, see [core-design-principles.md](core-design-principles.md).
+
+---
 
 ## Key Design Decisions
 
@@ -107,21 +122,6 @@ Extension files contain only the delta — not a full copy. Updates to the submo
 
 ---
 
-### 8. Token Efficiency — Mechanical Worker Model, Isolation, and File Path Passing
-
-**8a. Workers use `model: sonnet` by default**
-All core workers now use `model: sonnet`. Skill execution requires reading SKILL.md, following multi-step platform-specific instructions, verifying output artifacts, and enforcing layer boundaries — none of which is purely mechanical. `model: haiku` is reserved only for truly mechanical leaf tasks with no architectural judgment. Orchestrators remain on `sonnet`.
-
-**8b. Orchestrators pass only file paths, never file contents**
-Between worker phases, orchestrators receive and forward only the list of created file paths — never file contents. This prevents orchestrator context from accumulating previous workers' outputs across phases.
-
-Orchestrators also write a state file (`.claude/runs/<run-id>/state.json`) after each phase — if a long session loses context mid-run, the orchestrator reads the state file rather than re-reading source artifacts. This was validated by the xpnsio split-bill session (Issue #73) where a missing state file caused a PRD re-read in a 12-hour session.
-
-For cross-worker contract handoffs: the producing worker writes the contract file to `.claude/runs/<run-id>/`. The orchestrator passes only this path to the consuming worker — never the contract content. The consuming worker reads the file directly.
-
-**8d. Workers own their own context reads — no Phase 2 in orchestrators**
-Orchestrators no longer perform Phase 2 codebase reads (style matching, DI pattern discovery, route structure). Workers do their own targeted reads as part of their workflow. Orchestrators pass only intent (feature name, fields, operations).
-
 ---
 
 ## Convention Compliance System
@@ -160,7 +160,19 @@ software-dev-agentic enforces its own conventions through an automated internal 
 
 > Any `lib/core/agents/` file body that contains hardcoded platform paths, framework references (as rules), or language-specific syntax is a Critical violation. Platform knowledge must be delegated to a skill in `related_skills`.
 
-**Doc Sync System**
+---
+
+## Folder Design Rationale
+
+| Decision | Why |
+|---|---|
+| All workers in `lib/core/agents/` | DI at skill level — platform-agnostic brains |
+| Persona subdirectories | Workflow cohesion; selective installation; self-documenting |
+| `perf-worker.md` stays flat | No persona peers yet |
+| Root `agents/` and `skills/` | Internal tooling — not downstream API surface |
+| `lib/` boundary | Explicit distributable surface — everything under `lib/` ships, everything outside is tooling |
+| `arch-review-worker` platform-agnostic (P6) | Core workers must not embed platform knowledge |
+| `setup-worker` in `lib/core/agents/installer/` | Platform-agnostic setup logic; delegates mechanical steps to platform setup skills |
 
 ---
 
@@ -174,12 +186,12 @@ software-dev-agentic enforces its own conventions through an automated internal 
 | Auditor agents | `software-dev-agentic/lib/core/agents/auditor/` | Architecture review — platform-agnostic CLEAN checker; delegates platform rules to skills |
 | Installer agents | `software-dev-agentic/lib/core/agents/installer/` | Platform-agnostic project setup + onboarding; delegates mechanical steps to platform setup skills |
 | Meta/observability agents | `software-dev-agentic/lib/core/agents/detective/` | Performance analysis + agent prompt debugging |
-| Internal repo tooling | `software-dev-agentic/agents/` | Convention reviewer + doc sync worker — NOT symlinked to downstream projects |
+| Internal repo tooling | `software-dev-agentic/agents/` | Convention reviewer — NOT symlinked to downstream projects |
 | Platform-specific agents (`test-orchestrator`, `pr-review-worker`) | `software-dev-agentic/lib/platforms/<platform>/agents/` | Agent itself is inherently platform-specific |
 | Core skills | `software-dev-agentic/lib/core/skills/` | Identical across platforms |
 | Platform-contract skills | `software-dev-agentic/lib/platforms/<platform>/skills/contract/` | Same name on all platforms, platform-specific implementation; lands flat in `.claude/skills/<name>/` downstream |
 | Platform-only skills | `software-dev-agentic/lib/platforms/<platform>/skills/` (flat) | Called by platform agents only |
-| Internal repo skills | `software-dev-agentic/skills/` | Convention checker, report formatter, doc sync skills — NOT symlinked to downstream projects |
+| Internal repo skills | `software-dev-agentic/skills/` | Convention checklist, report formatter — NOT symlinked to downstream projects |
 | Universal reference docs | `software-dev-agentic/lib/core/reference/clean-arch/` | Language-agnostic CLEAN theory |
 | Cross-platform contract reference docs | `software-dev-agentic/lib/platforms/<platform>/reference/contract/` | Same six files on all platforms; preserved as `contract/` subdir downstream |
 | Platform-specific reference docs | `software-dev-agentic/lib/platforms/<platform>/reference/` (flat) | Platform-unique patterns; lands flat in `.claude/reference/<name>.md` downstream |
