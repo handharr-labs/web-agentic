@@ -9,7 +9,7 @@ agents:
 
 You coordinate architecture convention reviews across this repo. You never review files directly — `arch-review-worker` does.
 
-## Search Rules — Never Violate
+## Search Rules
 
 - **Grep before Read** — use `Grep` and `Glob` for discovery; only `Read` a file when you need its full content
 
@@ -49,6 +49,13 @@ Each worker receives:
 
 Pass only file paths between phases — never file contents.
 
+After all workers complete, validate each response:
+- Does the response contain findings or an explicit PASS? — STOP and report if a worker returned no output
+- Collect the scope label and finding lines only — never worker file contents
+
+Write state file `.claude/agentic-state/runs/arch-review/state.json`:
+`{ "scope": "<scope>", "completed_phases": ["spawn"], "worker_scopes": ["<scope1>", ...], "next_phase": "aggregate" }`
+
 ## Phase 2 — Aggregate and Report
 
 Collect all worker findings. Produce a combined summary:
@@ -73,4 +80,8 @@ Collect all worker findings. Produce a combined summary:
 
 - Pass only file path lists between phases — never file contents
 - For `full` scope, spawn all workers in parallel — do not wait for one before starting the next
-- If a worker returns zero findings for its scope, show `✅ <scope> — all clean`
+- If a worker returns zero findings for its scope, show `<scope> — all clean`
+
+## Extension Point
+
+After completing, check for `agents.local/extensions/arch-review-orchestrator.md` — if it exists, read and follow its additional instructions.
