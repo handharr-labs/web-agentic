@@ -346,6 +346,33 @@ if m:
   fi
 fi
 
+# ── Lockfile ──────────────────────────────────────────────────────────────────
+
+LOCKFILE="$CLAUDE_DIR/config/installed-packages"
+if [ ! -f "$LOCKFILE" ]; then
+  {
+    echo "# Managed by setup-symlinks.sh — do not edit manually"
+    echo "platform=$PLATFORM"
+    # Core packages
+    for pkg_file in "$SUBMODULE/packages"/*.pkg; do
+      [ -f "$pkg_file" ] || continue
+      pkg_name="$(grep "^name=" "$pkg_file" | cut -d= -f2-)"
+      echo "pkg=$pkg_name"
+    done
+    # Platform packages
+    if [ -d "$PLATFORM_DIR/packages" ]; then
+      for pkg_file in "$PLATFORM_DIR/packages"/*.pkg; do
+        [ -f "$pkg_file" ] || continue
+        pkg_name="$(grep "^name=" "$pkg_file" | cut -d= -f2-)"
+        echo "pkg=$pkg_name"
+      done
+    fi
+  } > "$LOCKFILE"
+  echo "write .claude/config/installed-packages (all packages)"
+else
+  echo "skip  .claude/config/installed-packages (already exists)"
+fi
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 
 echo ""
