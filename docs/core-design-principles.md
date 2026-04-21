@@ -333,9 +333,9 @@ Known undocumented but functional fields: `agents` field — empirically verifie
 
 ### 9. Convention Enforcement — Self-Auditing Architecture
 
-The agentic system enforces its own conventions through automated review — the same principle applied recursively. `arch-review-orchestrator` + `arch-review-worker` (`.claude/agents/` — internal tooling) audits all agent and skill files in this repo. This is distinct from `lib/core/agents/auditor/arch-review-worker.md`, which reviews application code in downstream projects.
+The agentic system enforces its own conventions through automated review — the same principle applied recursively. Convention compliance tooling audits agent and skill files for structural violations before they reach downstream consumers.
 
-For the full convention checklist, severity levels, and doc sync system, see [submodule-repo-structure.md — Convention Compliance System](submodule-repo-structure.md#convention-compliance-system).
+> For the internal reviewer setup, checklist, and severity levels, see [submodule-repo-structure.md — Convention Compliance System](submodule-repo-structure.md#convention-compliance-system).
 
 ---
 
