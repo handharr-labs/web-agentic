@@ -63,7 +63,7 @@ Agents have a second axis — where they live and what they know.
 - **Core** (`lib/core/agents/`) — platform-agnostic. Work on any platform. Add here when the behaviour is identical across all platforms.
 - **Platform-specific** (`lib/platforms/<platform>/agents/`) — exist only when the workflow diverges enough from core to need its own agent. Examples: iOS `test-orchestrator` (knows `xcodebuild`), iOS `pr-review-worker` (knows Swift/UIKit conventions). Do not add a platform agent unless a core agent + platform skills cannot handle it.
 
-> For the full agent roster, see [persona-builder.md](persona-builder.md).
+> For the full agent roster, see [persona-builder.md](persona/builder.md).
 
 **DI at Skill Level:**
 
@@ -117,7 +117,7 @@ Skills are focused, reusable workflow procedures. Each skill:
 
 Target: under 30 lines per skill
 
-> Naming: `<layer>-<action>-<target>`. Split by intent: `create-*` for new, `update-*` for existing. Keep `SKILL.md` under 500 lines. Skills are either **core-dependency** (same name on all platforms) or **platform-specific** (one platform only) — see [persona-builder.md](persona-builder.md).
+> Naming: `<layer>-<action>-<target>`. Split by intent: `create-*` for new, `update-*` for existing. Keep `SKILL.md` under 500 lines. Skills are either **core-dependency** (same name on all platforms) or **platform-specific** (one platform only) — see [persona-builder.md](persona/builder.md).
 
 **Preloading skills:**
 
@@ -351,7 +351,7 @@ The agentic system enforces its own conventions through automated review — the
 | Architecture reference knowledge (cross-platform standard) | `lib/platforms/<platform>/reference/contract/` — same filename on every platform; accessible as `.claude/reference/contract/<name>.md` downstream |
 | Architecture reference knowledge (platform-specific) | `lib/platforms/<platform>/reference/` (flat) |
 
-> For execution examples and the current agent roster, see [persona-builder.md](persona-builder.md).
+> For execution examples and the current agent roster, see [persona-builder.md](persona/builder.md).
 
 ---
 
