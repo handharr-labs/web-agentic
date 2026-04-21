@@ -7,6 +7,23 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.32.0] — 2026-04-22
+
+### Added
+- `agents/detective/debug-log-worker.md`: new worker — the only detective agent with `Edit` access; supports `MODE=add` (hypothesis-tagged log insertion) and `MODE=remove` (cleanup before commit); enforces a structural tool boundary where orchestrator and debug-worker remain read-only
+- `docs/persona/detective.md`: detective persona doc — governing theory (Zeller's Scientific Debugging), step-to-agent mapping, tool boundary rule, handoff contract, CLEAN/SOLID/DRY mapping, and future scaling direction
+- `docs/detective-agent-design.md`: design rationale doc — captures decisions on detective persona direction, platform workers vs feature-specific workers approach, and token-efficient feature reference doc structure
+
+### Removed
+- `agents/detective/prompt-debug-worker.md`: moved out of detective persona — prompt/agent debugging belongs with the perf evaluation workflow; `perf-worker` callout updated with inline guidance
+
+### Changed
+- `agents/detective/debug-worker.md`: updated to spawn `debug-log-worker` instead of referencing removed `debug-add-logs` / `debug-remove-logs` skills
+- `docs/persona/`: persona docs moved from `docs/` root into `docs/persona/` folder (`persona-builder.md` → `persona/builder.md`, `persona-detective.md` → `persona/detective.md`)
+- `docs/core-design-principles.md`: updated internal links to reflect `docs/persona/` move
+
+---
+
 ## [3.31.0] — 2026-04-22
 
 ### Added
