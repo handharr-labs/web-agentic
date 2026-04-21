@@ -275,8 +275,7 @@ Round to one decimal place.
 For any dimension that scored below 7, add a callout at the end of the "Issues found" section:
 
 ```
-> **Low score on D<N>?** Run `prompt-debug-worker` with this report + the agent's .md file
-> to surface ambiguous instructions that caused this behavior.
+> **Low score on D<N>?** Review the agent's .md file — look for ambiguous scope, missing precondition checks, or contradicting rules that match the failing dimension.
 ```
 
 Include the exact agent file path inferred from the `agent_spawns` subagent types:
