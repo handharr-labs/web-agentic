@@ -7,6 +7,22 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.37.0] — 2026-04-22
+
+### Changed
+- `lib/core/reference/clean-arch/` → `lib/core/reference/builder/`: renamed to align reference dir naming with the persona taxonomy — all files in this dir are owned and consumed by the builder persona
+- `lib/platforms/{ios,web,flutter}/reference/contract/*.md` → `reference/contract/builder/*.md`: contract reference docs grouped under a persona subdir to make room for future personas (e.g. `contract/detective/`) without restructuring
+- `scripts/setup-symlinks.sh`: `link_reference` made fully recursive — handles any depth of subdir nesting; `contract/builder/` and future persona subdirs land downstream automatically with no further script changes
+- `scripts/local-sync.sh`: `copy_reference` made fully recursive to match; core reference call updated to pass `lib/core/reference/` root so `builder/` is preserved as a subdir rather than copied flat
+- All builder agents (`domain-worker`, `data-worker`, `presentation-worker`, `ui-worker`, `test-worker`, `feature-planner`): Grep paths updated to `reference/builder/` and `reference/contract/builder/`
+- All platform contract skills (ios/web/flutter): `reference/contract/` paths updated to `reference/contract/builder/`
+- `docs/submodule-repo-structure.md`, `docs/core-design-principles.md`, `docs/contract/README.md`: updated to document `contract/<persona>/` grouping pattern
+
+### Fixed
+- `scripts/setup-symlinks.sh`: `link_skills()` now filters `extensions/` in addition to `contract/` — prevents `skills.local/extensions/` from being incorrectly symlinked as a skill downstream
+
+---
+
 ## [3.36.0] — 2026-04-22
 
 ### Changed
