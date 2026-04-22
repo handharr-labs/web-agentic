@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/testing.md`. This file covers TypeScript syntax and web-specific patterns.
 
-## Test Pyramid
+## Test Pyramid <!-- 24 -->
 
 ```
          ┌──────────────────┐
@@ -26,7 +26,7 @@
 - **Manual mocks** for repositories and use cases in unit tests
 - **`vi.fn()`** for simple dependency mocking
 
-## Service Tests
+## Service Tests <!-- 55 -->
 
 Highest priority. Pure input → output, no mocks needed.
 
@@ -81,7 +81,7 @@ describe('LeaveRequestValidatorService', () => {
 });
 ```
 
-## ViewModel Hook Tests
+## ViewModel Hook Tests <!-- 52 -->
 
 ```typescript
 // __tests__/presentation/hooks/useEmployeeListViewModel.test.ts
@@ -133,7 +133,7 @@ describe('useEmployeeListViewModel', () => {
 });
 ```
 
-## Repository Tests
+## Repository Tests <!-- 45 -->
 
 With injectable mappers, you can isolate repository logic from mapping logic:
 
@@ -178,7 +178,7 @@ describe('EmployeeRepositoryImpl', () => {
 });
 ```
 
-## Mapper Tests
+## Mapper Tests <!-- 53 -->
 
 Pure input → output, no mocks needed:
 

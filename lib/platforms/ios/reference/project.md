@@ -1,6 +1,6 @@
 # iOS — Project Structure
 
-## Modular Architecture (Feature-Based)
+## Modular Architecture (Feature-Based) <!-- 103 -->
 
 ### Current Module Structure
 
@@ -103,7 +103,7 @@ Talenta/Shared/
 
 ---
 
-## Project Structure
+## Project Structure <!-- 42 -->
 
 ```
 talenta-ios/
@@ -145,7 +145,7 @@ talenta-ios/
 
 ---
 
-## Conventions & Naming
+## Conventions & Naming <!-- 49 -->
 
 ### File Naming
 
@@ -194,7 +194,7 @@ talenta-ios/
 
 ---
 
-## Design Decisions & Rationale
+## Design Decisions & Rationale <!-- 52 -->
 
 ### Why UIKit?
 

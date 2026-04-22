@@ -4,7 +4,7 @@
 
 Implements Domain protocols. Handles all I/O: network, storage, caching.
 
-## Response Models (DTOs)
+## Response Models (DTOs) <!-- 67 -->
 
 API response models. Separate from domain entities.
 
@@ -71,7 +71,7 @@ struct RequestLiveAttendanceResponseData: Decodable {
 - Response models never escape Data layer
 - Standard wrapper: `status`, `message`, `data` structure
 
-## Data Sources
+## Data Sources <!-- 59 -->
 
 Abstract the data origin (remote API, local storage, cache).
 
@@ -130,7 +130,7 @@ class LiveAttendanceRemoteDataSourceImpl: LiveAttendanceRemoteDataSource {
 - Uses Moya for HTTP requests
 - Error handling: catch decode + network errors
 
-## Mappers
+## Mappers <!-- 162 -->
 
 **CRITICAL:** Mappers belong in the **Data Layer**, not Domain Layer.
 
@@ -292,7 +292,7 @@ class CustomFormValidator {
 | ✅ Consistent with architecture (injectable) | Simpler for trivial mappers |
 | ✅ Testable in isolation | More boilerplate |
 
-## Repository Implementation
+## Repository Implementation <!-- 74 -->
 
 Repositories inject **mappers** and **datasources**, implement **domain protocols**.
 
@@ -366,7 +366,7 @@ class LiveAttendanceRepositoryImpl: LiveAttendanceRepository {
 - Map errors to `BaseErrorModel`
 - Return `Result<Model, BaseErrorModel>` via completion
 
-## Networking (Moya)
+## Networking (Moya) <!-- 62 -->
 
 Talenta iOS uses **Moya** for type-safe networking.
 
@@ -428,7 +428,7 @@ extension TimeManagementAPI: TargetType {
 - Headers include auth tokens from storage
 - MoyaProvider handles HTTP requests
 
-## Advanced Repository Patterns
+## Advanced Repository Patterns <!-- 98 -->
 
 ### Offline Support with Cache Fallback
 

@@ -4,7 +4,7 @@
 
 Talenta iOS uses **Manual DI Container + Constructor Injection** pattern — lightweight, explicit, and framework-free.
 
-## Architecture Overview
+## Architecture Overview <!-- 25 -->
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -29,7 +29,7 @@ Talenta iOS uses **Manual DI Container + Constructor Injection** pattern — lig
         └─────────────────────┘
 ```
 
-## Manual DI Container Pattern
+## Manual DI Container Pattern <!-- 244 -->
 
 **Recommendation:** Use a lightweight manual DI Container per module to centralize dependency creation.
 
@@ -273,7 +273,7 @@ extension CICOCoordinator: CICOLocationNavigator {
 }
 ```
 
-## Constructor Injection (Fallback Pattern)
+## Constructor Injection (Fallback Pattern) <!-- 25 -->
 
 For classes **not** managed by DI Container (legacy code, simple utilities), use constructor injection with defaults:
 
@@ -298,7 +298,7 @@ class CICOLocationViewModel: BaseViewModelV2<...> {
 - ✅ **DI Container Factory:** New code, complex dependency graphs
 - ✅ **Constructor Injection with Defaults:** Legacy code, simple utilities, backward compatibility
 
-## Testing with DI Container
+## Testing with DI Container <!-- 56 -->
 
 ```swift
 // TalentaTests/Module/TalentaTM/Presentation/ViewModel/CICOLocationViewModelTest.swift
@@ -354,7 +354,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 }
 ```
 
-## DI Principles
+## DI Principles <!-- 12 -->
 
 | Component | Lifecycle | Managed By |
 |-----------|-----------|------------|
@@ -366,7 +366,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 | **Coordinators** | Factory (new instance) | Parent coordinator |
 | **ViewControllers** | Factory (new instance) | Coordinator |
 
-## Benefits of Manual DI Container
+## Benefits of Manual DI Container <!-- 13 -->
 
 | Benefit | Description |
 |---------|-------------|
@@ -379,7 +379,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 | ✅ **Modular** | Each feature module has own container, clear boundaries |
 | ✅ **Lazy Initialization** | Dependencies created only when needed |
 
-## When to Use What?
+## When to Use What? <!-- 19 -->
 
 ```swift
 // ✅ RECOMMENDED: DI Container factory for ViewModels
@@ -398,7 +398,7 @@ let useCase = PostSubmitCICOUseCase.sharedInstance
 let repository = LiveAttendanceRepositoryImpl()
 ```
 
-## DI Wrapper (Minimal Setup)
+## DI Wrapper (Minimal Setup) <!-- 257 -->
 
 **Advanced Pattern:** Use property wrappers and a registry to minimize boilerplate while keeping type safety.
 

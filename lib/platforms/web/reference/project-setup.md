@@ -8,7 +8,7 @@ Things that are **intentionally left open** in this starter kit because they are
 
 ---
 
-## Styling / UI Library — REQUIRED
+## Styling / UI Library — REQUIRED <!-- 21 -->
 
 The starter kit has no opinion on styling. Pick one and stick to it.
 
@@ -29,7 +29,7 @@ The starter kit has no opinion on styling. Pick one and stick to it.
 
 ---
 
-## Database / ORM — REQUIRED for full-stack, skip for frontend-only
+## Database / ORM — REQUIRED for full-stack, skip for frontend-only <!-- 22 -->
 
 The DB data source layer is generated as ORM-agnostic stubs. Fill in the impl when the ORM is chosen.
 
@@ -51,7 +51,7 @@ The DB data source layer is generated as ORM-agnostic stubs. Fill in the impl wh
 
 ---
 
-## Authentication — REQUIRED if the app has any protected routes
+## Authentication — REQUIRED if the app has any protected routes <!-- 21 -->
 
 | Option | When to choose |
 |--------|---------------|
@@ -72,7 +72,7 @@ The DB data source layer is generated as ORM-agnostic stubs. Fill in the impl wh
 
 ---
 
-## Environment Variables
+## Environment Variables <!-- 32 -->
 
 Set up `.env.local` before running the project. Never commit this file.
 
@@ -104,7 +104,7 @@ NEXTAUTH_URL=http://localhost:3000                # your app's base URL
 
 ---
 
-## Error Monitoring — OPTIONAL
+## Error Monitoring — OPTIONAL <!-- 17 -->
 
 Unhandled errors in production need somewhere to go.
 
@@ -121,7 +121,7 @@ Unhandled errors in production need somewhere to go.
 
 ---
 
-## Feature Flags — OPTIONAL
+## Feature Flags — OPTIONAL <!-- 13 -->
 
 If the project needs gradual rollout or A/B testing.
 
@@ -134,7 +134,7 @@ If the project needs gradual rollout or A/B testing.
 
 ---
 
-## Deployment Target — OPTIONAL (affects config)
+## Deployment Target — OPTIONAL (affects config) <!-- 14 -->
 
 | Target | Notes |
 |--------|-------|
@@ -148,7 +148,7 @@ If the project needs gradual rollout or A/B testing.
 
 ---
 
-## Testing Framework — REQUIRED before writing tests
+## Testing Framework — REQUIRED before writing tests <!-- 16 -->
 
 The architecture docs reference both Vitest and Jest. Pick one.
 
@@ -164,7 +164,7 @@ The architecture docs reference both Vitest and Jest. Pick one.
 
 ---
 
-## Linting & Formatting — OPTIONAL but strongly recommended
+## Linting & Formatting — OPTIONAL but strongly recommended <!-- 25 -->
 
 | Tool | Config file |
 |------|------------|
@@ -189,7 +189,7 @@ This enforces the dependency rule at the linter level — presentation cannot im
 
 ---
 
-## Summary Table
+## Summary Table <!-- 15 -->
 
 | Decision | Status | Blocking |
 |----------|--------|---------|

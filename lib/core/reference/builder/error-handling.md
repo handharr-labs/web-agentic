@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/error-handling.md` in 
 
 ---
 
-## Error Flow
+## Error Flow <!-- 20 -->
 
 Errors travel inward-to-outward, mapped at each layer boundary:
 
@@ -25,7 +25,7 @@ Screen → renders error UI
 
 ---
 
-## Error Types
+## Error Types <!-- 12 -->
 
 | Layer | Error type owned | Purpose |
 |---|---|---|
@@ -37,7 +37,7 @@ Screen → renders error UI
 
 ---
 
-## Error Mapping
+## Error Mapping <!-- 15 -->
 
 Repository implementations own the mapping from transport errors to domain errors:
 
@@ -52,7 +52,7 @@ Mappers never throw — they handle null/missing fields defensively and return s
 
 ---
 
-## Error UI
+## Error UI <!-- 14 -->
 
 The StateHolder maps `DomainError` to an error State that the screen renders:
 
@@ -66,7 +66,7 @@ The StateHolder maps `DomainError` to an error State that the screen renders:
 
 ---
 
-## Layer Invariants
+## Layer Invariants <!-- 7 -->
 
 - DataSources throw — they never return null to signal failure
 - Repository implementations always catch and map — never let transport errors propagate to use cases

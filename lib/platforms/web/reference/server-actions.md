@@ -5,7 +5,7 @@ Server Actions are the primary mechanism for **mutations** when Next.js is the b
 
 > **Frontend-only projects**: skip this section. Use the existing ViewModel → UseCase → RemoteDataSource pattern.
 
-## When to Use What
+## When to Use What <!-- 16 -->
 
 ```
 Read data (initial load)
@@ -21,7 +21,7 @@ External API / webhook / file upload
   → Not a Server Action
 ```
 
-## Setup — `next-safe-action`
+## Setup — `next-safe-action` <!-- 40 -->
 
 Install:
 ```bash
@@ -61,7 +61,7 @@ export const authActionClient = actionClient.use(async ({ next }) => {
 - `handleServerError` is the single place that decides what error details reach the client
 - Never expose raw error messages, stack traces, or database errors to the client
 
-## Action File Pattern
+## Action File Pattern <!-- 43 -->
 
 One file per mutation. Actions live alongside the feature they belong to:
 
@@ -104,7 +104,7 @@ export const submitLeaveRequestAction = authActionClient
 - Call use cases from `container.server.ts` — never instantiate repositories or data sources directly
 - The action returns the use case result directly; `next-safe-action` wraps it in `{ data }` automatically
 
-## Client-Side Consumption
+## Client-Side Consumption <!-- 43 -->
 
 ```typescript
 // presentation/features/leave-request/LeaveRequestView.tsx
@@ -147,7 +147,7 @@ export function LeaveRequestView() {
 }
 ```
 
-## Optimistic Updates
+## Optimistic Updates <!-- 18 -->
 
 For mutations where you want instant UI feedback:
 
@@ -165,7 +165,7 @@ const { execute, optimisticState } = useOptimisticAction(
 );
 ```
 
-## Data Flow — Full-Stack Mutation
+## Data Flow — Full-Stack Mutation <!-- 19 -->
 
 ```
 Client Component
@@ -184,7 +184,7 @@ Repository
     ↑ result available in useAction({ onSuccess })
 ```
 
-## Cache Revalidation
+## Cache Revalidation <!-- 17 -->
 
 After a successful mutation, revalidate the affected data:
 
@@ -201,7 +201,7 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 });
 ```
 
-## Full-Stack Project Structure Addition
+## Full-Stack Project Structure Addition <!-- 15 -->
 
 ```
 src/
@@ -216,7 +216,7 @@ src/
 │       └── [Feature]View.tsx
 ```
 
-## Naming Conventions
+## Naming Conventions <!-- 10 -->
 
 | Artifact | Pattern | Example |
 |----------|---------|---------|

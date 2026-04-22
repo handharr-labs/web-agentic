@@ -2,7 +2,7 @@
 
 Load only the file relevant to your task.
 
-## Contract References (cross-platform standard — same filename on every platform)
+## Contract References (cross-platform standard — same filename on every platform) <!-- 13 -->
 
 | File | Contents |
 |------|----------|
@@ -15,7 +15,7 @@ Load only the file relevant to your task.
 | contract/error-handling.md | Error flow, error types, error mapping, error boundaries |
 | contract/utilities.md | StorageService, DateService, Logger, Validator, null safety, NetworkMonitor |
 
-## Platform-Specific References
+## Platform-Specific References <!-- 12 -->
 
 | File | Contents |
 |------|----------|

@@ -4,7 +4,7 @@ Shared infrastructure used across all layers. Interface-based for testability. R
 
 ---
 
-## StorageService
+## StorageService <!-- 110 -->
 
 Abstracts key-value storage. `SharedPreferences` for preferences; `FlutterSecureStorage` for tokens.
 
@@ -114,7 +114,7 @@ class SecureStorageService implements StorageService {
 
 ---
 
-## DateService
+## DateService <!-- 101 -->
 
 Centralized date handling with timezone and formatting. Uses `intl` package.
 
@@ -215,7 +215,7 @@ class DateServiceImpl implements DateService {
 
 ---
 
-## Null Safety Utilities
+## Null Safety Utilities <!-- 39 -->
 
 Dart has built-in null safety — prefer `??` operators and extension methods for clean fallbacks.
 
@@ -254,7 +254,7 @@ final limit = params.limit ?? 20;
 
 ---
 
-## Logger
+## Logger <!-- 64 -->
 
 Structured logging using the `logger` package. Swap implementation per environment.
 

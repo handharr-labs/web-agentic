@@ -4,7 +4,7 @@
 
 ---
 
-## Setup
+## Setup <!-- 9 -->
 
 ```yaml
 dependencies:
@@ -13,7 +13,7 @@ dependencies:
 
 ---
 
-## Route Constants
+## Route Constants <!-- 26 -->
 
 Define all route paths and names as constants. Never hard-code path strings.
 
@@ -39,7 +39,7 @@ abstract class Routes {
 
 ---
 
-## Router Configuration
+## Router Configuration <!-- 62 -->
 
 ```dart
 // presentation/navigation/app_router.dart
@@ -101,7 +101,7 @@ class AppRouter {
 
 ---
 
-## Navigating from Widgets
+## Navigating from Widgets <!-- 18 -->
 
 ```dart
 // Push a new screen
@@ -119,7 +119,7 @@ context.pop(true);
 
 ---
 
-## Navigating from BLoC (Side Effects)
+## Navigating from BLoC (Side Effects) <!-- 43 -->
 
 Use `BlocListener` — BLoC emits a navigation action via state, widget listens and calls `context.go/push`.
 
@@ -162,7 +162,7 @@ BlocListener<EmployeeBloc, EmployeeState>(
 
 ---
 
-## Passing Complex Objects
+## Passing Complex Objects <!-- 28 -->
 
 For objects too large or non-serialisable to encode in the URL, use `extra`:
 
@@ -190,7 +190,7 @@ GoRoute(
 
 ---
 
-## Nested Navigation (Shell Routes)
+## Nested Navigation (Shell Routes) <!-- 23 -->
 
 Use `ShellRoute` for persistent navigation bars:
 
@@ -213,7 +213,7 @@ GoRoute(
 
 ---
 
-## Deep Link Support
+## Deep Link Support <!-- 16 -->
 
 ```dart
 // android/app/src/main/AndroidManifest.xml
@@ -229,7 +229,7 @@ go_router handles deep links automatically when paths match route definitions. N
 
 ---
 
-## Material App Setup
+## Material App Setup <!-- 21 -->
 
 ```dart
 // app.dart

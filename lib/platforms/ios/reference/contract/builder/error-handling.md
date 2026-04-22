@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/error-handling.md`. This file covers Swift syntax and iOS-specific patterns.
 
-## Error Flow
+## Error Flow <!-- 16 -->
 
 ```
 DataSource throws NetworkError
@@ -18,7 +18,7 @@ ViewController shows error UI
 
 ---
 
-## Error Types
+## Error Types <!-- 23 -->
 
 ```swift
 // Shared/Domain/Entities/BaseErrorModel.swift
@@ -41,7 +41,7 @@ struct BaseErrorModel: Error {
 
 ---
 
-## Result Type
+## Result Type <!-- 16 -->
 
 ```swift
 Result<Model, BaseErrorModel>
@@ -57,7 +57,7 @@ All UseCase/Repository completions use `Result<Model, BaseErrorModel>`.
 
 ---
 
-## Error Mapping
+## Error Mapping <!-- 22 -->
 
 ```swift
 // Shared/Data/Mapper/BaseErrorModelMapper.swift
@@ -79,7 +79,7 @@ class BaseErrorModelMapper {
 
 ---
 
-## Error UI
+## Error UI <!-- 26 -->
 
 ViewController observes ViewModel actions to surface errors. Platform patterns are in `UIViewController+Extensions.swift`.
 

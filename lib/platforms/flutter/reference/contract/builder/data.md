@@ -6,7 +6,7 @@ Implements repository interfaces from the Domain layer. Knows about serializatio
 
 ---
 
-## DTOs
+## DTOs <!-- 35 -->
 
 DTO classes for API responses. **Always have `fromJson` — entities never do.**
 
@@ -41,7 +41,7 @@ class EmployeeModel with _$EmployeeModel {
 
 ---
 
-## Payload (Write Models)
+## Payload (Write Models) <!-- 53 -->
 
 Separate class for request bodies. Keeps read models clean.
 
@@ -94,7 +94,7 @@ class UpdateEmployeePayloadMapper {
 
 ---
 
-## Mappers
+## Mappers <!-- 44 -->
 
 Convert Models → Entities. One mapper per aggregate root.
 
@@ -138,7 +138,7 @@ class EmployeeMapper extends BaseMapper<EmployeeModel, EmployeeEntity> {
 
 ---
 
-## Data Sources
+## Data Sources <!-- 127 -->
 
 Separate remote and local data sources via abstract interface + implementation.
 
@@ -265,7 +265,7 @@ class BaseResponse<T> {
 
 ---
 
-## Repository Implementations
+## Repository Implementations <!-- 68 -->
 
 Implement domain interfaces. Orchestrate datasource → mapper → Either.
 
@@ -333,7 +333,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
 
 ---
 
-## Exceptions
+## Exceptions <!-- 81 -->
 
 Typed exceptions thrown by DataSources. Converted to `Failure` in repository.
 
@@ -414,7 +414,7 @@ extension AppExceptionX on AppException {
 
 ---
 
-## Dio Error Interceptor
+## Dio Error Interceptor <!-- 44 -->
 
 Translate Dio errors → `AppException` before they reach the repository.
 
@@ -458,7 +458,7 @@ class ErrorInterceptor extends Interceptor {
 
 ---
 
-## Endpoint Constants
+## Endpoint Constants <!-- 19 -->
 
 ```dart
 // data/network/endpoints.dart
@@ -477,7 +477,7 @@ abstract class Endpoints {
 
 ---
 
-## Local Data Source (Cache-First Pattern)
+## Local Data Source (Cache-First Pattern) <!-- 33 -->
 
 ```dart
 // data/datasources/employee_local_data_source.dart

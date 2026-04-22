@@ -1,6 +1,6 @@
 # iOS — Core Services
 
-## StorageService
+## StorageService <!-- 100 -->
 
 Abstract key-value storage for tokens, preferences, cached data.
 
@@ -100,7 +100,7 @@ final class SecureStorageService: StorageService {
 
 ---
 
-## DateService
+## DateService <!-- 69 -->
 
 Centralized date handling with timezone/formatting.
 

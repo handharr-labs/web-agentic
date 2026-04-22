@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/presentation.md` in ea
 
 ---
 
-## Dependency Rule
+## Dependency Rule <!-- 13 -->
 
 Presentation depends on Domain only. It never imports from the Data layer.
 
@@ -18,7 +18,7 @@ Forbidden: any DataSource, RepositoryImpl, DTO, mapper, HTTP client, or database
 
 ---
 
-## StateHolder
+## StateHolder <!-- 15 -->
 
 A **StateHolder** is the single source of truth for a screen's UI state. Platform names vary (ViewModel, BLoC, Presenter) but the contract is identical across platforms.
 
@@ -33,7 +33,7 @@ A **StateHolder** is the single source of truth for a screen's UI state. Platfor
 
 ---
 
-## State
+## State <!-- 20 -->
 
 **State** is an immutable snapshot of what the UI should render at a given moment.
 
@@ -53,7 +53,7 @@ error    →  domain error type; UI decides how to display it
 
 ---
 
-## Events / Input
+## Events / Input <!-- 11 -->
 
 **Events** (also called Input or Intent) represent user intentions flowing into the StateHolder.
 
@@ -64,7 +64,7 @@ error    →  domain error type; UI decides how to display it
 
 ---
 
-## Actions / Output
+## Actions / Output <!-- 11 -->
 
 **Actions** (also called Output or SideEffects) represent one-time side effects the StateHolder emits after processing an event.
 
@@ -75,7 +75,7 @@ error    →  domain error type; UI decides how to display it
 
 ---
 
-## StateHolder Contract
+## StateHolder Contract <!-- 15 -->
 
 The **StateHolder contract** is a written handoff artifact that `presentation-worker` produces for `ui-worker`. It is not a code file — it is a structured summary written to `.claude/runs/<feature>/stateholder-contract.md`.
 
@@ -90,7 +90,7 @@ The **StateHolder contract** is a written handoff artifact that `presentation-wo
 
 ---
 
-## Creation Order
+## Creation Order <!-- 10 -->
 
 ```
 Use Cases (from domain-worker) → StateHolder → StateHolder contract → Screen (ui-worker)
@@ -100,7 +100,7 @@ Never write the screen before the StateHolder contract exists.
 
 ---
 
-## Layer Invariants
+## Layer Invariants <!-- 7 -->
 
 - StateHolder never imports from the data layer — no DTOs, no datasources, no mappers
 - Use cases injected via DI — never `new UseCase()` inside a StateHolder

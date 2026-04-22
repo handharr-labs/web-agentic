@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/presentation.md`. This file covers Swift syntax and iOS-specific patterns.
 
-## ViewModel State Management
+## ViewModel State Management <!-- 81 -->
 
 Talenta iOS uses **BaseViewModelV2** with generic State/Event/Action pattern.
 
@@ -83,7 +83,7 @@ enum CICOLocationViewModelAction: ViewModelAction {
 }
 ```
 
-## BaseViewModelV2
+## BaseViewModelV2 <!-- 89 -->
 
 Generic base class for all ViewModels with reactive state management.
 
@@ -172,7 +172,7 @@ class BaseViewModelV2<State: ViewModelState, Event: ViewModelEvent, Action: View
 - Subclasses override `emitEvent(_ event:)` for user interactions
 - Subclasses override `setBinders()` for RxSwift bindings
 
-## Concrete ViewModel
+## Concrete ViewModel <!-- 129 -->
 
 ```swift
 // Presentation/ViewModel/CICOLocation/CICOLocationViewModel.swift
@@ -301,7 +301,7 @@ class CICOLocationViewModel: BaseViewModelV2<
 - Use `weak self` in closures
 - Dispose subscriptions via `disposeBag`
 
-## ViewController
+## ViewController <!-- 133 -->
 
 ```swift
 // Presentation/View/CICOLocation/CICOLocationViewController.swift
@@ -434,9 +434,9 @@ class CICOLocationViewController: TalentaBaseViewController {
 
 ---
 
-## Advanced Patterns
+## Advanced Patterns <!-- 2 -->
 
-## Complex Dependency Management
+## Complex Dependency Management <!-- 58 -->
 
 When ViewModels have 20+ dependencies, organize them systematically using MARK comments:
 
@@ -494,7 +494,7 @@ final class CICOLocationViewModel: BaseViewModelV2<CICOLocationViewModelState, C
 - **Default singletons**: Every dependency has default parameter for testability
 - **Protocol types**: Use `any ProtocolName` for all dependencies to enable mocking
 
-## Navigator Protocol Pattern
+## Navigator Protocol Pattern <!-- 39 -->
 
 ViewModels never perform navigation directly. Use Navigator protocol with weak reference:
 
@@ -533,7 +533,7 @@ final class CICOLocationViewModel {
 - Navigation methods can return `Observable<T>` for bidirectional data flow
 - Use `.orEmpty()` when calling optional navigator methods that return Observable
 
-## Coordinator Pattern
+## Coordinator Pattern <!-- 25 -->
 
 ```swift
 protocol [Feature]Coordinator: AnyObject {
@@ -558,7 +558,7 @@ class [Feature]CoordinatorImpl: [Feature]Coordinator {
 }
 ```
 
-## Advanced RxSwift Patterns
+## Advanced RxSwift Patterns <!-- 75 -->
 
 ### Observable.zip for Parallel Requests
 
@@ -633,7 +633,7 @@ private func loadAllData() -> Observable<Action> {
 }
 ```
 
-## UIModel Pattern with copyWith
+## UIModel Pattern with copyWith <!-- 35 -->
 
 ViewModels expose UIModels for the presentation layer, not domain entities:
 
@@ -668,7 +668,7 @@ struct ClockInConfirmationUIModel {
 - **Separation**: Keeps presentation logic out of domain entities
 - **Type Safety**: Compiler ensures UI only receives formatted data
 
-## Advanced State Management
+## Advanced State Management <!-- 32 -->
 
 Beyond the single State pattern, use specialized relays for specific flows:
 
@@ -700,7 +700,7 @@ final class CICOBottomSheetViewModel {
 - **PublishSubject**: One-time events or commands (navigation, user actions)
 - **Driver**: Safe UI binding (never errors, on main thread)
 
-## Memory Management & deinit
+## Memory Management & deinit <!-- 17 -->
 
 Always implement `deinit` to clean up resources:
 
@@ -717,7 +717,7 @@ deinit {
 **What to clean up:** location managers, publish/behavior subjects (`.onCompleted()`), timers, file handles.
 Always log `deinit` to catch retain cycles.
 
-## Feature Flags Integration
+## Feature Flags Integration <!-- 26 -->
 
 ```swift
 final class CICOLocationViewModel {
@@ -743,7 +743,7 @@ final class CICOLocationViewModel {
 
 ---
 
-## Shared Component Paths
+## Shared Component Paths <!-- 12 -->
 
 When running a Component Reuse Check, search these locations for existing reusable views:
 

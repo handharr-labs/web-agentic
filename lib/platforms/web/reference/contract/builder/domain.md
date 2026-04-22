@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/domain.md`. This file covers TypeScript syntax and web-specific patterns.
 
-## Entities
+## Entities <!-- 34 -->
 
 ```typescript
 // domain/entities/Employee.ts
@@ -36,7 +36,7 @@ export interface PaginatedResult<T> {
 - Plain TypeScript interfaces — no class inheritance, no decorators
 - Represent business concepts, not API shapes
 
-## Repository Interfaces
+## Repository Interfaces <!-- 22 -->
 
 ```typescript
 // domain/repositories/EmployeeRepository.ts
@@ -58,7 +58,7 @@ export interface EmployeeRepository {
 - Return domain entities, never DTOs
 - Interface must be in the Domain layer — implementations go in Data
 
-## Use Cases
+## Use Cases <!-- 92 -->
 
 Each UseCase has a **Params** type that bundles all input parameters:
 
@@ -150,7 +150,7 @@ export class UpdateEmployeeUseCaseImpl implements UpdateEmployeeUseCase {
 
 **Naming convention:** `[Verb][Feature]UseCase` — e.g., `GetEmployeeUseCase`, `SubmitAttendanceUseCase`, `CalculateLeaveBalanceUseCase`
 
-## Services
+## Services <!-- 137 -->
 
 Pure business decisions — no I/O, no side effects, no async. See extraction rules in `reference/builder/domain.md`.
 
@@ -287,7 +287,7 @@ A service computing only dashboard display logic belongs in `dashboard`.
 
 **Naming convention:** `[Feature][Noun]` interface + `[Feature][Noun]Service` class — e.g., `LeaveBalanceCalculator` / `LeaveBalanceCalculatorService`
 
-## Domain Errors
+## Domain Errors <!-- 46 -->
 
 ```typescript
 // domain/errors/DomainError.ts

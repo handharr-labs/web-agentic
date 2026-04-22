@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/testing.md` in each pl
 
 ---
 
-## Test Pyramid
+## Test Pyramid <!-- 18 -->
 
 ```
          ┌──────────────────┐
@@ -23,7 +23,7 @@ Platform syntax and patterns: `reference/contract/builder/testing.md` in each pl
 
 ---
 
-## What to Test Per Layer
+## What to Test Per Layer <!-- 11 -->
 
 | Layer | Test targets | What to assert |
 |---|---|---|
@@ -34,7 +34,7 @@ Platform syntax and patterns: `reference/contract/builder/testing.md` in each pl
 
 ---
 
-## Repository Tests
+## Repository Tests <!-- 11 -->
 
 Repository implementation tests verify the bridge between DataSource and Domain:
 
@@ -45,7 +45,7 @@ Repository implementation tests verify the bridge between DataSource and Domain:
 
 ---
 
-## Mapper Tests
+## Mapper Tests <!-- 10 -->
 
 Mapper tests are pure input → output assertions — the simplest tests to write:
 
@@ -55,7 +55,7 @@ Mapper tests are pure input → output assertions — the simplest tests to writ
 
 ---
 
-## Mock vs Real
+## Mock vs Real <!-- 12 -->
 
 | Use a mock/stub when… | Use a real implementation when… |
 |---|---|
@@ -67,7 +67,7 @@ Mapper tests are pure input → output assertions — the simplest tests to writ
 
 ---
 
-## Test Naming Convention
+## Test Naming Convention <!-- 8 -->
 
 `[unit under test]_[scenario]_[expected outcome]`
 

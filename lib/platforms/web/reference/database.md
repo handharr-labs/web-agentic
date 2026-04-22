@@ -5,7 +5,7 @@ Introduces a `db/` data source variant alongside the existing `remote/` data sou
 
 > **Frontend-only projects**: skip this section. The remote data source pattern already covers your data needs.
 
-## Core Principle — Swap the DataSource, Keep Everything Else
+## Core Principle — Swap the DataSource, Keep Everything Else <!-- 15 -->
 
 ```
 Frontend-only:                          Full-stack:
@@ -20,7 +20,7 @@ Both implement the same:
 
 The DI container is the only file that changes when switching modes. Business logic (use cases, domain services) is reused without modification.
 
-## DB Record Types
+## DB Record Types <!-- 32 -->
 
 Analogous to DTOs, but represent the database row shape instead of the API response shape.
 
@@ -52,7 +52,7 @@ export interface PaginatedDbResult<T> {
 - DB records never escape the data layer
 - Nullable DB columns map to `T | null` (not `T | undefined`)
 
-## DB DataSource
+## DB DataSource <!-- 68 -->
 
 ```typescript
 // data/data-sources/db/EmployeeDbDataSource.ts
@@ -120,7 +120,7 @@ export class EmployeeDbDataSourceImpl implements EmployeeDbDataSource {
 }
 ```
 
-## DB Mapper
+## DB Mapper <!-- 30 -->
 
 Maps `DbRecord → Domain Entity`. Same interface + impl pattern as HTTP mappers.
 
@@ -150,7 +150,7 @@ export class EmployeeDbMapperImpl implements EmployeeDbMapper {
 }
 ```
 
-## DB Repository Implementation
+## DB Repository Implementation <!-- 70 -->
 
 A separate impl class that uses the DB data source. Implements the same domain interface as the remote repository.
 
@@ -220,7 +220,7 @@ export class EmployeeDbRepositoryImpl implements EmployeeRepository {
 }
 ```
 
-## DB Error Mapper
+## DB Error Mapper <!-- 34 -->
 
 Maps ORM-specific errors to `DomainError`. Pattern mirrors `ErrorMapperImpl` for HTTP errors.
 
@@ -254,7 +254,7 @@ export class DbErrorMapperImpl implements DbErrorMapper {
 
 Fill in the ORM-specific error codes when the ORM is chosen. The interface never changes.
 
-## Wiring in the Container
+## Wiring in the Container <!-- 46 -->
 
 ```typescript
 // di/container.server.ts (full-stack mode)
@@ -300,7 +300,7 @@ export const getEmployeeUseCase = () => new GetEmployeeUseCaseImpl(employeeRepos
 export const db = null; // TODO: replace with ORM client
 ```
 
-## Full-Stack Project Structure Addition
+## Full-Stack Project Structure Addition <!-- 25 -->
 
 ```
 src/
@@ -325,7 +325,7 @@ src/
 │       └── EmployeeDbRepositoryImpl.ts    ← new (DB mode)
 ```
 
-## Decision Rule — Remote vs DB
+## Decision Rule — Remote vs DB <!-- 17 -->
 
 ```
 Is this project consuming an external API you don't control?

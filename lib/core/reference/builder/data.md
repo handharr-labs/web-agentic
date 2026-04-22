@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/data.md` in each platf
 
 ---
 
-## Dependency Rule
+## Dependency Rule <!-- 13 -->
 
 Data depends on Domain only. It never imports from Presentation or UI.
 
@@ -18,7 +18,7 @@ Forbidden: any presentation type, UI framework, StateHolder, or view import.
 
 ---
 
-## DTOs
+## DTOs <!-- 15 -->
 
 A **DTO (Data Transfer Object)** mirrors the raw API or database shape exactly.
 
@@ -33,7 +33,7 @@ A **DTO (Data Transfer Object)** mirrors the raw API or database shape exactly.
 
 ---
 
-## Mappers
+## Mappers <!-- 15 -->
 
 A **Mapper** converts between a DTO and a domain entity — always defined as an interface with a concrete implementation.
 
@@ -48,7 +48,7 @@ A **Mapper** converts between a DTO and a domain entity — always defined as an
 
 ---
 
-## Data Sources
+## Data Sources <!-- 14 -->
 
 A **DataSource** is an abstract interface for raw data access — remote (HTTP) or local (DB, cache).
 
@@ -62,7 +62,7 @@ A **DataSource** is an abstract interface for raw data access — remote (HTTP) 
 
 ---
 
-## Repository Implementation
+## Repository Implementation <!-- 15 -->
 
 A **Repository Implementation** implements the domain repository interface using a DataSource and Mapper.
 
@@ -77,7 +77,7 @@ A **Repository Implementation** implements the domain repository interface using
 
 ---
 
-## Creation Order
+## Creation Order <!-- 18 -->
 
 **Remote API feature:**
 
@@ -95,7 +95,7 @@ Never create a repository implementation before the DataSource it depends on.
 
 ---
 
-## Layer Invariants
+## Layer Invariants <!-- 5 -->
 
 - Imports from domain layer only — never from presentation or UI
 - Raw transport errors never propagate upward — repository implementation maps them to domain errors

@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/presentation.md` in ea
 
 ---
 
-## Dependency Rule
+## Dependency Rule <!-- 13 -->
 
 UI depends on Presentation only. It never imports from Domain or Data directly.
 
@@ -18,7 +18,7 @@ Forbidden: use case interfaces, repository interfaces, DTOs, mappers, datasource
 
 ---
 
-## Screen
+## Screen <!-- 15 -->
 
 A **Screen** is a full-page view bound to a single StateHolder. It observes state and sends events — it contains no business logic.
 
@@ -33,7 +33,7 @@ A **Screen** is a full-page view bound to a single StateHolder. It observes stat
 
 ---
 
-## Component / Sub-view
+## Component / Sub-view <!-- 14 -->
 
 A **Component** (also called Sub-view, Widget, or View) is a reusable UI element smaller than a full screen.
 
@@ -47,7 +47,7 @@ A **Component** (also called Sub-view, Widget, or View) is a reusable UI element
 
 ---
 
-## Navigator / Coordinator
+## Navigator / Coordinator <!-- 14 -->
 
 A **Navigator** (web/Flutter) or **Coordinator** (iOS) owns all navigation logic for a feature or flow.
 
@@ -61,7 +61,7 @@ A **Navigator** (web/Flutter) or **Coordinator** (iOS) owns all navigation logic
 
 ---
 
-## DI Wiring
+## DI Wiring <!-- 13 -->
 
 **DI wiring** registers the StateHolder and its dependencies in the project's DI container for a given screen.
 
@@ -74,7 +74,7 @@ A **Navigator** (web/Flutter) or **Coordinator** (iOS) owns all navigation logic
 
 ---
 
-## Creation Order
+## Creation Order <!-- 10 -->
 
 ```
 Screen → Navigator/Coordinator (if navigation needed) → DI wiring
@@ -84,7 +84,7 @@ The StateHolder and its contract must exist before any UI layer file is written.
 
 ---
 
-## Layer Invariants
+## Layer Invariants <!-- 7 -->
 
 - UI never mutates state directly — observes only
 - UI never calls use cases directly — all interactions go through the StateHolder

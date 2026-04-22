@@ -4,7 +4,7 @@ Conventions checked during PR review for the Talenta iOS project.
 
 ---
 
-## 10 Convention Checks
+## 10 Convention Checks <!-- 174 -->
 
 ### 1. Safe Unwrapping (HIGH)
 
@@ -178,7 +178,7 @@ All UseCase and Repository completions must use `Result<Success, BaseErrorModel>
 
 ---
 
-## PR Comment Placement
+## PR Comment Placement <!-- 16 -->
 
 - **Line-specific**: Isolated issue on a known line → inline comment on that line
 - **General/multi-location**: Fix spans multiple files → comment on problematic line + explain other locations
@@ -194,37 +194,37 @@ Comment at line N (where the issue is):
 
 ---
 
-## Review Output Format
+## Review Output Format <!-- 3 -->
 
 ```markdown
-## PR Review: {PR_TITLE}
+## PR Review: {PR_TITLE} <!-- 6 -->
 
 ### 📊 Overview
 - **Branch**: {branch}
 - **Overall Assessment**: [✅ APPROVE | ⚠️ CHANGES REQUESTED]
 
-## ✅ Positive Findings
+## ✅ Positive Findings <!-- 3 -->
 ### 1. **{Category}** — {good practice noted}
 
-## ⚠️ Issues Found
+## ⚠️ Issues Found <!-- 6 -->
 ### N. **[HIGH/MED/LOW] {Issue Title}**
 **File**: path:line
 ❌ Current: {code}
 ✅ Fix: {code}
 
-## 📋 Summary by File
+## 📋 Summary by File <!-- 3 -->
 | File | Issues | Status |
 
-## 🎯 Action Items
+## 🎯 Action Items <!-- 3 -->
 1. path:line — fix description
 
-## 💡 Final Recommendation
+## 💡 Final Recommendation <!-- 6 -->
 **APPROVE / CHANGES_REQUESTED**
 ```
 
 ---
 
-## Checklist (15 points)
+## Checklist (15 points) <!-- 20 -->
 
 - [ ] `.orEmpty()` / `.orZero()` / `.orFalse()` — no `?? ""`
 - [ ] Parentheses rule: `(chain?.field).orEmpty()`
@@ -244,7 +244,7 @@ Comment at line N (where the issue is):
 
 ---
 
-## Do NOT Comment On
+## Do NOT Comment On <!-- 10 -->
 
 - Legacy code not touched in this PR
 - Already-fixed issues (acknowledge as positive instead)
@@ -254,7 +254,7 @@ Comment at line N (where the issue is):
 
 ---
 
-## Quick Reference
+## Quick Reference <!-- 17 -->
 
 | Pattern | Status | Fix |
 |---------|--------|-----|

@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/testing.md`. This file covers Swift syntax and iOS-specific patterns.
 
-## Test Pyramid
+## Test Pyramid <!-- 15 -->
 
 ```
           ┌───────────┐
@@ -17,7 +17,7 @@
         └───────────────┘
 ```
 
-## Service Tests
+## Service Tests <!-- 31 -->
 
 Highest priority. Pure input → output, no mocks needed.
 
@@ -48,7 +48,7 @@ final class LeaveBalanceCalculatorTests: XCTestCase {
 }
 ```
 
-## ViewModel Tests
+## ViewModel Tests <!-- 66 -->
 
 ```swift
 final class CICOLocationViewModelTest: XCTestCase {
@@ -114,7 +114,7 @@ final class CICOLocationViewModelTest: XCTestCase {
 }
 ```
 
-## Mock Pattern
+## Mock Pattern <!-- 40 -->
 
 ```swift
 // TalentaTests/Mock/Module/TalentaTM/Domain/UseCase/PostSubmitCICOUseCaseMock.swift
@@ -154,7 +154,7 @@ class PostSubmitCICOUseCaseMock: UseCaseProtocol {
 - Test state changes via `stateDriver`
 - Test actions via `actionDriver`
 
-## Mapper Tests
+## Mapper Tests <!-- 41 -->
 
 Test that Response DTOs are correctly converted to Domain Models.
 
@@ -195,7 +195,7 @@ class EmployeeModelMapperTests: XCTestCase {
 - One test for nil handling — verify `.orZero()`, `.orEmpty()`, `.orFalse()` defaults
 - Every Entity field must appear in at least one assertion
 
-## Repository Tests
+## Repository Tests <!-- 51 -->
 
 Test that RepositoryImpl correctly bridges DataSource results to Domain completions.
 

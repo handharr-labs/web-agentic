@@ -6,7 +6,7 @@ BLoC pattern for state management. Widgets are dumb — they react to state and 
 
 ---
 
-## ViewDataState
+## ViewDataState <!-- 63 -->
 
 A generic state wrapper for async data operations. Used in every BLoC state that holds fetched or submitted data.
 
@@ -69,7 +69,7 @@ class ViewDataState<T> extends Equatable {
 
 ---
 
-## Events
+## Events <!-- 37 -->
 
 Sealed classes with freezed. Name with **verb + noun** pattern.
 
@@ -106,7 +106,7 @@ sealed class EmployeeEvent with _$EmployeeEvent {
 
 ---
 
-## States
+## States <!-- 33 -->
 
 Single immutable state class per BLoC. Use `ViewDataState<T>` for each async operation.
 
@@ -139,7 +139,7 @@ class EmployeeState with _$EmployeeState {
 
 ---
 
-## BLoC
+## BLoC <!-- 88 -->
 
 ```dart
 // presentation/blocs/employee_bloc.dart
@@ -227,7 +227,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
 
 ---
 
-## Cubit (Simpler Alternative)
+## Cubit (Simpler Alternative) <!-- 32 -->
 
 Use Cubit when there are no events — only method calls.
 
@@ -259,7 +259,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
 ---
 
-## Screen Structure
+## Screen Structure <!-- 59 -->
 
 ```dart
 // presentation/screens/employee_screen.dart
@@ -318,7 +318,7 @@ class _EmployeeView extends StatelessWidget {
 
 ---
 
-## BlocListener (Side Effects)
+## BlocListener (Side Effects) <!-- 34 -->
 
 Use `BlocListener` for navigation, toasts, dialogs — one-time reactions not reflected in UI.
 
@@ -352,7 +352,7 @@ BlocListener<EmployeeBloc, EmployeeState>(
 
 ---
 
-## MultiBlocProvider
+## MultiBlocProvider <!-- 22 -->
 
 For screens needing multiple BLoCs:
 
@@ -374,7 +374,7 @@ MultiBlocProvider(
 
 ---
 
-## State Access from Child Widgets
+## State Access from Child Widgets <!-- 18 -->
 
 ```dart
 // In a child widget — read without listening
@@ -392,7 +392,7 @@ final isLoading = context.select<EmployeeBloc, bool>(
 
 ---
 
-## Shared Component Paths
+## Shared Component Paths <!-- 11 -->
 
 When running a Component Reuse Check, search these locations for existing reusable widgets:
 

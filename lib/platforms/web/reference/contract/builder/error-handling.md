@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/error-handling.md`. This file covers TypeScript syntax and web-specific patterns.
 
-## Error Flow
+## Error Flow <!-- 14 -->
 
 ```
 DataSource throws NetworkError
@@ -16,7 +16,7 @@ ViewModel hook → TanStack Query error state
 Component shows error UI
 ```
 
-## Error Types
+## Error Types <!-- 9 -->
 
 ```typescript
 // data/networking/NetworkError.ts (already defined above)
@@ -25,7 +25,7 @@ Component shows error UI
 
 Error type definitions live in `contract/domain.md ## Domain Errors`. See `## Error Mapping` for layer mapping and `## Error UI` for UI display.
 
-## Error Mapping
+## Error Mapping <!-- 30 -->
 
 `ErrorMapperImpl` follows the same interface-based pattern as other mappers (see Section 4.2). Repositories inject `ErrorMapper` to convert `NetworkError` → `DomainError`:
 
@@ -55,7 +55,7 @@ export function humanizeError(code: DomainErrorCode): string {
 // strings are a display concern, not a domain concept.
 ```
 
-## Error UI
+## Error UI <!-- 34 -->
 
 React error boundaries catch rendering errors; TanStack Query's error state surfaces data-fetch errors.
 

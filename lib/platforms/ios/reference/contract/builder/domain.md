@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/domain.md`. This file covers Swift syntax and iOS-specific patterns.
 
-## Entities
+## Entities <!-- 70 -->
 
 ```swift
 // Domain/Entities/CICO/RequestLiveAttendanceModel.swift
@@ -72,7 +72,7 @@ extension RequestLiveAttendanceModel {
 - ❌ No `import UIKit` or heavy framework dependencies
 - ❌ No business logic (pure data)
 
-## Repository Protocols
+## Repository Protocols <!-- 31 -->
 
 ```swift
 // Domain/Repository/LiveAttendanceRepository.swift
@@ -103,7 +103,7 @@ protocol LiveAttendanceRepository {
 - ✅ Params are domain Param objects, not raw dictionaries
 - ❌ No implementation details (no Moya, no network code)
 
-## Use Cases
+## Use Cases <!-- 333 -->
 
 ### Modern UseCase Protocol (Simplified)
 
@@ -436,7 +436,7 @@ getCurrentUserUseCase.execute(params: ()) { [weak self] result in
 - Discoverable — autocomplete shows params right from the UseCase type
 - Colocated — params definition lives next to the code that uses it
 
-## Services
+## Services <!-- 348 -->
 
 Pure business decisions — no I/O, no side effects, no async. Can be called by both UseCases and ViewModels. See extraction rules in `reference/builder/domain.md`.
 
@@ -784,7 +784,7 @@ class InboxApprovalListViewModel: BaseViewModelV2<State, Event, Action> {
 
 **Key Principle:** Services contain pure business logic. UseCases orchestrate I/O. ViewModels orchestrate UI.
 
-## Domain Errors
+## Domain Errors <!-- 15 -->
 
 ```swift
 // Shared/Domain/Entities/BaseErrorModel.swift
@@ -799,7 +799,7 @@ struct BaseErrorModel: Error {
 
 ---
 
-## Domain Enums
+## Domain Enums <!-- 31 -->
 
 ```swift
 // Domain/enum/CICOType.swift

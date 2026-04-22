@@ -6,7 +6,7 @@ Errors flow inward: HTTP → `AppException` → `Failure` → `ViewDataState.err
 
 ---
 
-## Error Flow
+## Error Flow <!-- 21 -->
 
 ```
 HTTP / Storage / Parse error
@@ -27,7 +27,7 @@ HTTP / Storage / Parse error
 
 ---
 
-## Error Types
+## Error Types <!-- 30 -->
 
 The canonical error type. Lives in `domain/errors/failure.dart`. See `domain.md` for the full definition.
 
@@ -57,7 +57,7 @@ result.fold(
 
 ---
 
-## Error Mapping
+## Error Mapping <!-- 13 -->
 
 Errors are converted at two boundaries:
 
@@ -70,7 +70,7 @@ See `## AppException (Data)` and `## Dio Error Interceptor` sections for code pa
 
 ---
 
-## AppException (Data)
+## AppException (Data) <!-- 40 -->
 
 Typed exceptions thrown inside datasources. Lives in `data/exceptions/app_exception.dart`. See `data.md` for the full definition and `toFailure()` extension.
 
@@ -110,7 +110,7 @@ try {
 
 ---
 
-## Dio Error Interceptor
+## Dio Error Interceptor <!-- 15 -->
 
 Converts Dio network errors into `AppException` before they reach repositories. See `data.md` for the full `ErrorInterceptor`.
 
@@ -125,7 +125,7 @@ After the interceptor runs, all Dio errors that escape as `DioException` have an
 
 ---
 
-## Validation Errors
+## Validation Errors <!-- 44 -->
 
 API validation errors (HTTP 422) carry structured field errors.
 
@@ -169,7 +169,7 @@ result.fold(
 
 ---
 
-## Widget Error UI
+## Widget Error UI <!-- 39 -->
 
 Standard patterns for surfacing errors:
 
@@ -208,7 +208,7 @@ BlocListener<EmployeeBloc, EmployeeState>(
 
 ---
 
-## Global Error Boundary (Optional)
+## Global Error Boundary (Optional) <!-- 26 -->
 
 Catch uncaught Flutter and Dart errors at app level:
 
@@ -234,7 +234,7 @@ void main() {
 
 ---
 
-## Rules
+## Rules <!-- 8 -->
 
 1. **DataSources throw, Repositories return Either** — never mix
 2. **Never throw in domain or presentation** — only `Left(failure)` and `emit(...error...)`

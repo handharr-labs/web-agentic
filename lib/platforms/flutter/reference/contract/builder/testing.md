@@ -6,7 +6,7 @@
 
 ---
 
-## Dependencies
+## Dependencies <!-- 13 -->
 
 ```yaml
 dev_dependencies:
@@ -19,7 +19,7 @@ dev_dependencies:
 
 ---
 
-## Test Pyramid
+## Test Pyramid <!-- 29 -->
 
 ```
 test/
@@ -48,7 +48,7 @@ test/
 
 ---
 
-## Mock Generation
+## Mock Generation <!-- 32 -->
 
 Declare all mocks for a feature in one file:
 
@@ -80,7 +80,7 @@ Generated file: `employee_mocks.mocks.dart` — import this in tests.
 
 ---
 
-## BLoC Tests
+## BLoC Tests <!-- 95 -->
 
 Use `bloc_test` — never test BLoC state by calling `act` and inspecting `state` manually.
 
@@ -175,7 +175,7 @@ void main() {
 
 ---
 
-## Use Case Tests
+## Use Case Tests <!-- 54 -->
 
 ```dart
 // test/features/employee/domain/usecases/get_employee_usecase_test.dart
@@ -229,7 +229,7 @@ void main() {
 
 ---
 
-## Repository Tests
+## Repository Tests <!-- 75 -->
 
 ```dart
 // test/features/employee/data/repositories/employee_repository_impl_test.dart
@@ -304,7 +304,7 @@ void main() {
 
 ---
 
-## Mapper Tests
+## Mapper Tests <!-- 54 -->
 
 Mapper tests are plain unit tests — no mocks needed.
 
@@ -358,7 +358,7 @@ void main() {
 
 ---
 
-## Test Fixtures
+## Test Fixtures <!-- 33 -->
 
 Centralize test data — don't define inline in every test.
 
@@ -391,7 +391,7 @@ final tServerFailure = Failure.serverFailure(
 
 ---
 
-## Best Practices
+## Best Practices <!-- 10 -->
 
 1. **AAA** — Arrange, Act, Assert — one concept per test
 2. **Describe intent** — `'emits [loading, loaded] when LoadEmployee succeeds'`

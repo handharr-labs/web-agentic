@@ -4,7 +4,7 @@ This directory contains shared knowledge loaded on demand by workers and planner
 
 ---
 
-## What Belongs in Reference
+## What Belongs in Reference <!-- 12 -->
 
 A piece of knowledge belongs here if it passes all three tests:
 
@@ -16,7 +16,7 @@ If it only makes sense addressed to a specific agent ("before writing, check X")
 
 ---
 
-## What Belongs in the Agent Body
+## What Belongs in the Agent Body <!-- 10 -->
 
 Keep in the agent if:
 
@@ -26,7 +26,7 @@ Keep in the agent if:
 
 ---
 
-## What Belongs in Skills
+## What Belongs in Skills <!-- 10 -->
 
 Keep in skills if:
 
@@ -36,7 +36,7 @@ Keep in skills if:
 
 ---
 
-## Directory Structure
+## Directory Structure <!-- 24 -->
 
 ```
 lib/core/reference/
@@ -60,7 +60,7 @@ lib/platforms/<platform>/reference/
 
 ---
 
-## How Agents Use This Directory
+## How Agents Use This Directory <!-- 6 -->
 
 - Always Grep by section heading before reading a full file
 - If uncertain which file covers a topic, Grep `reference/index.md` (platform level) or this README first

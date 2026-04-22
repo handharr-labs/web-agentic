@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/domain.md`. This file covers Dart syntax and Flutter-specific patterns.
 
-## Entities
+## Entities <!-- 30 -->
 
 Immutable business objects with `@freezed`. **No `fromJson` — ever.**
 
@@ -32,7 +32,7 @@ class EmployeeEntity with _$EmployeeEntity {
 
 ---
 
-## Repository Interfaces
+## Repository Interfaces <!-- 32 -->
 
 ```dart
 // domain/repositories/employee_repository.dart
@@ -64,7 +64,7 @@ abstract class EmployeeRepository {
 
 ---
 
-## Use Cases
+## Use Cases <!-- 145 -->
 
 ### UseCase Base Class
 
@@ -209,7 +209,7 @@ class GetCurrentUserUseCase
 
 ---
 
-## Domain Services
+## Domain Services <!-- 42 -->
 
 Pure synchronous functions — no I/O, no async, no side effects. See extraction rules in `reference/builder/domain.md`.
 
@@ -251,7 +251,7 @@ class LeaveBalanceCalculator {
 
 ---
 
-## Domain Errors
+## Domain Errors <!-- 46 -->
 
 The unified error type returned from all repository and use case calls.
 
@@ -297,7 +297,7 @@ abstract class Failure<T> with _$Failure<T> {
 
 ---
 
-## Domain Enums
+## Domain Enums <!-- 20 -->
 
 Business-level constants. Place in `domain/enums/`.
 

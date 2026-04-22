@@ -1,6 +1,6 @@
 # iOS — Migration Guide
 
-## Migration Guide
+## Migration Guide <!-- 353 -->
 
 ### Legacy → Modern Code
 
@@ -353,7 +353,7 @@ lazy var postSubmitCICOUseCase: PostSubmitCICOUseCaseType = {
 
 ---
 
-## Appendix: Quick Reference
+## Appendix: Quick Reference <!-- 134 -->
 
 ### A. Layer Checklist (Modern Pattern)
 

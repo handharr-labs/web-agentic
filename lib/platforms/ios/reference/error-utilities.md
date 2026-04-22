@@ -1,6 +1,6 @@
 # iOS — Error Handling & Utilities
 
-## Error Handling
+## Error Handling <!-- 72 -->
 
 ### Error Flow
 
@@ -72,7 +72,7 @@ class BaseErrorModelMapper {
 
 ---
 
-## Utilities
+## Utilities <!-- 214 -->
 
 > For StorageService and DateService specs, see `.claude/reference/core-services.md`.
 

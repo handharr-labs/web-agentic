@@ -1,7 +1,7 @@
 # Web — Navigation
 
 
-## Why Next.js App Router
+## Why Next.js App Router <!-- 10 -->
 
 The **Next.js App Router** is the standard navigation solution — file-based, type-safe with typed routes, and Server Component-first:
 
@@ -11,7 +11,7 @@ The **Next.js App Router** is the standard navigation solution — file-based, t
 - **Parallel routes** — Tabs, modals, and split-panes natively supported
 - **Nested layouts** — Persistent UI across navigation (sidebars, tabs)
 
-## Route Constants
+## Route Constants <!-- 31 -->
 
 ```typescript
 // presentation/navigation/routes.ts
@@ -42,7 +42,7 @@ export interface EmployeeDetailParams {
 }
 ```
 
-## AppRouter Hook
+## AppRouter Hook <!-- 36 -->
 
 Wraps `next/navigation` with convenience methods. Consumed by ViewModel hooks for navigation actions.
 
@@ -78,7 +78,7 @@ export function useAppRouter() {
 }
 ```
 
-## Route Resolution (Page Components)
+## Route Resolution (Page Components) <!-- 30 -->
 
 In Next.js, page components in the `app/` directory replace the `ViewFactory`. Each route is a file.
 
@@ -108,7 +108,7 @@ export default async function EmployeeDetailPage({ params }: Props) {
 }
 ```
 
-## Root Layout with Navigation
+## Root Layout with Navigation <!-- 36 -->
 
 ```typescript
 // app/layout.tsx  ← Server Component — no DIProvider here
@@ -144,7 +144,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-## Tab Navigation
+## Tab Navigation <!-- 51 -->
 
 ```typescript
 // app/(main)/layout.tsx — layout with persistent bottom nav
@@ -195,7 +195,7 @@ export function BottomNav() {
 }
 ```
 
-## Result Passing Between Pages
+## Result Passing Between Pages <!-- 25 -->
 
 ```typescript
 // Option 1: URL search params (for simple scalar results)

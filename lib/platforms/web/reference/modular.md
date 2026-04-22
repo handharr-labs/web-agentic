@@ -3,7 +3,7 @@
 
 This starter kit scales from a single Next.js app to a Turborepo mono-repo with independently deployable packages.
 
-## When to Modularize
+## When to Modularize <!-- 10 -->
 
 | Signal | Action |
 |--------|--------|
@@ -13,7 +13,7 @@ This starter kit scales from a single Next.js app to a Turborepo mono-repo with 
 
 Don't modularize prematurely. Start with a single `src/` structure and extract packages when build times or team conflicts become real problems.
 
-## Module Structure (Turborepo)
+## Module Structure (Turborepo) <!-- 70 -->
 
 ```
 starterkit/                          # Turborepo root
@@ -83,7 +83,7 @@ starterkit/                          # Turborepo root
 └── turbo.json
 ```
 
-## Package Dependencies
+## Package Dependencies <!-- 14 -->
 
 ```
 App (web) → feature-employee, feature-leave, feature-auth, ui
@@ -97,7 +97,7 @@ core → (none)
 
 **Rule:** Feature packages never depend on each other. Cross-feature communication goes through the App layer or shared interfaces in `core`.
 
-## Package Configuration
+## Package Configuration <!-- 34 -->
 
 ```json
 // packages/feature-employee/package.json
@@ -131,7 +131,7 @@ core → (none)
 }
 ```
 
-## Feature Module Public API
+## Feature Module Public API <!-- 44 -->
 
 Each feature package exposes a **public interface** — views, hooks, and a factory. Internal implementation details stay unexported.
 
@@ -175,7 +175,7 @@ export function createEmployeeFeatureDI(httpClient: HTTPClient) {
 }
 ```
 
-## App-Level Composition
+## App-Level Composition <!-- 44 -->
 
 The main app wires feature packages together:
 
@@ -219,7 +219,7 @@ export function createClientContainer() {
 }
 ```
 
-## Cross-Feature Communication
+## Cross-Feature Communication <!-- 28 -->
 
 Features don't depend on each other. When they need to communicate:
 
@@ -247,7 +247,7 @@ export const useEmployeeSelectionStore = create<...>(...);
 // Both features import this store — no direct dependency on each other
 ```
 
-## Benefits at Scale
+## Benefits at Scale <!-- 11 -->
 
 | Benefit | How |
 |---------|-----|

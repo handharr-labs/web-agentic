@@ -4,7 +4,7 @@ Shared patterns for creating, verifying, updating, and fixing ViewModel tests in
 
 ---
 
-## Test Naming Convention
+## Test Naming Convention <!-- 13 -->
 
 ```
 test[EventName]Event_[LogicOrMethodName]_[Condition]_[Outcome]
@@ -17,7 +17,7 @@ Examples:
 
 ---
 
-## Mock Result Array Pattern
+## Mock Result Array Pattern <!-- 22 -->
 
 Mocks return sequential results via array access using the `[safe:]` subscript:
 
@@ -39,7 +39,7 @@ mockUseCase.mockResult = [.success(data), .success(data), .success(data)]
 
 ---
 
-## Navigator Mock Pattern
+## Navigator Mock Pattern <!-- 20 -->
 
 Navigator mocks return `Observable` or `Driver` that the ViewModel subscribes to:
 
@@ -59,7 +59,7 @@ navigatorMock.openCICOCameraResult = .just(CICOCameraResult(navigationType: .goT
 
 ---
 
-## `createViewModel` Init Mapping
+## `createViewModel` Init Mapping <!-- 27 -->
 
 Use a helper that accepts optional overrides (matching ViewModel init param names):
 
@@ -86,7 +86,7 @@ createViewModel(displayMode: .actionWithForm, type: .clockIn)
 
 ---
 
-## State Access Chain
+## State Access Chain <!-- 24 -->
 
 ```swift
 // Capture state emissions
@@ -110,7 +110,7 @@ viewModel.actionDriver
 
 ---
 
-## 5-Point Test Creation Process
+## 5-Point Test Creation Process <!-- 38 -->
 
 1. **Define execution path** — trace from event through private methods to terminal action
 2. **Write test method** — Given/When/Then structure, follow naming convention
@@ -148,7 +148,7 @@ Always use `.createMock()` for entities — never direct initializers:
 
 ---
 
-## Guard Clause Verification
+## Guard Clause Verification <!-- 26 -->
 
 Satisfy ALL guards before the test point, in order:
 
@@ -174,7 +174,7 @@ func testSubmit_Guard_LocationNil_NoOp() {
 
 ---
 
-## Branch Tracing Rules
+## Branch Tracing Rules <!-- 15 -->
 
 1. Every `if/else`, `guard`, `switch`, ternary → separate branches
 2. Trace INTO private methods recursively
@@ -189,7 +189,7 @@ func testSubmit_Guard_LocationNil_NoOp() {
 
 ---
 
-## Two-Phase Compilation Error Fix
+## Two-Phase Compilation Error Fix <!-- 18 -->
 
 When new tests don't compile due to missing mocks/API changes:
 
@@ -207,7 +207,7 @@ When new tests don't compile due to missing mocks/API changes:
 
 ---
 
-## Failure Diagnosis Framework
+## Failure Diagnosis Framework <!-- 27 -->
 
 ### 4 Failure Types
 
@@ -234,7 +234,7 @@ When new tests don't compile due to missing mocks/API changes:
 
 ---
 
-## Coverage Workflow
+## Coverage Workflow <!-- 23 -->
 
 ### Get coverage data from xcresult:
 ```bash
@@ -257,27 +257,27 @@ Target: **90% line coverage**. Priority: critical business logic > edge cases > 
 
 ---
 
-## Analysis Report Format (for `test-update`)
+## Analysis Report Format (for `test-update`) <!-- 5 -->
 
 ```markdown
 # ViewModel Test Analysis Report
 
-## Executive Summary
+## Executive Summary <!-- 5 -->
 - ViewModel: [name]
 - Events: [total] ([covered]/[uncovered])
 - Action Required: [count] items
 
-## Event Analysis
+## Event Analysis <!-- 6 -->
 ### ✅ [EventName] — COVERED
 ### ⚠️ [EventName] — PARTIALLY COVERED
   Missing: [branches not covered]
 ### ❌ [EventName] — NOT COVERED
 
-## Mock Compliance
+## Mock Compliance <!-- 4 -->
 - ❌ [MockName]: Missing reset() method
 - ✅ [MockName]: Compliant
 
-## Prioritized Actions
+## Prioritized Actions <!-- 9 -->
 1. Critical — Fix/create missing mocks
 2. Critical — Remove obsolete tests
 3. High — Add tests for new events/branches
@@ -286,7 +286,7 @@ Target: **90% line coverage**. Priority: critical business logic > edge cases > 
 
 ---
 
-## Mock Requirements
+## Mock Requirements <!-- 10 -->
 
 Every mock must:
 - Track calls: `var callCount = 0`, `var capturedParams: Params? = nil`
@@ -296,7 +296,7 @@ Every mock must:
 
 ---
 
-## ViewModelTestGen Tool
+## ViewModelTestGen Tool <!-- 9 -->
 
 For bulk test generation from a ViewModel's full execution path:
 

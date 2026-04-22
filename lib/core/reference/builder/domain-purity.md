@@ -5,7 +5,7 @@ globs:
   - src/shared/domain/**/*.ts
 ---
 
-## Domain Purity Rules
+## Domain Purity Rules <!-- 32 -->
 
 ### Zero external imports
 Domain files must never import from:

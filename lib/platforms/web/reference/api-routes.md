@@ -3,7 +3,7 @@
 
 Route Handlers (`app/api/*/route.ts`) are Next.js's HTTP server endpoints. They are **not** the default for full-stack features in this architecture — Server Actions cover own-UI mutations. Use Route Handlers only when the HTTP interface itself is the requirement.
 
-## When to Use Route Handlers vs Server Actions
+## When to Use Route Handlers vs Server Actions <!-- 14 -->
 
 | Scenario | Use |
 |----------|-----|
@@ -17,7 +17,7 @@ Route Handlers (`app/api/*/route.ts`) are Next.js's HTTP server endpoints. They 
 
 **Default to Server Actions.** Add Route Handlers only when you have one of the above reasons.
 
-## Route Handler Pattern
+## Route Handler Pattern <!-- 39 -->
 
 ```typescript
 // app/api/[feature]/route.ts
@@ -56,7 +56,7 @@ const getEmployeesSchema = z.object({
 });
 ```
 
-## Shared Error Handler
+## Shared Error Handler <!-- 34 -->
 
 Centralize Route Handler error responses — do not inline try/catch error formatting in every handler:
 
@@ -90,7 +90,7 @@ function domainErrorToStatus(code: string): number {
 }
 ```
 
-## Webhook Pattern
+## Webhook Pattern <!-- 29 -->
 
 ```typescript
 // app/api/webhooks/stripe/route.ts
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
 export const runtime = 'nodejs';
 ```
 
-## Response Shape Convention
+## Response Shape Convention <!-- 14 -->
 
 All Route Handlers return consistent shapes:
 
@@ -133,7 +133,7 @@ All Route Handlers return consistent shapes:
 { error: string, details: ZodFlattenedErrors } // validation errors
 ```
 
-## Authentication in Route Handlers
+## Authentication in Route Handlers <!-- 15 -->
 
 ```typescript
 import { getServerSession } from 'next-auth';
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-## File Locations
+## File Locations <!-- 14 -->
 
 ```
 src/app/api/

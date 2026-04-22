@@ -4,7 +4,7 @@ Shared infrastructure used across all layers. Interface-based for testability.
 
 ---
 
-## StorageService
+## StorageService <!-- 100 -->
 
 Abstract key-value storage for tokens, preferences, cached data.
 
@@ -104,7 +104,7 @@ final class SecureStorageService: StorageService {
 
 ---
 
-## DateService
+## DateService <!-- 71 -->
 
 Centralized date handling with timezone/formatting.
 
@@ -175,7 +175,7 @@ extension DateService {
 
 ---
 
-## Null Safety Extensions
+## Null Safety Extensions <!-- 47 -->
 
 **CRITICAL PATTERN:** Always use extension methods for optional unwrapping.
 
@@ -222,7 +222,7 @@ $0.dataState.data?.title.orEmpty()       // ❌ compile error
 
 ---
 
-## Logger
+## Logger <!-- 62 -->
 
 Centralized logging with severity levels.
 
@@ -284,7 +284,7 @@ enum Log {
 
 ---
 
-## Helper Extensions Index
+## Helper Extensions Index <!-- 19 -->
 
 Extension files live in `Talenta/Shared/Extension/`.
 

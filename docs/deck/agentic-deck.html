@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We Gave Our Engineers an AI Team — software-dev-agentic</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0F1117;
+      --surface:    #161B22;
+      --surface-2:  #1C2128;
+      --border:     #30363D;
+      --text:       #E6EDF3;
+      --muted:      #8B949E;
+      --accent:     #00C48C;
+      --accent-bg:  rgba(0, 196, 140, 0.08);
+      --accent-bd:  rgba(0, 196, 140, 0.28);
+      --bad:        #FF7B7B;
+      --bad-bg:     rgba(255, 123, 123, 0.08);
+      --bad-bd:     rgba(255, 123, 123, 0.28);
+      --blue:       #79C0FF;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', 'Courier New', monospace;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+    }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+      z-index: 200;
+    }
+
+    /* ── Counter ── */
+    #counter {
+      position: fixed;
+      bottom: 24px; right: 32px;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      z-index: 200;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Deck ── */
+    #deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 52px 88px 52px 88px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+    }
+    .slide.active { display: flex; }
+
+    /* ── Labels ── */
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    /* ── Titles ── */
+    .slide-title {
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--text);
+    }
+    .slide-title em { color: var(--accent); font-style: normal; }
+
+    .headline {
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+    .headline em { color: var(--accent); font-style: normal; }
+
+    /* ── Divider ── */
+    .divider {
+      width: 44px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 24px 0;
+    }
+
+    /* ── Body text ── */
+    .body-text {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .body-text strong { color: var(--text); }
+
+    /* ── Bullets ── */
+    .bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .bullets li {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--muted);
+      padding-left: 22px;
+      position: relative;
+    }
+    .bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .bullets li strong { color: var(--text); }
+
+    /* ── Code panels ── */
+    .code-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .code-panel-header {
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: var(--mono);
+      letter-spacing: 0.02em;
+    }
+    .code-panel-header.bad  { color: var(--bad);    background: var(--bad-bg);    border-color: var(--bad-bd);  border-bottom-color: var(--border); }
+    .code-panel-header.good { color: var(--accent);  background: var(--accent-bg); border-color: var(--accent-bd); border-bottom-color: var(--border); }
+
+    .code-panel pre {
+      padding: 16px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.65;
+      color: var(--text);
+      overflow: auto;
+      flex: 1;
+    }
+    .code-panel pre .cm  { color: var(--muted); }
+    .code-panel pre .ac  { color: var(--accent); }
+    .code-panel pre .bd  { color: var(--bad); }
+    .code-panel pre .bl  { color: var(--blue); }
+
+    /* ── 2-col comparison ── */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    /* ── Caption ── */
+    .caption {
+      margin-top: 18px;
+      font-size: 13.5px;
+      color: var(--muted);
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+      line-height: 1.6;
+    }
+    .caption strong { color: var(--text); }
+
+    /* ── Tags ── */
+    .tag {
+      display: inline-block;
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent-bd);
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--mono);
+    }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 15px; }
+    th {
+      text-align: left;
+      padding: 11px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    td:first-child { color: var(--text); font-weight: 600; }
+    td strong { color: var(--accent); }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── Metric cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+    }
+    .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .card-metric {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── Tree diagram ── */
+    .tree {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 22px 26px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .tree .dm  { color: var(--muted); }
+    .tree .ac  { color: var(--accent); }
+    .tree .rl  { color: var(--blue); }
+    .tree .bd  { color: var(--bad); }
+
+    /* ── Caching boxes ── */
+    .cache-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .cache-box.stable {
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-bd);
+    }
+    .cache-box.dynamic {
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .cache-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .cache-box.stable  .cache-label { color: var(--accent); }
+    .cache-box.dynamic .cache-label { color: var(--muted); }
+    .cache-arrow {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 4px 0;
+      font-family: var(--mono);
+    }
+
+    /* ── Transition table ── */
+    .t-table {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .t-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .t-head-cell {
+      padding: 11px 22px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .t-head-cell:first-child { border-right: 1px solid var(--border); }
+    .t-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .t-row:last-child { border-bottom: none; }
+    .t-cell {
+      padding: 20px 22px;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .t-cell.prob { color: var(--muted);  border-right: 1px solid var(--border); }
+    .t-cell.sol  { color: var(--accent); font-weight: 500; }
+
+    /* ── Roadmap ── */
+    .roadmap { display: flex; flex-direction: column; gap: 22px; }
+    .roadmap-item { display: flex; align-items: flex-start; gap: 20px; }
+    .roadmap-num {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      width: 32px;
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+    .roadmap-text strong { display: block; font-size: 17px; color: var(--text); margin-bottom: 5px; }
+    .roadmap-text span   { font-size: 15px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Quote ── */
+    .quote {
+      font-size: 27px;
+      line-height: 1.65;
+      color: var(--text);
+      font-weight: 400;
+      max-width: 820px;
+    }
+    .quote em { color: var(--accent); font-style: normal; }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="counter">1 / 16</div>
+<div id="deck">
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 1 — COVER
+  ════════════════════════════════════════════ -->
+  <section class="slide active" id="s1">
+    <div class="label">software-dev-agentic · April 2026</div>
+    <h1 class="slide-title">We Gave Our<br>Engineers an <em>AI Team</em></h1>
+    <div class="divider"></div>
+    <p class="body-text" style="max-width: 560px; margin-bottom: 24px;">
+      A shared AI engineering toolkit that builds features across iOS, Flutter, and Web —
+      consistently, efficiently, from a single source of truth.
+    </p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <span class="tag">iOS · Swift/UIKit</span>
+      <span class="tag">Flutter · Dart/BLoC</span>
+      <span class="tag">Web · Next.js 15</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 2 — THE PROBLEM (INTRO)
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s2">
+    <div class="label">The Problem</div>
+    <h2 class="headline">Building features across platforms creates <em>invisible drift</em></h2>
+    <ul class="bullets">
+      <li>
+        An engineer picks up a ticket. The first hour is spent reading code —
+        understanding structure, conventions, where things go.
+        <strong>Not building.</strong>
+      </li>
+      <li>
+        Three platforms. Three codebases. The same architecture decisions made differently,
+        drifting over time, slowing down every engineer who touches them next.
+      </li>
+      <li>
+        Agents in Claude Code promised to help — but without a shared system,
+        every project grew its own. The problems got worse, not better.
+      </li>
+    </ul>
+    <div class="divider"></div>
+    <p class="body-text"><strong>This is not a people problem. It is a system problem.</strong></p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 3 — PROBLEM 1: BLOATED CONTEXT
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s3">
+    <div class="label">Problem 1 of 3</div>
+    <h2 class="headline">Every task loads knowledge that <em>isn't needed</em></h2>
+    <div class="compare">
+      <div class="code-panel">
+        <div class="code-panel-header bad">❌  CLAUDE.md grows without limits</div>
+        <pre><span class="cm"># CLAUDE.md  (~400 lines)</span>
+
+<span class="bd">## Domain Layer Rules</span>
+- Entities: pure Dart classes, no Flutter imports
+- Use cases implement UseCase&lt;Params, Result&gt;
+- Never import dio, hive, or any data package
+- Repository interfaces: domain/repository/
+<span class="cm">... 40 more domain rules ...</span>
+
+<span class="bd">## Data Layer Rules</span>
+- Response models use @JsonSerializable
+- Mappers implement Mapper&lt;Remote, Domain&gt;
+<span class="cm">... 35 more data rules ...</span>
+
+<span class="bd">## BLoC / Presentation Rules</span>
+- Events extend Equatable
+- States are sealed classes
+<span class="cm">... 30 more presentation rules ...</span></pre>
+      </div>
+      <div class="code-panel">
+        <div class="code-panel-header good">✓  Lean CLAUDE.md — knowledge deferred</div>
+        <pre><span class="cm"># CLAUDE.md  (~1 page)</span>
+
+<span class="ac">## Stack</span>
+Flutter · Dart · BLoC · Clean Architecture
+
+<span class="ac">## Rules</span>
+- Domain: zero Flutter/package imports
+- Agents: feature-orchestrator →
+    domain-worker → data-worker
+- Reference docs: .claude/reference/
+  Agents load sections on demand via Grep</pre>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Bloated CLAUDE.md</strong> = tokens wasted on every turn, even when the agent
+      is just creating a UI widget. Every session starts by paying for knowledge it may never use.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 4 — PROBLEM 2: KNOWLEDGE NOT ISOLATED
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s4">
+    <div class="label">Problem 2 of 3</div>
+    <h2 class="headline">The agent reads everything. <em>Even what it doesn't need.</em></h2>
+    <div class="compare">
+      <div class="code-panel">
+        <div class="code-panel-header bad">❌  domain-worker.md — 450 lines</div>
+        <pre><span class="cm"># Agent for domain layer</span>
+
+<span class="ac">## Entity Pattern</span>
+class LeaveRequest {
+  final String id;
+  final LeaveStatus status;
+}
+
+<span class="bd">## Data Layer Rules  ← not your layer</span>
+@JsonSerializable()
+class LeaveResponse { ... }
+class LeaveMapper
+  implements Mapper&lt;LeaveResponse,
+                    LeaveRequest&gt;
+
+<span class="bd">## BLoC Patterns  ← not your layer</span>
+class LeaveBloc
+  extends Bloc&lt;LeaveEvent,
+               LeaveState&gt; { ... }
+<span class="cm">... 200 more lines ...</span></pre>
+      </div>
+      <div class="code-panel">
+        <div class="code-panel-header good">✓  domain-worker.md — 80 lines</div>
+        <pre><span class="cm"># Agent for domain layer only</span>
+
+<span class="ac">## Scope Boundary</span>
+Own:  domain/entities/
+      domain/usecases/
+      domain/repository/
+
+Delegate data work   → data-worker
+Delegate BLoC/UI     → presentation-worker
+
+<span class="ac">## Search Protocol</span>
+<span class="cm"># Load only the section needed, when needed</span>
+Grep(<span class="ac">"^## Entity"</span>,
+  <span class="ac">"reference/contract/builder/domain.md"</span>)
+<span class="cm"># → 15 lines. Only when creating an entity.</span>
+<span class="cm"># Not 450 lines. Not on every call.</span></pre>
+      </div>
+    </div>
+    <div class="caption">
+      Isolated context = agents only pay for the knowledge they actually use.
+      <strong>This is the primary driver behind the 85% token reduction.</strong>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 5 — PROBLEM 3: NO SHARED AGENTS
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s5">
+    <div class="label">Problem 3 of 3</div>
+    <h2 class="headline">Three projects. Three copies. <em>Three drift paths.</em></h2>
+    <div class="compare">
+      <div class="code-panel">
+        <div class="code-panel-header bad">❌  Each project maintains its own agents</div>
+        <pre>xpnsio/
+  .claude/agents/
+    <span class="bd">domain-worker.md</span>  <span class="cm">← updated last month</span>
+    <span class="bd">data-worker.md</span>    <span class="cm">← project hacks baked in</span>
+
+wehire/
+  .claude/agents/
+    <span class="bd">domain-worker.md</span>  <span class="cm">← copy from 3mo ago, drifted</span>
+    <span class="bd">data-worker.md</span>    <span class="cm">← different conventions</span>
+
+talenta-ios/
+  .claude/agents/
+    <span class="bd">domain-worker.md</span>  <span class="cm">← separate evolution</span>
+    <span class="bd">data-worker.md</span>    <span class="cm">← iOS assumptions baked in</span></pre>
+      </div>
+      <div class="code-panel">
+        <div class="code-panel-header good">✓  One source, symlinked everywhere</div>
+        <pre>software-dev-agentic/     <span class="cm">← submodule</span>
+  lib/core/agents/builder/
+    <span class="ac">domain-worker.md</span>        <span class="cm">← ONE file</span>
+    <span class="ac">data-worker.md</span>
+  lib/platforms/
+    flutter/skills/ <span class="cm">← Dart/BLoC here</span>
+    ios/skills/     <span class="cm">← Swift here</span>
+    web/skills/     <span class="cm">← TypeScript here</span>
+
+xpnsio/.claude/agents/
+  <span class="ac">domain-worker.md</span> → <span class="cm">symlink ──┐</span>
+wehire/.claude/agents/              <span class="cm">│</span>
+  <span class="ac">domain-worker.md</span> → <span class="cm">symlink ──┤ same file</span>
+talenta-ios/.claude/agents/         <span class="cm">│</span>
+  <span class="ac">domain-worker.md</span> → <span class="cm">symlink ──┘</span></pre>
+      </div>
+    </div>
+    <div class="caption">
+      One improvement to <strong>domain-worker</strong> ships to all three products simultaneously.
+      No copy-paste. No drift. No synchronisation cost.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 6 — SOLUTION TRANSITION
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s6">
+    <div class="label">The Architecture</div>
+    <h2 class="headline">Three problems. <em>Three architectural answers.</em></h2>
+    <div class="t-table">
+      <div class="t-head">
+        <div class="t-head-cell">Problem</div>
+        <div class="t-head-cell">Solution</div>
+      </div>
+      <div class="t-row">
+        <div class="t-cell prob">Bloated context — agents and CLAUDE.md carry everything</div>
+        <div class="t-cell sol">Tiered knowledge architecture — lean agents, reference docs loaded on demand</div>
+      </div>
+      <div class="t-row">
+        <div class="t-cell prob">Knowledge not isolated — full reference file read on every call</div>
+        <div class="t-cell sol">Grep over Read — fetch only the section needed, only when needed</div>
+      </div>
+      <div class="t-row">
+        <div class="t-cell prob">No shared agents — three projects, three copies, constant drift</div>
+        <div class="t-cell sol">Git submodule — one file, symlinked to every project, updated once</div>
+      </div>
+    </div>
+    <div class="caption" style="margin-top: 22px;">
+      Together with <strong>prompt caching</strong>, these three decisions reduced
+      AI compute cost by 85% in four calendar days.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 7 — SOLUTION: GREP OVER READ
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s7">
+    <div class="label">Solution — Token Efficiency</div>
+    <h2 class="headline">Same file. <em>A fraction of the context.</em></h2>
+    <div class="compare">
+      <div class="code-panel">
+        <div class="code-panel-header bad">❌  Read — entire file enters context</div>
+        <pre><span class="cm"># Returns the whole file to the agent</span>
+Read(<span class="bd">"reference/contract/builder/domain.md"</span>)
+
+<span class="cm"># → 200 lines added to context window</span>
+<span class="cm"># → Agent pays for all of it, every call</span>
+<span class="cm"># → Even when only one section is relevant</span></pre>
+      </div>
+      <div class="code-panel">
+        <div class="code-panel-header good">✓  Grep + targeted Read — only the section needed</div>
+        <pre><span class="cm"># Reference doc heading carries its own line count:</span>
+<span class="cm"># ## Entity <!-- 15 -->   ← auto-updated by pre-commit hook</span>
+
+<span class="cm"># Step 1: locate section, read count from heading</span>
+Grep(<span class="ac">"^## Entity"</span>,
+  <span class="ac">"reference/contract/builder/domain.md"</span>)
+<span class="cm"># → "## Entity <!-- 15 -->" at line 42</span>
+
+<span class="cm"># Step 2: read exactly that section</span>
+Read(<span class="ac">"reference/contract/builder/domain.md"</span>,
+  offset=<span class="ac">42</span>, limit=<span class="ac">15</span>)
+<span class="cm"># → 15 lines. Dynamic. Always accurate.</span></pre>
+      </div>
+    </div>
+    <div class="caption">
+      Section counts are maintained automatically by a pre-commit hook —
+      engineers edit the doc freely, the hook rewrites the annotation on every commit.
+      <strong>No hardcoded limits. No stale counts.</strong>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 8 — SOLUTION: PROMPT CACHING
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s8">
+    <div class="label">Solution — Prompt Caching</div>
+    <h2 class="headline">Pay once. <em>Reuse many times.</em></h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="cache-box stable">
+          <div class="cache-label">Cached — paid once per session</div>
+          Agent system prompt (agent file content)<br>
+          Preloaded skills (SKILL.md files)<br>
+          CLAUDE.md (universal project rules)
+        </div>
+        <div class="cache-arrow">↕ cache boundary</div>
+        <div class="cache-box dynamic">
+          <div class="cache-label">Not cached — changes each call</div>
+          Current task / user message<br>
+          Grepped reference snippets<br>
+          Worker outputs from prior phases
+        </div>
+      </div>
+      <div>
+        <ul class="bullets" style="gap: 18px;">
+          <li><strong>Agent files are stable</strong> — cache hit on every subsequent worker spawn in a session.</li>
+          <li><strong>Preloaded skills injected once</strong> at startup, cached for the whole session.</li>
+          <li><strong>CLAUDE.md is short (~1 page)</strong> — small stable prefix, high cache efficiency.</li>
+          <li><strong>Compounds across workers</strong> — in a 5-worker feature build, the stable prefix is paid for once. Workers 2–5 reuse it from cache.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="caption">
+      Lean agents + Grep-first + caching = <strong>the cost curve bends down
+      as usage goes up, not up.</strong>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 9 — SOLUTION: SHARED SUBMODULE
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s9">
+    <div class="label">Solution — Shared Submodule</div>
+    <h2 class="headline">One toolkit. <em>Every platform.</em> Updated once.</h2>
+    <div class="tree" style="font-size: 12.5px; line-height: 1.72;">
+<span class="ac">software-dev-agentic/</span>  <span class="dm">← git submodule — single source of truth</span>
+  lib/
+    core/agents/builder/
+      <span class="ac">domain-worker.md</span>         <span class="dm">← platform-agnostic brain</span>
+      <span class="ac">data-worker.md</span>           <span class="dm">← platform-agnostic brain</span>
+      <span class="ac">feature-orchestrator.md</span>  <span class="dm">← coordinates all workers</span>
+    platforms/
+      flutter/skills/          <span class="dm">← Dart/BLoC implementations</span>
+      ios/skills/              <span class="dm">← Swift/UIKit implementations</span>
+      web/skills/              <span class="dm">← TypeScript/Next.js implementations</span>
+
+<span class="dm">At setup time, symlinks wire the right platform skills into each project:</span>
+
+xpnsio/.claude/
+  agents/<span class="ac">domain-worker.md</span>       → <span class="dm">symlink ──┐</span>
+  skills/<span class="ac">domain-create-entity/</span>  → <span class="dm">symlink   │ flutter skills</span>
+wehire/.claude/
+  agents/<span class="ac">domain-worker.md</span>       → <span class="dm">symlink ──┤ same agent</span>
+talenta-ios/.claude/
+  agents/<span class="ac">domain-worker.md</span>       → <span class="dm">symlink ──┘ ios skills</span>
+    </div>
+    <div class="caption">
+      Adding a 4th platform (Android, React Native) requires only a new
+      <strong>lib/platforms/&lt;platform&gt;/skills/</strong> directory.
+      No changes to any agent.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 10 — WHAT WE BUILT
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s10">
+    <div class="label">What We Built</div>
+    <h1 class="slide-title" style="font-size: 44px; max-width: 680px;">
+      Not a chatbot.<br>Not autocomplete.<br><em>A hierarchy of specialized AI agents.</em>
+    </h1>
+    <div class="divider"></div>
+    <ul class="bullets">
+      <li>Each agent is an expert in exactly one layer of the codebase — and nothing else.</li>
+      <li>A Tech Lead orchestrator coordinates them in the right order, passes only what each needs, and compiles the result.</li>
+      <li><strong>The engineer's job shifts from writing boilerplate to reviewing output.</strong></li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 11 — THE ROLES
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s11">
+    <div class="label">Architecture</div>
+    <h2 class="headline">Three roles. <em>Each knows exactly what it owns.</em></h2>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 20px;">
+      <div class="card">
+        <div class="card-label">Orchestrator</div>
+        <div style="font-size: 13px; color: var(--accent); font-family: var(--mono); margin-bottom: 12px;">feature-orchestrator</div>
+        <div class="card-desc">
+          Coordinates workers in sequence. Validates each worker's output before proceeding.
+          <strong style="color: var(--text);">Never writes code directly</strong> — all writes go through workers.<br><br>
+          Passes file paths between phases, not file contents. Stops immediately if a worker fails.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Worker</div>
+        <div style="font-size: 13px; color: var(--accent); font-family: var(--mono); margin-bottom: 12px;">domain-worker · data-worker · ui-worker</div>
+        <div class="card-desc">
+          Owns exactly one CLEAN layer. Reads reference docs via Grep, executes skills, writes files, returns paths.
+          <strong style="color: var(--text);">Platform-agnostic</strong> — the same worker runs on Flutter, iOS, and Web.<br><br>
+          Refuses work outside its layer. Stops and names the correct worker instead.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Skill</div>
+        <div style="font-size: 13px; color: var(--accent); font-family: var(--mono); margin-bottom: 12px;">domain-create-entity · data-create-mapper</div>
+        <div class="card-desc">
+          Step-by-step procedure for one task. Does one thing only, under 30 lines.
+          <strong style="color: var(--text);">Platform-specific</strong> — the same skill name generates a Dart class on Flutter, a Swift struct on iOS.<br><br>
+          Swapping the platform swaps the skills. No agent changes needed.
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      Workers are the brains — they decide what to do. Skills are the hands — they know how to do it.
+      <strong>This separation is what makes the system extensible across platforms without touching any agent.</strong>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 12 — KNOWLEDGE ARCHITECTURE
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s12">
+    <div class="label">Knowledge</div>
+    <h2 class="headline">Three tiers. <em>Each loaded only when needed.</em></h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="cache-box stable">
+          <div class="cache-label">Tier 1 — CLAUDE.md</div>
+          Universal rules. ~1 page. Loaded every turn.<br>
+          Naming conventions, architecture boundaries, quality gates.
+        </div>
+        <div class="cache-box dynamic" style="border-color: var(--accent-bd); background: var(--accent-bg);">
+          <div class="cache-label" style="color: var(--accent);">Tier 2 — Agent body</div>
+          Decision logic for that agent only.<br>
+          When to act, what to check, how to handle failure.<br>
+          <span style="color: var(--muted); font-size: 13px;">Not shared. Not duplicated. Scoped to one agent.</span>
+        </div>
+        <div class="cache-box dynamic">
+          <div class="cache-label">Tier 3 — Reference docs</div>
+          Deep architectural knowledge: layer contracts, patterns, platform examples.<br>
+          Loaded on demand via Grep — one section at a time.
+        </div>
+      </div>
+      <div>
+        <ul class="bullets" style="gap: 20px;">
+          <li>
+            <strong>Reference docs are greppable by design</strong> — every file uses the same heading structure
+            (<code style="font-family: var(--mono); font-size: 13px; color: var(--accent);">## SectionName</code>)
+            so workers fetch exactly the section they need.
+          </li>
+          <li>
+            <strong>Knowledge is never duplicated</strong> — one reference file, multiple workers reading the same section via Grep.
+            Update once, every agent sees it immediately.
+          </li>
+          <li>
+            <strong>Self-enforcing</strong> — an internal arch-reviewer audits every agent and skill file for convention violations before it ships to any downstream project. The system checks itself.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 13 — HOW IT WORKS
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s13">
+    <div class="label">How It Works — Builder Persona (example)</div>
+    <h2 class="headline">Describe the feature. <em>The team takes over.</em></h2>
+    <div class="tree">
+<span class="ac">You:</span> <span class="dm">"Build the leave request feature."</span>
+     <span class="dm">↓</span>
+<span class="rl">Tech Lead</span>  <span class="dm">(feature-orchestrator)</span>
+<span class="dm">│</span>
+<span class="dm">├──</span> <span class="rl">Domain Engineer</span>   <span class="dm">← entities, use cases, repository interface</span>
+<span class="dm">│</span>
+<span class="dm">├──</span> <span class="rl">Data Engineer</span>     <span class="dm">← API models, mappers, repository implementation</span>
+<span class="dm">│</span>
+<span class="dm">├──</span> <span class="rl">State Engineer</span>    <span class="dm">← BLoC: events, states, business logic wiring</span>
+<span class="dm">│</span>
+<span class="dm">└──</span> <span class="rl">UI Engineer</span>       <span class="dm">← screens, widgets, navigation</span>
+     <span class="dm">↓</span>
+<span class="ac">Complete feature, all layers, ready for review</span>
+    </div>
+    <div class="caption">
+      This is the <strong>Builder</strong> persona — one example of how the principles work in practice.
+      The system is not limited to feature building. Each persona applies the same architecture
+      to a different kind of engineering work.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 14 — MEET THE TEAM
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s14">
+    <div class="label">The Team</div>
+    <h2 class="headline">Five personas <em>so far</em>. Anyone can add more.</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>What it handles</th>
+          <th>Ships to</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Builder</td>
+          <td>Feature development — domain, data, state, UI delivered in sequence</td>
+          <td>iOS · Flutter · Web</td>
+        </tr>
+        <tr>
+          <td>Detective</td>
+          <td>Debugging, performance analysis, root cause investigation</td>
+          <td>iOS · Flutter · Web</td>
+        </tr>
+        <tr>
+          <td>Auditor</td>
+          <td>Architecture review, standards enforcement, convention compliance</td>
+          <td>iOS · Flutter · Web</td>
+        </tr>
+        <tr>
+          <td>Tracker</td>
+          <td>Issue management, backlog, branch coordination</td>
+          <td>iOS · Flutter · Web</td>
+        </tr>
+        <tr>
+          <td>Installer</td>
+          <td>Project setup, platform wiring, onboarding</td>
+          <td>iOS · Flutter · Web</td>
+        </tr>
+        <tr style="border-top: 1px dashed var(--accent-bd);">
+          <td style="color: var(--accent);">+ Your persona</td>
+          <td style="color: var(--muted); font-style: italic;">Identify a recurring workflow → PR the agents and skills to the shared submodule</td>
+          <td style="color: var(--accent);">All platforms</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="caption">
+      These are the <strong>currently active personas</strong> — not a fixed set.
+      Any engineer can propose and contribute a new persona. It ships to every project the same day it merges.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 15 — IN ACTION: LEAVE REQUEST
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s15">
+    <div class="label">In Action — Leave Request (Flutter)</div>
+    <h2 class="headline" style="margin-bottom: 18px;">One sentence in. <em>Complete feature out.</em></h2>
+    <div class="tree" style="font-size: 12px; line-height: 1.68;">
+<span class="dm">Input: "Build the leave request feature — submit, approve, reject, notify."</span>
+
+<span class="rl">feature-orchestrator</span>
+<span class="dm">├── 1.</span> <span class="rl">domain-worker</span>
+<span class="dm">│       →</span> <span class="ac">LeaveRequest</span> <span class="dm">(pure Dart entity, no imports)</span>
+<span class="dm">│       →</span> <span class="ac">LeaveRequestRepository</span> <span class="dm">(interface — domain contract)</span>
+<span class="dm">│       →</span> <span class="ac">SubmitLeaveRequestUseCase</span>
+<span class="dm">│       →</span> <span class="ac">ApproveLeaveRequestUseCase</span>  ·  <span class="ac">RejectLeaveRequestUseCase</span>
+<span class="dm">├── 2.</span> <span class="rl">data-worker</span>
+<span class="dm">│       →</span> <span class="ac">LeaveRequestResponse</span> <span class="dm">(@JsonSerializable)</span>  ·  <span class="ac">LeaveRequestMapper</span>
+<span class="dm">│       →</span> <span class="ac">LeaveRequestRemoteDataSource</span> <span class="dm">(dio)</span>  ·  <span class="ac">LeaveRequestRepositoryImpl</span>
+<span class="dm">├── 3.</span> <span class="rl">presentation-worker</span>
+<span class="dm">│       →</span> <span class="ac">LeaveRequestBloc</span>  ·  <span class="ac">LeaveRequestEvent</span>  ·  <span class="ac">LeaveRequestState</span>
+<span class="dm">├── 4.</span> <span class="rl">ui-worker</span>
+<span class="dm">│       →</span> <span class="ac">LeaveRequestScreen</span>  ·  <span class="ac">LeaveRequestWidget</span> <span class="dm">(observes BLoC)</span>
+<span class="dm">└──</span> <span class="rl">feature-orchestrator</span> <span class="dm">opens PR, linked to ticket</span>
+    </div>
+    <div class="caption">
+      <strong>Total engineer time: one sentence and a code review.</strong>
+      Every file follows architecture standards. Every layer only knows what it's supposed to know.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 16 — RESULTS
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s16">
+    <div class="label">Results — April 2026 · talenta-iOS · xpnsio · wehire</div>
+    <h2 class="headline">Measured across three products, <em>four days of tuning.</em></h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Speed</div>
+        <div class="card-metric">1 session</div>
+        <div class="card-desc">
+          34-file, 5-layer feature — domain, database, API, state, UI — all wired together.
+          Previously: 2–3 days for a senior engineer.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Cost</div>
+        <div class="card-metric">85% ↓</div>
+        <div class="card-desc">
+          737,000 → 103,000 tokens per feature session.
+          Not from a cheaper model. From building the system correctly.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Quality</div>
+        <div class="card-metric">6.3 → 8.0</div>
+        <div class="card-desc">
+          Session score (1–10) across 7 dimensions:<br><br>
+          D1 Orchestration Quality<br>
+          D2 Worker Invocation<br>
+          D3 Skill Execution<br>
+          D4 Token Efficiency<br>
+          D5 Routing Accuracy<br>
+          D6 Workflow Compliance<br>
+          D7 One-Shot Rate
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      The system improves itself. Every session produces a performance report.
+      Every report drives a toolkit update. Every update ships to all three products simultaneously.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 17 — WHERE WE'RE GOING
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s17">
+    <div class="label">Roadmap</div>
+    <h2 class="headline">The foundation is in place. <em>Here's what's next.</em></h2>
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-num">01</div>
+        <div class="roadmap-text">
+          <strong>Android</strong>
+          <span>iOS and Flutter are active today. Android is the next platform — same shared agents,
+          same architecture, same standards. Adding it requires only a new platform skills directory.
+          No changes to any agent.</span>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-num">02</div>
+        <div class="roadmap-text">
+          <strong>Broader scope</strong>
+          <span>The same agent model that builds features can be applied to performance analysis,
+          security review, migration automation, and engineer onboarding.</span>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-num">03</div>
+        <div class="roadmap-text">
+          <strong>Shorter feedback loops</strong>
+          <span>The gap between "a developer describes intent" and "a feature is ready for review"
+          continues to shrink. The system gets better with every session.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SLIDE 18 — CLOSING
+  ════════════════════════════════════════════ -->
+  <section class="slide" id="s18">
+    <div class="label">software-dev-agentic</div>
+    <p class="quote">
+      We built a system where an engineer describes what they want to build,
+      and a team of specialized AI agents builds it correctly —
+      <em>across every platform, at a fraction of the cost, every time.</em>
+    </p>
+    <div class="divider"></div>
+    <p class="body-text">Engineering · April 2026</p>
+    <p style="margin-top: 10px; font-size: 13px; color: var(--muted);">
+      Technical details:
+      <code style="font-family: var(--mono); color: var(--accent); background: var(--accent-bg); padding: 2px 8px; border-radius: 4px;">docs/core-design-principles.md</code>
+    </p>
+  </section>
+
+</div>
+
+<script>
+  const slides  = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const total   = slides.length;
+  let current   = 0;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    counter.textContent  = `${current + 1} / ${total}`;
+    progress.style.width = `${((current + 1) / total) * 100}%`;
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (['ArrowLeft',  'ArrowUp'       ].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Only trigger if horizontal swipe dominates and exceeds 50px threshold
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  }, { passive: true });
+
+  goTo(0);
+</script>
+</body>
+</html>

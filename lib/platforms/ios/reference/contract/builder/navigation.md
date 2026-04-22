@@ -4,7 +4,7 @@
 
 Talenta uses the **Coordinator pattern** with `BaseCoordinator` to handle navigation and decouple ViewControllers from navigation logic.
 
-## Navigator Protocol
+## Navigator Protocol <!-- 26 -->
 
 Define navigation methods as a protocol that the coordinator implements:
 
@@ -30,7 +30,7 @@ protocol DashboardNavigator: AnyObject {
 - Methods with simple navigation return `Void`
 - All methods take necessary parameters (IDs, flags, models)
 
-## BaseCoordinator Pattern (V2 Recommended)
+## BaseCoordinator Pattern (V2 Recommended) <!-- 43 -->
 
 ```swift
 // Presentation/Coordinator/DashboardCoordinator.swift
@@ -73,7 +73,7 @@ final class DashboardCoordinator: BaseCoordinator<Void> {
 }
 ```
 
-## Navigator Implementation
+## Navigator Implementation <!-- 69 -->
 
 ```swift
 extension DashboardCoordinator: DashboardNavigator {
@@ -142,7 +142,7 @@ extension DashboardCoordinator: DashboardNavigator {
 }
 ```
 
-## Coordinator Lifecycle Management
+## Coordinator Lifecycle Management <!-- 34 -->
 
 **Child Coordinator Pattern:**
 
@@ -176,7 +176,7 @@ func openAnotherFeature() {
 - `defaultNavigationController` - Shared navigation controller
 - `defaultController` - Reference to created view controller
 
-## V2 Pattern with DI Container
+## V2 Pattern with DI Container <!-- 32 -->
 
 **In Coordinator:**
 ```swift
@@ -208,7 +208,7 @@ final class TalentaDashboardDIContainer {
 }
 ```
 
-## Coordinator Patterns Summary
+## Coordinator Patterns Summary <!-- 10 -->
 
 | Pattern | When to Use | Example |
 |---------|-------------|---------|
@@ -218,7 +218,7 @@ final class TalentaDashboardDIContainer {
 | **Bottom sheet** | Modal presentation with custom view | `presentBottomSheet(view: customView, ...)` |
 | **Feature module manager** | Cross-module navigation | `timeManagementManager.openTmTimeOffIndex()` |
 
-## Complete Example: Feature Coordinator
+## Complete Example: Feature Coordinator <!-- 74 -->
 
 ```swift
 // Presentation/Coordinator/CustomFormListCoordinator.swift

@@ -2,7 +2,7 @@
 
 > Concepts and invariants: `reference/builder/presentation.md`. This file covers TypeScript syntax and web-specific patterns.
 
-## QueryState
+## QueryState <!-- 33 -->
 
 A unified state type for all view states — mirrors the `ViewState<T>` enum from the SwiftUI kit.
 
@@ -35,7 +35,7 @@ export function getDataOrNull<T>(state: QueryState<T>): T | null {
 }
 ```
 
-## ViewModel Hook
+## ViewModel Hook <!-- 91 -->
 
 The ViewModel pattern is implemented as a custom React hook. No class inheritance — just a hook that orchestrates use cases, manages state, and handles navigation.
 
@@ -126,7 +126,7 @@ export function useEmployeeListViewModel({
 }
 ```
 
-## ViewModel Hook with Service Integration
+## ViewModel Hook with Service Integration <!-- 58 -->
 
 When a ViewModel hook needs business decisions, it delegates to a Domain Service:
 
@@ -184,7 +184,7 @@ export function useLeaveRequestViewModel({
 }
 ```
 
-## React Component (View)
+## React Component (View) <!-- 65 -->
 
 Components are dumb renderers. They receive state and callbacks from the ViewModel hook and render UI.
 
@@ -249,7 +249,7 @@ export function EmployeeListView({ initialData }: Props) {
 
 ---
 
-## Atomic Design within the Presentation Layer
+## Atomic Design within the Presentation Layer <!-- 19 -->
 
 Clean Architecture owns the **vertical** slice (domain → data → presentation).
 Atomic Design owns the **horizontal** slice (how components are structured *within* presentation).
@@ -268,7 +268,7 @@ Atomic Design owns the **horizontal** slice (how components are structured *with
 4. Shared atoms/molecules live in `src/shared/presentation/common/`. Feature-specific organisms live inside their own feature slice.
 5. A component that is used in ≥2 features must be promoted to `shared/presentation/common/`.
 
-## View Data Transformer Pattern
+## View Data Transformer Pattern <!-- 53 -->
 
 Domain objects return structured, semantic data. The presentation layer is responsible for converting that data into display-ready values like CSS class strings, labels, and icons. **Never put Tailwind class strings or locale-formatted display strings inside domain services or use cases.**
 
@@ -321,7 +321,7 @@ const STATUS_TEXT: Record<BudgetStatus, string> = {
 | Raw numbers / booleans | Domain | `remaining: number`, `isOverrun: boolean` |
 | User-facing message strings | Presentation | `'The requested resource was not found.'` |
 
-## Server-Side ViewModel (Pure Function)
+## Server-Side ViewModel (Pure Function) <!-- 87 -->
 
 When a page is a **Server Component** (`async page.tsx`), data is fetched server-side and there are no React hooks. The ViewModel is a **pure function** instead of a hook.
 
@@ -408,7 +408,7 @@ export function CareerPageView({ viewModel }: { viewModel: CareerPageViewModel }
 
 ---
 
-## Shared Component Paths
+## Shared Component Paths <!-- 11 -->
 
 When running a Component Reuse Check, search these locations for existing reusable components:
 

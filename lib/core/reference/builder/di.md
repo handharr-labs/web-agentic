@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/di.md` in each platfor
 
 ---
 
-## DI Principles
+## DI Principles <!-- 12 -->
 
 These rules apply regardless of framework (Next.js React Context, Swinject, get_it):
 
@@ -17,7 +17,7 @@ These rules apply regardless of framework (Next.js React Context, Swinject, get_
 
 ---
 
-## Registration Order
+## Registration Order <!-- 17 -->
 
 Dependencies must be registered before they are resolved. The correct registration order mirrors the dependency graph:
 
@@ -34,7 +34,7 @@ Register leaf nodes (no dependencies) first. Register consumers after their depe
 
 ---
 
-## Scope Rules
+## Scope Rules <!-- 12 -->
 
 | Scope | Use for | Lifetime |
 |---|---|---|
@@ -46,7 +46,7 @@ Register leaf nodes (no dependencies) first. Register consumers after their depe
 
 ---
 
-## Testing with DI
+## Testing with DI <!-- 5 -->
 
 - Swap real implementations for test doubles at registration time — the caller never changes
 - Each test gets its own container instance — never share container state across tests

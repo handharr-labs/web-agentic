@@ -22,7 +22,7 @@ The strategy: **two containers, two runtimes**.
 └────────────────────────────────────────────────────────┘
 ```
 
-## Server Container
+## Server Container <!-- 30 -->
 
 Module-level exports are natural singletons in Node.js — the module is evaluated once and cached. No DI framework needed for server-side code.
 
@@ -52,7 +52,7 @@ export const getEmployeesUseCase = () => new GetEmployeesUseCaseImpl(employeeRep
 export const getEmployeeUseCase = () => new GetEmployeeUseCaseImpl(employeeRepository);
 ```
 
-## Client Container
+## Client Container <!-- 61 -->
 
 Only client-interactive dependencies live here. Uses `NEXT_PUBLIC_` env vars because this code runs in the browser.
 
@@ -113,7 +113,7 @@ export function useDI(): ClientContainer {
 }
 ```
 
-## App Entry Point
+## App Entry Point <!-- 74 -->
 
 `DIProvider` no longer needs to wrap the entire app — only the client subtrees that need it. The root layout stays a Server Component:
 
@@ -187,7 +187,7 @@ export function EmployeeListView({ initialData }: { initialData?: PaginatedResul
 }
 ```
 
-## Decision Rule
+## Decision Rule <!-- 12 -->
 
 ```
 Is this component a Server Component?
@@ -199,7 +199,7 @@ Does this env var go to the browser?
   └── NO  → API_BASE_URL (container.server.ts)
 ```
 
-## DI Principles
+## DI Principles <!-- 14 -->
 
 | Rule | Reason |
 |------|--------|

@@ -5,7 +5,7 @@ globs:
   - src/shared/di/DIContext.tsx
 ---
 
-## DI Container Rules
+## DI Container Rules <!-- 23 -->
 
 ### `container.server.ts`
 - Must start with `import 'server-only'` as the very first import

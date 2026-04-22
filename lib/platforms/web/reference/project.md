@@ -1,7 +1,7 @@
 # Web — Project Structure
 
 
-## Feature-Based Layout
+## Feature-Based Layout <!-- 129 -->
 
 ```
 src/
@@ -130,7 +130,7 @@ src/
             └── ...
 ```
 
-## Feature Module Structure
+## Feature Module Structure <!-- 40 -->
 
 Every feature module is self-contained with its own layers:
 
@@ -170,9 +170,9 @@ features/[feature-name]/
 
 ---
 
-## Conventions & Naming
+## Conventions & Naming <!-- 2 -->
 
-## File & Type Naming
+## File & Type Naming <!-- 25 -->
 
 | Component | Pattern | Example |
 |-----------|---------|---------|
@@ -197,7 +197,7 @@ features/[feature-name]/
 | Route constant | `ROUTES.[feature]` | `ROUTES.employeeDetail(id)` |
 | Feature folder | `kebab-case/` | `employee-list/`, `leave-request/` |
 
-## Code Conventions
+## Code Conventions <!-- 13 -->
 
 | Convention | Rule |
 |------------|------|
@@ -210,7 +210,7 @@ features/[feature-name]/
 | React Server Components | Default for pages; add `'use client'` only when hooks/interactivity are needed |
 | Services | Always pure — no DOM APIs, no async, no I/O |
 
-## Feature Module Structure
+## Feature Module Structure <!-- 14 -->
 
 Every feature follows this pattern:
 
@@ -224,9 +224,9 @@ features/[feature-name]/
 
 ---
 
-## Design Decisions & Rationale
+## Design Decisions & Rationale <!-- 2 -->
 
-## TanStack Query Over Custom Fetch Logic
+## TanStack Query Over Custom Fetch Logic <!-- 12 -->
 
 | TanStack Query | Custom async state |
 |----------------|-------------------|
@@ -238,7 +238,7 @@ features/[feature-name]/
 
 **Trade-off:** Adds a dependency. For purely server-rendered apps (RSC), prefer `fetch` directly in Server Components. TanStack Query shines for client-side interactive data.
 
-## Custom Hooks as ViewModels Over Class-Based VMs
+## Custom Hooks as ViewModels Over Class-Based VMs <!-- 12 -->
 
 | Custom Hook | Class-based ViewModel |
 |-------------|----------------------|
@@ -250,7 +250,7 @@ features/[feature-name]/
 
 **Trade-off:** Business logic is tied to React's hook rules (`use*` prefix, can't call outside components). For shared, framework-agnostic logic, keep it in Domain Services instead.
 
-## Next.js App Router Over Pages Router
+## Next.js App Router Over Pages Router <!-- 12 -->
 
 | App Router (Next.js 13+) | Pages Router |
 |--------------------------|--------------|
@@ -262,7 +262,7 @@ features/[feature-name]/
 
 **Trade-off:** App Router has a steeper learning curve. Server Components cannot use hooks or browser APIs. Plan your `'use client'` boundary carefully.
 
-## No Base Hook / No Shared State Logic Inheritance
+## No Base Hook / No Shared State Logic Inheritance <!-- 11 -->
 
 React hooks cannot be subclassed or inherited. This kit avoids the temptation to create a `useBaseViewModel` hook with shared logic because:
 
@@ -273,7 +273,7 @@ React hooks cannot be subclassed or inherited. This kit avoids the temptation to
 
 **Instead:** Share common behavior through dedicated utility hooks (`useNetworkStatus`, `useFormField`, `useAppRouter`) and compose them per feature.
 
-## Services in Domain (Not a Separate Layer)
+## Services in Domain (Not a Separate Layer) <!-- 17 -->
 
 Services live inside the Domain layer alongside UseCases. They are **not** a separate architectural layer.
 
@@ -290,7 +290,7 @@ Services live inside the Domain layer alongside UseCases. They are **not** a sep
 - **UseCase:** "Fetch from API" / "Persist to database" / "Submit this form"
 - **Inline:** Simple 1-3 line conditions — keep them in the UseCase
 
-## Server/Client Split DI Over a Single Container
+## Server/Client Split DI Over a Single Container <!-- 21 -->
 
 | Split (this kit) | Single React Context container |
 |-----------------|-------------------------------|
@@ -311,7 +311,7 @@ Services live inside the Domain layer alongside UseCases. They are **not** a sep
 
 **Trade-off:** Two container files instead of one. For large-scale apps, split further into per-feature containers (see Section 11.5).
 
-## Interface-Based Mappers Over Utility Functions
+## Interface-Based Mappers Over Utility Functions <!-- 13 -->
 
 | Interface-based (this kit) | Plain functions |
 |---------------------------|----------------|
@@ -324,9 +324,9 @@ Services live inside the Domain layer alongside UseCases. They are **not** a sep
 
 ---
 
-## Appendix A: Quick Reference Card
+## Appendix A: Quick Reference Card <!-- 2 -->
 
-## Adding a New Feature
+## Adding a New Feature <!-- 17 -->
 
 1. **Define entities** in `domain/entities/`
 2. **Define repository interface** in `domain/repositories/`
@@ -343,7 +343,7 @@ Services live inside the Domain layer alongside UseCases. They are **not** a sep
 13. **Wire in container** — add to `container.server.ts` (RSC) and/or `container.client.ts` (interactive)
 14. **Write tests** — Service tests first, then ViewModel hook, then Repository
 
-## Layer Import Rules
+## Layer Import Rules <!-- 14 -->
 
 | Layer | Can Import |
 |-------|-----------|
@@ -357,7 +357,7 @@ Services live inside the Domain layer alongside UseCases. They are **not** a sep
 | App — Server page | `container.server.ts`, Presentation |
 | App — Client page | `useDI()` hook via `DIContext` |
 
-## Data Flow (Complete)
+## Data Flow (Complete) <!-- 32 -->
 
 **Server path (initial page load — RSC):**
 ```

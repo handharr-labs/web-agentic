@@ -5,7 +5,7 @@ Platform syntax and patterns: `reference/contract/builder/domain.md` in each pla
 
 ---
 
-## Dependency Rule
+## Dependency Rule <!-- 13 -->
 
 Domain is the innermost layer. It imports nothing from outer layers.
 
@@ -18,7 +18,7 @@ Forbidden: any framework, UI library, HTTP client, database driver, or data-laye
 
 ---
 
-## Entities
+## Entities <!-- 15 -->
 
 An **Entity** is a pure data structure representing a business concept.
 
@@ -33,7 +33,7 @@ An **Entity** is a pure data structure representing a business concept.
 
 ---
 
-## Repository
+## Repository <!-- 15 -->
 
 A **Repository** is a contract that defines data access operations — *what* is needed, not *how* it is done.
 
@@ -48,7 +48,7 @@ A **Repository** is a contract that defines data access operations — *what* is
 
 ---
 
-## Use Cases
+## Use Cases <!-- 35 -->
 
 A **UseCase** encapsulates a single business operation: one class, one public method, one responsibility.
 
@@ -83,7 +83,7 @@ Presentation → Repository              ❌  direct call is a CLEAN violation
 
 ---
 
-## Domain Services
+## Domain Services <!-- 23 -->
 
 A **Domain Service** contains pure business logic that spans multiple entities or is reused across multiple use cases.
 
@@ -106,7 +106,7 @@ A **Domain Service** contains pure business logic that spans multiple entities o
 
 ---
 
-## Domain Errors
+## Domain Errors <!-- 11 -->
 
 A **Domain Error** is the unified error type returned from all repository and use case operations. It decouples the domain from transport-layer error types (HTTP status codes, network errors).
 
@@ -117,7 +117,7 @@ A **Domain Error** is the unified error type returned from all repository and us
 
 ---
 
-## Creation Order
+## Creation Order <!-- 9 -->
 
 When building a new feature's domain layer:
 

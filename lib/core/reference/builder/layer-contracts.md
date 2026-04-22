@@ -4,7 +4,7 @@ Platform-agnostic contracts for the four Clean Architecture layers used across w
 
 ---
 
-## Dependency Direction
+## Dependency Direction <!-- 10 -->
 
 ```
 Domain  ←  Data  ←  Presentation  ←  UI
@@ -14,7 +14,7 @@ Each layer may only import from the layer to its left. No exceptions.
 
 ---
 
-## Domain Layer
+## Domain Layer <!-- 17 -->
 
 Full artifact definitions, invariants, and creation order: `reference/builder/domain.md`
 
@@ -31,7 +31,7 @@ Creation order: `Entity → Repository Interface → Use Case(s) → Domain Serv
 
 ---
 
-## Data Layer
+## Data Layer <!-- 18 -->
 
 Full artifact definitions, invariants, and creation order: `reference/builder/data.md`
 
@@ -49,7 +49,7 @@ Creation order (remote): `DTO → Mapper → DataSource interface → DataSource
 
 ---
 
-## Presentation Layer (StateHolder)
+## Presentation Layer (StateHolder) <!-- 17 -->
 
 Full artifact definitions, invariants, and creation order: `reference/builder/presentation.md`
 
@@ -66,7 +66,7 @@ Creation order: `Use Cases → StateHolder → StateHolder contract → Screen (
 
 ---
 
-## UI Layer
+## UI Layer <!-- 17 -->
 
 Full artifact definitions, invariants, and creation order: `reference/builder/ui.md`
 
@@ -83,7 +83,7 @@ Creation order: `Screen → Navigator/Coordinator (if needed) → DI wiring (if 
 
 ---
 
-## Inter-Layer Dependency Summary
+## Inter-Layer Dependency Summary <!-- 8 -->
 
 | Consumer | May import from |
 |---|---|
