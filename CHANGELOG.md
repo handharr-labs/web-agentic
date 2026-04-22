@@ -7,6 +7,14 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.39.1] — 2026-04-22
+
+### Fixed
+- `test-worker`, `debug-worker`, `debug-log-worker`, `arch-review-worker` (lib/core), `pr-review-worker`, `issue-worker`, `perf-worker`: added Read-once rule and/or full Search Protocol block — these workers had the lookup table but no re-read enforcement
+- `backend-orchestrator`, `feature-orchestrator`, `feature-planner`, `pres-orchestrator`, `debug-orchestrator`: added coordinator-scoped Search Protocol (state/run files only, delegate source reads to workers) and Read-once rule
+
+---
+
 ## [3.39.0] — 2026-04-22
 
 ### Added
