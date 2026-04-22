@@ -62,8 +62,9 @@ Only include sections that have entries. Use today's date from system context.
 git add VERSION CHANGELOG.md
 git commit -m "chore(release): vX.Y.Z"
 git tag vX.Y.Z
-git push origin main && git push origin --tags
-git push hndhr main && git push hndhr --tags
+for remote in $(git remote); do
+  git push "$remote" main && git push "$remote" --tags
+done
 ```
 
-Report the version, tag, and both push confirmations when done.
+Report the version, tag, and per-remote push confirmations when done.
