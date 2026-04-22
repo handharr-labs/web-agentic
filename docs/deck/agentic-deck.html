@@ -719,12 +719,12 @@ Read(<span class="bd">"reference/contract/builder/domain.md"</span>)
       <div class="code-panel">
         <div class="code-panel-header good">✓  Grep + targeted Read — only the section needed</div>
         <pre><span class="cm"># Reference doc heading carries its own line count:</span>
-<span class="cm"># ## Entity <!-- 15 -->   ← auto-updated by pre-commit hook</span>
+<span class="cm"># ## Entity &lt;!-- 15 --&gt;   ← auto-updated by pre-commit hook</span>
 
 <span class="cm"># Step 1: locate section, read count from heading</span>
 Grep(<span class="ac">"^## Entity"</span>,
   <span class="ac">"reference/contract/builder/domain.md"</span>)
-<span class="cm"># → "## Entity <!-- 15 -->" at line 42</span>
+<span class="cm"># → "## Entity &lt;!-- 15 --&gt;" at line 42</span>
 
 <span class="cm"># Step 2: read exactly that section</span>
 Read(<span class="ac">"reference/contract/builder/domain.md"</span>,
@@ -735,11 +735,11 @@ Read(<span class="ac">"reference/contract/builder/domain.md"</span>,
     <div style="margin-top: 14px;">
       <div class="code-panel">
         <div class="code-panel-header" style="color: var(--muted);">reference/contract/builder/domain.md — what the file actually looks like</div>
-        <pre><span class="ac">## Entity <!-- 15 --></span>        <span class="cm">← heading + auto-maintained line count</span>
+        <pre><span class="ac">## Entity &lt;!-- 15 --&gt;</span>        <span class="cm">← heading + auto-maintained line count</span>
 An entity is a pure domain object...
 <span class="cm">... 13 more lines ...</span>
 
-<span class="ac">## UseCase <!-- 28 --></span>       <span class="cm">← next section starts here</span>
+<span class="ac">## UseCase &lt;!-- 28 --&gt;</span>       <span class="cm">← next section starts here</span>
 A use case encapsulates one business operation...</pre>
       </div>
     </div>
