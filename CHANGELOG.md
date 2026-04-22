@@ -7,6 +7,17 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.35.0] — 2026-04-22
+
+### Added
+- `lib/platforms/web/CLAUDE-template.md`: `## Stack` section with placeholder comments for backend-type, ORM, auth, styling, testing, and deployment — agents read CLAUDE.md every session so filling this in once propagates choices automatically
+- `lib/platforms/web/skills/setup-nextjs-project/SKILL.md`: Step 5 updated to show the Stack table and prompt engineers to fill it in during initial setup
+
+### Changed
+- `scripts/setup-packages.sh`: post-install next steps now lists the six specific stack decisions engineers must fill in, replacing the vague "Fill in CLAUDE.md placeholders" message
+
+---
+
 ## [3.34.0] — 2026-04-22
 
 ### Changed
