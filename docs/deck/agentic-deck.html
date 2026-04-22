@@ -718,29 +718,13 @@ Read(<span class="bd">"reference/contract/builder/domain.md"</span>)
       </div>
       <div class="code-panel">
         <div class="code-panel-header good">✓  Grep + targeted Read — only the section needed</div>
-        <pre><span class="cm"># Reference doc heading carries its own line count:</span>
-<span class="cm"># ## Entity &lt;!-- 15 --&gt;   ← auto-updated by pre-commit hook</span>
-
-<span class="cm"># Step 1: locate section, read count from heading</span>
-Grep(<span class="ac">"^## Entity"</span>,
-  <span class="ac">"reference/contract/builder/domain.md"</span>)
-<span class="cm"># → "## Entity &lt;!-- 15 --&gt;" at line 42</span>
-
-<span class="cm"># Step 2: read exactly that section</span>
-Read(<span class="ac">"reference/contract/builder/domain.md"</span>,
-  offset=<span class="ac">42</span>, limit=<span class="ac">15</span>)
-<span class="cm"># → 15 lines. Dynamic. Always accurate.</span></pre>
+        <pre id="grep-example"></pre>
       </div>
     </div>
     <div style="margin-top: 14px;">
       <div class="code-panel">
         <div class="code-panel-header" style="color: var(--muted);">reference/contract/builder/domain.md — what the file actually looks like</div>
-        <pre><span class="ac">## Entity &lt;!-- 15 --&gt;</span>        <span class="cm">← heading + auto-maintained line count</span>
-An entity is a pure domain object...
-<span class="cm">... 13 more lines ...</span>
-
-<span class="ac">## UseCase &lt;!-- 28 --&gt;</span>       <span class="cm">← next section starts here</span>
-A use case encapsulates one business operation...</pre>
+        <pre id="annotation-example"></pre>
       </div>
     </div>
     <div class="caption">
@@ -1228,6 +1212,35 @@ talenta-ios/.claude/
   }, { passive: true });
 
   goTo(0);
+
+  // Inject <!-- N --> examples via JS so the HTML parser never strips the annotation
+  const grepEx = document.getElementById('grep-example');
+  if (grepEx) {
+    const open = '\x3C!--', close = '--\x3E';
+    grepEx.innerHTML =
+      `<span class="cm"># Reference doc heading carries its own line count:</span>\n` +
+      `<span class="cm"># ## Entity ${open} 15 ${close}   ← auto-updated by pre-commit hook</span>\n\n` +
+      `<span class="cm"># Step 1: locate section, read count from heading</span>\n` +
+      `Grep(<span class="ac">"^## Entity"</span>,\n` +
+      `  <span class="ac">"reference/contract/builder/domain.md"</span>)\n` +
+      `<span class="cm"># → "## Entity ${open} 15 ${close}" at line 42</span>\n\n` +
+      `<span class="cm"># Step 2: read exactly that section</span>\n` +
+      `Read(<span class="ac">"reference/contract/builder/domain.md"</span>,\n` +
+      `  offset=<span class="ac">42</span>, limit=<span class="ac">15</span>)\n` +
+      `<span class="cm"># → 15 lines. Dynamic. Always accurate.</span>`;
+  }
+
+  // Inject <!-- N --> annotation example — written via JS so the HTML parser never strips it
+  const ann = document.getElementById('annotation-example');
+  if (ann) {
+    const open = '\x3C!--', close = '--\x3E';
+    ann.innerHTML =
+      `<span class="ac">## Entity ${open} 15 ${close}</span>        <span class="cm">← heading + auto-maintained line count</span>\n` +
+      `An entity is a pure domain object...\n` +
+      `<span class="cm">... 13 more lines ...</span>\n\n` +
+      `<span class="ac">## UseCase ${open} 28 ${close}</span>       <span class="cm">← next section starts here</span>\n` +
+      `A use case encapsulates one business operation...`;
+  }
 </script>
 </body>
 </html>
