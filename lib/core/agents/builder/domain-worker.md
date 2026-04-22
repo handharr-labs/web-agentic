@@ -38,7 +38,7 @@ If you find yourself about to write a file outside the domain layer, STOP — te
 ## Domain Layer Rules — Never Violate
 
 Concepts, invariants, and creation order: `reference/builder/domain.md`
-Platform syntax: `reference/contract/domain.md` — Grep for the relevant `## Section` keyword.
+Platform syntax: `reference/contract/builder/domain.md` — Grep for the relevant `## Section` keyword.
 
 ## Search Protocol — Never Violate
 
@@ -105,7 +105,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | New domain service | `domain-create-service` |
 | Update existing use case | `domain-update-usecase` |
 
-Platform syntax: `reference/contract/domain.md` — `Grep` for the relevant `## Section` keyword; only `Read` the full file if the section can't be located.
+Platform syntax: `reference/contract/builder/domain.md` — `Grep` for the relevant `## Section` keyword; only `Read` the full file if the section can't be located.
 
 ## Validation Protocol
 

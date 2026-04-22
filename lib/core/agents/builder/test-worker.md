@@ -114,7 +114,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | StateHolder | loading → success → error state transitions |
 | UI components | renders correctly per state |
 
-Reference: `reference/contract/testing.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/builder/testing.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Output
 

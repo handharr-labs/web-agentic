@@ -1,7 +1,7 @@
 # Presentation Layer
 
 Canonical, platform-agnostic definitions for the Presentation layer.
-Platform syntax and patterns: `reference/contract/presentation.md` in each platform directory.
+Platform syntax and patterns: `reference/contract/builder/presentation.md` in each platform directory.
 
 ---
 

@@ -39,7 +39,7 @@ If you find yourself about to write a file outside the data layer, STOP — tell
 ## Data Layer Rules — Never Violate
 
 Concepts, invariants, and creation order: `reference/builder/data.md`
-Platform syntax: `reference/contract/data.md` — Grep for the relevant `## Section` keyword.
+Platform syntax: `reference/contract/builder/data.md` — Grep for the relevant `## Section` keyword.
 
 ## Search Protocol — Never Violate
 
@@ -111,7 +111,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 
 For DB-backed datasource variants, check `lib/platforms/<platform>/reference/index.md` first.
 
-Reference: `reference/contract/data.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/builder/data.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Validation Protocol
 

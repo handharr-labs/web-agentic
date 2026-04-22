@@ -1,7 +1,7 @@
 # Dependency Injection
 
 Canonical, platform-agnostic principles for Dependency Injection across CLEAN Architecture layers.
-Platform syntax and patterns: `reference/contract/di.md` in each platform directory.
+Platform syntax and patterns: `reference/contract/builder/di.md` in each platform directory.
 
 ---
 

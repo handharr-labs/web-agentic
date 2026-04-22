@@ -1,7 +1,7 @@
 # UI Layer
 
 Canonical, platform-agnostic definitions for the UI layer.
-Platform syntax and patterns: `reference/contract/presentation.md` in each platform directory (UI artifacts live in the presentation contract file on most platforms).
+Platform syntax and patterns: `reference/contract/builder/presentation.md` in each platform directory (UI artifacts live in the presentation contract file on most platforms).
 
 ---
 

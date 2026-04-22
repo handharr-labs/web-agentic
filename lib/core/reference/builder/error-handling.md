@@ -1,7 +1,7 @@
 # Error Handling
 
 Canonical, platform-agnostic principles for error handling across CLEAN Architecture layers.
-Platform syntax and patterns: `reference/contract/error-handling.md` in each platform directory.
+Platform syntax and patterns: `reference/contract/builder/error-handling.md` in each platform directory.
 
 ---
 

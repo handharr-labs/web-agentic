@@ -36,7 +36,7 @@ If you find yourself writing state management or business logic, STOP — that b
 ## UI Layer Rules — Never Violate
 
 Concepts, invariants, and creation order: `reference/builder/ui.md`
-Platform syntax: `reference/contract/presentation.md` — Grep for the relevant `## Section` keyword.
+Platform syntax: `reference/contract/builder/presentation.md` — Grep for the relevant `## Section` keyword.
 
 ## Search Protocol — Never Violate
 
@@ -60,7 +60,7 @@ Read a full file only when: (a) you need its complete structure to write a new m
 Before creating any new component or screen, check whether an existing one already covers the need.
 
 **Step 1 — Find the platform's shared component paths:**
-Grep `reference/contract/presentation.md` for the section heading `Shared Component Paths`. This section lists the exact directories and file patterns to search for this platform.
+Grep `reference/contract/builder/presentation.md` for the section heading `Shared Component Paths`. This section lists the exact directories and file patterns to search for this platform.
 
 **Step 2 — Search those paths:**
 For each path listed, run a Grep for keywords matching the component need (e.g. the component type, a key prop name, or a UI concept like "card", "list", "avatar"). Use the file pattern from the section (e.g. `*View.swift`, `*.tsx`, `*.dart`).
@@ -126,7 +126,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | Navigator / Coordinator | `pres-create-navigator` *(iOS only)* |
 | Update existing screen | `pres-update-screen` |
 
-Reference: `reference/contract/presentation.md`, `reference/contract/navigation.md` — `Grep` for the relevant section; only `Read` the full file if the section can't be located. If uncertain which file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/builder/presentation.md`, `reference/contract/builder/navigation.md` — `Grep` for the relevant section; only `Read` the full file if the section can't be located. If uncertain which file covers a topic, check `reference/index.md` first.
 
 ## Output
 

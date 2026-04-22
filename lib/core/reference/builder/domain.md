@@ -1,7 +1,7 @@
 # Domain Layer
 
 Canonical, platform-agnostic definitions for the Domain layer.
-Platform syntax and patterns: `reference/contract/domain.md` in each platform directory.
+Platform syntax and patterns: `reference/contract/builder/domain.md` in each platform directory.
 
 ---
 

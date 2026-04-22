@@ -1,7 +1,7 @@
 # Testing
 
 Canonical, platform-agnostic principles for testing CLEAN Architecture layers.
-Platform syntax and patterns: `reference/contract/testing.md` in each platform directory.
+Platform syntax and patterns: `reference/contract/builder/testing.md` in each platform directory.
 
 ---
 

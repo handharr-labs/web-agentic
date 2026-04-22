@@ -1,7 +1,7 @@
 # Data Layer
 
 Canonical, platform-agnostic definitions for the Data layer.
-Platform syntax and patterns: `reference/contract/data.md` in each platform directory.
+Platform syntax and patterns: `reference/contract/builder/data.md` in each platform directory.
 
 ---
 

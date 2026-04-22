@@ -40,7 +40,7 @@ If you find yourself about to write a screen or navigation file, STOP — that b
 ## Presentation Layer Rules — Never Violate
 
 Concepts, invariants, and creation order: `reference/builder/presentation.md`
-Platform syntax: `reference/contract/presentation.md` — Grep for the relevant `## Section` keyword.
+Platform syntax: `reference/contract/builder/presentation.md` — Grep for the relevant `## Section` keyword.
 
 ## Search Protocol — Never Violate
 
@@ -68,7 +68,7 @@ Before writing:
 1. Identify what is needed: new StateHolder or update to existing?
 2. Check preconditions
 3. Style-match against existing StateHolders via `Glob` + `Grep`
-4. Load `reference/contract/presentation.md` — `Grep` for State/Event/Action pattern
+4. Load `reference/contract/builder/presentation.md` — `Grep` for State/Event/Action pattern
 5. Execute skill procedure
 6. Write the StateHolder contract to `.claude/agentic-state/runs/<feature-name>/stateholder-contract.md` — create the directory if needed. Include:
    - StateHolder class/hook name and file path
@@ -105,7 +105,7 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | New StateHolder | `pres-create-stateholder` |
 | Update existing StateHolder | `pres-update-stateholder` |
 
-Reference: `reference/contract/presentation.md`, `reference/contract/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+Reference: `reference/contract/builder/presentation.md`, `reference/contract/builder/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 
 ## Validation Protocol
 
