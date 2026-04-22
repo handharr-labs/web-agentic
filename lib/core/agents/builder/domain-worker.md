@@ -47,7 +47,7 @@ Before any Read call, ask: "Do I need the full file, or just a specific symbol/s
 | What you need | Tool |
 |---|---|
 | A specific class, function, or type | `Grep` for the name |
-| A section of a reference doc | `Grep` for the section heading |
+| A section of a reference doc | `Grep` for `^## SectionName` → heading returns `<!-- N -->` — use N as limit → `Read(file, offset=line, limit=N)` |
 | The full file structure (style-matching a new file) | `Read` — justified |
 | Whether a file exists | `Glob` |
 

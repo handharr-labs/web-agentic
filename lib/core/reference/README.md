@@ -62,7 +62,7 @@ lib/platforms/<platform>/reference/
 
 ## How Agents Use This Directory <!-- 6 -->
 
-- Always Grep by section heading before reading a full file
+- Always Grep by section heading (`^## SectionName`) before reading a full file — the heading line contains `<!-- N -->` (auto-maintained line count); use N as the `limit` in the subsequent `Read(file, offset=matched_line, limit=N)` call
 - If uncertain which file covers a topic, Grep `reference/index.md` (platform level) or this README first
 - Never Read a reference file in full speculatively — target the section you need
 - After adding a new reference file, add an entry to the relevant `index.md` and this README's directory map
