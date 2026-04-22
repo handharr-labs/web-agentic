@@ -41,7 +41,7 @@ Keep in skills if:
 ```
 lib/core/reference/
   README.md              ← this file — taxonomy and placement rules
-  clean-arch/
+  builder/
     layer-contracts.md   ← artifact types, creation order, invariants per layer
     di-containers.md     ← DI registration patterns (language-agnostic)
     domain-purity.md     ← what must never enter the domain layer

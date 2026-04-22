@@ -16,7 +16,7 @@ Each layer may only import from the layer to its left. No exceptions.
 
 ## Domain Layer
 
-Full artifact definitions, invariants, and creation order: `reference/clean-arch/domain.md`
+Full artifact definitions, invariants, and creation order: `reference/builder/domain.md`
 
 **Summary:**
 
@@ -33,7 +33,7 @@ Creation order: `Entity → Repository Interface → Use Case(s) → Domain Serv
 
 ## Data Layer
 
-Full artifact definitions, invariants, and creation order: `reference/clean-arch/data.md`
+Full artifact definitions, invariants, and creation order: `reference/builder/data.md`
 
 **Summary:**
 
@@ -51,7 +51,7 @@ Creation order (remote): `DTO → Mapper → DataSource interface → DataSource
 
 ## Presentation Layer (StateHolder)
 
-Full artifact definitions, invariants, and creation order: `reference/clean-arch/presentation.md`
+Full artifact definitions, invariants, and creation order: `reference/builder/presentation.md`
 
 **Summary:**
 
@@ -68,7 +68,7 @@ Creation order: `Use Cases → StateHolder → StateHolder contract → Screen (
 
 ## UI Layer
 
-Full artifact definitions, invariants, and creation order: `reference/clean-arch/ui.md`
+Full artifact definitions, invariants, and creation order: `reference/builder/ui.md`
 
 **Summary:**
 
