@@ -389,9 +389,7 @@
 
       /* collapse all side-by-side grids to single column */
       .compare,
-      .cards,
-      .t-head,
-      .t-row {
+      .cards {
         grid-template-columns: 1fr !important;
       }
 
@@ -400,8 +398,22 @@
         grid-template-columns: 1fr !important;
       }
 
-      .t-head-cell:first-child,
-      .t-cell.prob { border-right: none; border-bottom: 1px solid var(--border); }
+      /* t-table: hide column headers, label each cell inline */
+      .t-head { display: none; }
+      .t-row   { display: block; border-bottom: 1px solid var(--border); }
+      .t-row:last-child { border-bottom: none; }
+      .t-cell  { display: block; border-right: none !important; border-bottom: none; padding: 12px 16px; }
+      .t-cell::before {
+        display: block;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+      .t-cell.prob::before { content: 'Problem'; color: var(--muted); }
+      .t-cell.sol::before  { content: 'Solution'; color: var(--accent); }
+      .t-cell.sol { border-top: 1px solid var(--border); }
 
       #counter { bottom: 16px; right: 16px; }
     }
