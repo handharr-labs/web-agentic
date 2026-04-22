@@ -139,7 +139,7 @@ echo ""
 echo "1/3 Copying core..."
 copy_agents "$SUBMODULE/lib/core/agents"
 copy_skills "$SUBMODULE/lib/core/skills"
-copy_reference "$SUBMODULE/lib/core/reference/clean-arch"
+copy_reference "$SUBMODULE/lib/core/reference/builder"
 
 # ── 2. Platform agents/skills/reference (overwrites core where names collide) ─
 

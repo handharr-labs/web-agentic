@@ -1,6 +1,6 @@
 # Flutter — Data Layer
 
-> Concepts and invariants: `reference/clean-arch/data.md`. This file covers Dart syntax and Flutter-specific patterns.
+> Concepts and invariants: `reference/builder/data.md`. This file covers Dart syntax and Flutter-specific patterns.
 
 Implements repository interfaces from the Domain layer. Knows about serialization, HTTP, local storage, and mappers. Never leaks into Domain or Presentation.
 

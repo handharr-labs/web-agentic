@@ -1,6 +1,6 @@
 # iOS — Testing
 
-> Concepts and invariants: `reference/clean-arch/testing.md`. This file covers Swift syntax and iOS-specific patterns.
+> Concepts and invariants: `reference/builder/testing.md`. This file covers Swift syntax and iOS-specific patterns.
 
 ## Test Pyramid
 

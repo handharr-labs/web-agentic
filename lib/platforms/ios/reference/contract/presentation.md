@@ -1,6 +1,6 @@
 # iOS — Presentation Layer
 
-> Concepts and invariants: `reference/clean-arch/presentation.md`. This file covers Swift syntax and iOS-specific patterns.
+> Concepts and invariants: `reference/builder/presentation.md`. This file covers Swift syntax and iOS-specific patterns.
 
 ## ViewModel State Management
 

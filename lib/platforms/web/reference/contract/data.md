@@ -1,6 +1,6 @@
 # Web — Data Layer
 
-> Concepts and invariants: `reference/clean-arch/data.md`. This file covers TypeScript syntax and web-specific patterns.
+> Concepts and invariants: `reference/builder/data.md`. This file covers TypeScript syntax and web-specific patterns.
 
 Implements Domain interfaces. Handles all I/O: network, storage, caching.
 

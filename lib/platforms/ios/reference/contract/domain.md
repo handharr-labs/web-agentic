@@ -1,6 +1,6 @@
 # iOS — Domain Layer
 
-> Concepts and invariants: `reference/clean-arch/domain.md`. This file covers Swift syntax and iOS-specific patterns.
+> Concepts and invariants: `reference/builder/domain.md`. This file covers Swift syntax and iOS-specific patterns.
 
 ## Entities
 
@@ -438,7 +438,7 @@ getCurrentUserUseCase.execute(params: ()) { [weak self] result in
 
 ## Services
 
-Pure business decisions — no I/O, no side effects, no async. Can be called by both UseCases and ViewModels. See extraction rules in `reference/clean-arch/domain.md`.
+Pure business decisions — no I/O, no side effects, no async. Can be called by both UseCases and ViewModels. See extraction rules in `reference/builder/domain.md`.
 
 ### Service Patterns
 

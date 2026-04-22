@@ -11,7 +11,7 @@
     software-dev-agentic/    ← submodule
     agents/                  ← symlinks only (core + platform)
     skills/                  ← symlinks only (platform)
-    reference/               ← symlinks only (clean-arch + platform)
+    reference/               ← symlinks only (builder + platform)
 ```
 
 The submodule is the single source of truth — downstream projects get agents, skills, and reference docs via symlinks. For the agent design principles that govern what goes into these files, see [core-design-principles.md](core-design-principles.md).
@@ -62,15 +62,15 @@ Three-pass linking priority: `agents.local` > platform > core (first link wins)
 
 **Decision:** Reference docs live in four locations within the submodule:
 - `lib/core/reference/README.md` — taxonomy doc: placement rules for reference vs agent body vs skills (agentic use)
-- `lib/core/reference/clean-arch/` — two kinds of files, both preserved as `clean-arch/` subdir downstream (`.claude/reference/clean-arch/<name>.md`):
+- `lib/core/reference/builder/` — two kinds of files, both preserved as `builder/` subdir downstream (`.claude/reference/builder/<name>.md`):
   - **Universal theory** (`layer-contracts.md`, `domain-purity.md`, `di-containers.md`) — cross-cutting CLEAN Architecture principles shared across all layers.
   - **Layer canonical templates** (`domain.md`, and `data.md`, `presentation.md` in progress) — platform-agnostic concept definitions per CLEAN layer. Defines what each artifact IS, its invariants, and when to use it. Workers reference these for concepts; platform `contract/` files implement the same headings in platform syntax.
-- `lib/platforms/<platform>/reference/contract/` — cross-platform standard patterns with code examples. Same eight filenames on every platform. Preserved as `contract/` subdir downstream (`.claude/reference/contract/<name>.md`). Syntax and platform-specific patterns only — conceptual definitions belong in the corresponding `lib/core/reference/clean-arch/<layer>.md` template.
+- `lib/platforms/<platform>/reference/contract/` — cross-platform standard patterns with code examples. Same eight filenames on every platform. Preserved as `contract/` subdir downstream (`.claude/reference/contract/<name>.md`). Syntax and platform-specific patterns only — conceptual definitions belong in the corresponding `lib/core/reference/builder/<layer>.md` template.
 - `lib/platforms/<platform>/reference/` (flat) — platform-specific patterns unique to that platform (e.g. `ssr.md`, `server-actions.md` for web). Lands flat as `.claude/reference/<name>.md`.
 
-**Rationale:** The split between `clean-arch/` (what X is) and `contract/` (how X looks in this platform) mirrors the DI pattern applied at the knowledge level: workers know the concept from the canonical template; platform contract files provide the implementation. Universal theory files handle cross-cutting principles that no single layer owns.
+**Rationale:** The split between `builder/` (what X is) and `contract/` (how X looks in this platform) mirrors the DI pattern applied at the knowledge level: workers know the concept from the canonical template; platform contract files provide the implementation. Universal theory files handle cross-cutting principles that no single layer owns.
 
-**Reference subdir rule:** All subdirectories under a reference source dir are preserved downstream. `contract/` and `clean-arch/` both land as-is. Unlike agents and skills (always flat), reference docs maintain their subdir structure because agents reference them by path (e.g. `reference/clean-arch/domain.md`, `reference/contract/domain.md`). Any new subdir added under `lib/core/reference/` or `lib/platforms/<platform>/reference/` is automatically preserved.
+**Reference subdir rule:** All subdirectories under a reference source dir are preserved downstream. `contract/` and `builder/` both land as-is. Unlike agents and skills (always flat), reference docs maintain their subdir structure because agents reference them by path (e.g. `reference/builder/domain.md`, `reference/contract/domain.md`). Any new subdir added under `lib/core/reference/` or `lib/platforms/<platform>/reference/` is automatically preserved.
 
 Every contract file follows a strict heading structure: `#` platform+topic title, `##` canonical sections (agent-greppable keywords), `###` subsections. This makes `grep "^## Keyword"` deterministic across all platforms.
 
@@ -98,7 +98,7 @@ Every contract file follows a strict heading structure: `#` platform+topic title
 |---|---|---|
 | `lib/platforms/<platform>/skills/contract/<name>/` | `.claude/skills/<name>/` | No — lands flat |
 | `lib/platforms/<platform>/skills/<name>/` | `.claude/skills/<name>/` | No — already flat |
-| `lib/core/reference/clean-arch/<name>.md` | `.claude/reference/clean-arch/<name>.md` | **Yes** — `clean-arch/` preserved |
+| `lib/core/reference/builder/<name>.md` | `.claude/reference/builder/<name>.md` | **Yes** — `builder/` preserved |
 | `lib/platforms/<platform>/reference/contract/<name>.md` | `.claude/reference/contract/<name>.md` | **Yes** — `contract/` preserved |
 | `lib/platforms/<platform>/reference/<name>.md` | `.claude/reference/<name>.md` | No — already flat |
 
@@ -192,7 +192,7 @@ software-dev-agentic enforces its own conventions through an automated internal 
 | Platform-contract skills | `software-dev-agentic/lib/platforms/<platform>/skills/contract/` | Same name on all platforms, platform-specific implementation; lands flat in `.claude/skills/<name>/` downstream |
 | Platform-only skills | `software-dev-agentic/lib/platforms/<platform>/skills/` (flat) | Called by platform agents only |
 | Internal repo skills | `software-dev-agentic/skills/` | Convention checklist, report formatter — NOT symlinked to downstream projects |
-| Universal reference docs | `software-dev-agentic/lib/core/reference/clean-arch/` | Language-agnostic CLEAN theory |
+| Universal reference docs | `software-dev-agentic/lib/core/reference/builder/` | Language-agnostic CLEAN theory |
 | Cross-platform contract reference docs | `software-dev-agentic/lib/platforms/<platform>/reference/contract/` | Same six files on all platforms; preserved as `contract/` subdir downstream |
 | Platform-specific reference docs | `software-dev-agentic/lib/platforms/<platform>/reference/` (flat) | Platform-unique patterns; lands flat in `.claude/reference/<name>.md` downstream |
 | Project-specific agents | `.claude/agents.local/` | Only relevant to one project |
@@ -267,7 +267,7 @@ Both scripts are idempotent — re-running never overwrites existing files (`lin
     software-dev-agentic/    ← submodule
     agents/                  ← symlinks: core + ios platform agents
     skills/                  ← symlinks: ios platform skills
-    reference/               ← symlinks: clean-arch + ios reference
+    reference/               ← symlinks: builder + ios reference
     agents.local/
       extensions/
     skills.local/

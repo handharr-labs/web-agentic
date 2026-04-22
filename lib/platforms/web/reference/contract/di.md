@@ -1,6 +1,6 @@
 # Web — Dependency Injection
 
-> Concepts and invariants: `reference/clean-arch/di.md`. This file covers TypeScript syntax and web-specific patterns.
+> Concepts and invariants: `reference/builder/di.md`. This file covers TypeScript syntax and web-specific patterns.
 
 Next.js App Router has a hard split between **Server Components** (run only on the server) and **Client Components** (run in the browser). This changes how DI should work:
 

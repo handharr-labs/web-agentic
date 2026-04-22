@@ -1,6 +1,6 @@
 # Flutter — Domain Layer
 
-> Concepts and invariants: `reference/clean-arch/domain.md`. This file covers Dart syntax and Flutter-specific patterns.
+> Concepts and invariants: `reference/builder/domain.md`. This file covers Dart syntax and Flutter-specific patterns.
 
 ## Entities
 
@@ -211,7 +211,7 @@ class GetCurrentUserUseCase
 
 ## Domain Services
 
-Pure synchronous functions — no I/O, no async, no side effects. See extraction rules in `reference/clean-arch/domain.md`.
+Pure synchronous functions — no I/O, no async, no side effects. See extraction rules in `reference/builder/domain.md`.
 
 ```dart
 // domain/services/leave_balance_calculator.dart

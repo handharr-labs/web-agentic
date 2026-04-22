@@ -20,7 +20,7 @@ Every file under `lib/platforms/<platform>/reference/contract/` must follow this
 
 Platforms may add platform-specific `##` sections and adapt content to their syntax — but every required keyword must be in a `##` heading.
 
-**Core templates** — each contract file has a platform-agnostic counterpart in `lib/core/reference/clean-arch/<filename>` that defines concepts and invariants. Platform files implement those concepts in their own syntax. Currently available: `domain.md`, `data.md`, `presentation.md`, `ui.md`, `di.md`, `testing.md`, `error-handling.md`.
+**Core templates** — each contract file has a platform-agnostic counterpart in `lib/core/reference/builder/<filename>` that defines concepts and invariants. Platform files implement those concepts in their own syntax. Currently available: `domain.md`, `data.md`, `presentation.md`, `ui.md`, `di.md`, `testing.md`, `error-handling.md`.
 
 ---
 

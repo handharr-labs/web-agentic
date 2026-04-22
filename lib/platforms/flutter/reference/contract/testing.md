@@ -1,6 +1,6 @@
 # Flutter — Testing
 
-> Concepts and invariants: `reference/clean-arch/testing.md`. This file covers Dart syntax and Flutter-specific patterns.
+> Concepts and invariants: `reference/builder/testing.md`. This file covers Dart syntax and Flutter-specific patterns.
 
 `flutter_test` + `bloc_test` + `mockito`. Test every layer in isolation: BLoC, use case, repository, mapper.
 

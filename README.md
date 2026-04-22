@@ -150,7 +150,7 @@ Platform skill implementations handle the language and framework specifics:
 | iOS | Swift | UIKit | ViewModel + Coordinator |
 | Flutter | Dart | Flutter | BLoC *(stub)* |
 
-Architecture reference docs live in `lib/core/reference/clean-arch/` (universal) and `lib/platforms/<platform>/reference/` (platform-specific).
+Architecture reference docs live in `lib/core/reference/builder/` (universal) and `lib/platforms/<platform>/reference/` (platform-specific).
 
 ---
 

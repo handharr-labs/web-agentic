@@ -1,6 +1,6 @@
 # Flutter — Dependency Injection
 
-> Concepts and invariants: `reference/clean-arch/di.md`. This file covers Dart syntax and Flutter-specific patterns.
+> Concepts and invariants: `reference/builder/di.md`. This file covers Dart syntax and Flutter-specific patterns.
 
 `get_it` for the service locator. `injectable` for annotation-driven code generation. One DI module per feature.
 

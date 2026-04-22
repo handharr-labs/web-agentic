@@ -1,6 +1,6 @@
 # Web — Domain Layer
 
-> Concepts and invariants: `reference/clean-arch/domain.md`. This file covers TypeScript syntax and web-specific patterns.
+> Concepts and invariants: `reference/builder/domain.md`. This file covers TypeScript syntax and web-specific patterns.
 
 ## Entities
 
@@ -152,7 +152,7 @@ export class UpdateEmployeeUseCaseImpl implements UpdateEmployeeUseCase {
 
 ## Services
 
-Pure business decisions — no I/O, no side effects, no async. See extraction rules in `reference/clean-arch/domain.md`.
+Pure business decisions — no I/O, no side effects, no async. See extraction rules in `reference/builder/domain.md`.
 
 ```typescript
 // domain/services/LeaveBalanceCalculator.ts
