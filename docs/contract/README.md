@@ -12,7 +12,7 @@ Contracts that define the base spec for platform resources. Each file specifies 
 
 ## Platform Reference Contract Structure
 
-Every file under `lib/platforms/<platform>/reference/contract/` must follow this heading structure:
+Every file under `lib/platforms/<platform>/reference/contract/<persona>/` must follow this heading structure:
 
 - `#` — platform + topic title (e.g. `# Flutter — Domain Layer`)
 - `##` — canonical section headings (greppable by agents)
@@ -29,7 +29,7 @@ Platforms may add platform-specific `##` sections and adapt content to their syn
 ```bash
 # Check one file — exits non-zero if any keyword is missing
 for keyword in "Entities" "Repository" "Use Cases" "Services" "Domain Errors"; do
-  grep -q "^## .*$keyword" lib/platforms/web/reference/contract/domain.md \
+  grep -q "^## .*$keyword" lib/platforms/web/reference/contract/builder/domain.md \
     || echo "MISSING: $keyword"
 done
 ```
@@ -46,6 +46,6 @@ These 8 reference contract files are a **prerequisite for the builder and audito
 - **Auditor** (`arch-check-conventions`) enforces keyword presence — a platform without these files will fail every convention check
 
 When adding a 4th platform:
-1. Create `lib/platforms/<platform>/reference/contract/` with all 8 files
+1. Create `lib/platforms/<platform>/reference/contract/builder/` with all 8 files
 2. Each file must contain the required keywords defined in `builder-auditor-schema.md`
 3. Run `arch-check-conventions` on the new platform's contract directory to verify compliance before merging

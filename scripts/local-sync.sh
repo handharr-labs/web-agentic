@@ -111,26 +111,22 @@ copy_skills() {
 
 copy_reference() {
   local src_dir="$1"
+  local dest_base="${2:-$CLAUDE_DIR/reference}"
   [ -d "$src_dir" ] || return 0
   for ref in "$src_dir"/*.md; do
     [ -f "$ref" ] || continue
     name="$(basename "$ref")"
-    dest="$CLAUDE_DIR/reference/$name"
-    [ -L "$dest" ] && rm -f "$dest"  # replace symlinks (broken or stale) with real file
+    dest="$dest_base/$name"
+    [ -L "$dest" ] && rm -f "$dest"
     cp -f "$ref" "$dest"
-    echo "  copy  $name"
+    echo "  copy  ${dest#$CLAUDE_DIR/reference/}"
   done
-  if [ -d "$src_dir/contract" ]; then
-    mkdir -p "$CLAUDE_DIR/reference/contract"
-    for ref in "$src_dir/contract"/*.md; do
-      [ -f "$ref" ] || continue
-      name="$(basename "$ref")"
-      dest="$CLAUDE_DIR/reference/contract/$name"
-      [ -L "$dest" ] && rm -f "$dest"
-      cp -f "$ref" "$dest"
-      echo "  copy  contract/$name"
-    done
-  fi
+  for subdir in "$src_dir"/*/; do
+    [ -d "$subdir" ] || continue
+    subname="$(basename "$subdir")"
+    mkdir -p "$dest_base/$subname"
+    copy_reference "$subdir" "$dest_base/$subname"
+  done
 }
 
 # ── 1. Core agents/skills/reference ──────────────────────────────────────────
@@ -139,7 +135,7 @@ echo ""
 echo "1/3 Copying core..."
 copy_agents "$SUBMODULE/lib/core/agents"
 copy_skills "$SUBMODULE/lib/core/skills"
-copy_reference "$SUBMODULE/lib/core/reference/builder"
+copy_reference "$SUBMODULE/lib/core/reference"
 
 # ── 2. Platform agents/skills/reference (overwrites core where names collide) ─
 

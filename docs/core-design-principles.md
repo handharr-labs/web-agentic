@@ -348,7 +348,7 @@ The agentic system enforces its own conventions through automated review — the
 | New orchestration flow, same on all platforms | Core orchestrator |
 | New code generation pattern for one platform | Platform-contract skill (same name, platform implements) → `lib/platforms/<platform>/skills/contract/` |
 | Workflow too platform-specific for any core agent | Platform agent + platform skill → `lib/platforms/<platform>/skills/` (flat) |
-| Architecture reference knowledge (cross-platform standard) | `lib/platforms/<platform>/reference/contract/` — same filename on every platform; accessible as `.claude/reference/contract/<name>.md` downstream |
+| Architecture reference knowledge (cross-platform standard) | `lib/platforms/<platform>/reference/contract/<persona>/` — grouped by persona; accessible as `.claude/reference/contract/<persona>/<name>.md` downstream |
 | Architecture reference knowledge (platform-specific) | `lib/platforms/<platform>/reference/` (flat) |
 
 > For execution examples and the current agent roster, see [persona-builder.md](persona/builder.md).

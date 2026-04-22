@@ -117,23 +117,18 @@ link_skills() {
 link_reference() {
   local src_dir="$1"
   local rel_prefix="$2"
+  local dest_base="${3:-$CLAUDE_DIR/reference}"
   [ -d "$src_dir" ] || return 0
-  # Flat .md files
   for ref in "$src_dir"/*.md; do
     [ -f "$ref" ] || continue
     name="$(basename "$ref")"
-    link_if_absent "$rel_prefix/$name" "$CLAUDE_DIR/reference/$name"
+    link_if_absent "$rel_prefix/$name" "$dest_base/$name"
   done
-  # Subdirectories — each preserved as a subdir in .claude/reference/
   for subdir in "$src_dir"/*/; do
     [ -d "$subdir" ] || continue
     subname="$(basename "$subdir")"
-    mkdir -p "$CLAUDE_DIR/reference/$subname"
-    for ref in "$subdir"*.md; do
-      [ -f "$ref" ] || continue
-      name="$(basename "$ref")"
-      link_if_absent "$rel_prefix/$subname/$name" "$CLAUDE_DIR/reference/$subname/$name"
-    done
+    mkdir -p "$dest_base/$subname"
+    link_reference "$subdir" "$rel_prefix/$subname" "$dest_base/$subname"
   done
 }
 
