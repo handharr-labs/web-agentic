@@ -7,6 +7,19 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.39.0] — 2026-04-22
+
+### Added
+- `lib/core/skills/debug-orchestrator.md`: Type T trigger skill — collects missing intake then spawns `debug-orchestrator` agent
+- `lib/core/skills/feature-orchestrator.md`: Type T trigger skill — passes optional description and hands off to `feature-orchestrator` agent for Phase 0 intake
+
+### Fixed
+- `arch-review-orchestrator`: added `Agent` to `tools` — without it the orchestrator could not spawn any sub-agents and collapsed all work inline
+- `arch-review-orchestrator`, `agent-scaffold-worker`, `agent-migrate-worker`, `agent-audit-worker`, `agent-consult-worker`, `arch-review-worker`: upgraded Search Rules to `## Search Rules — Never Violate` with full 4-row table including `^## SectionName → <!-- N --> → Read(offset, limit=N)` bounded-read row and explicit Read-once rule
+- `.claude/reference/agent-conventions.md`: added `<!-- N -->` section annotations via `update-ref-counts.sh` — enables bounded Read for all `.claude/agents/` tooling
+
+---
+
 ## [3.38.0] — 2026-04-22
 
 ### Added
