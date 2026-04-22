@@ -422,7 +422,47 @@
         margin-top: 6px;
       }
 
-      #counter { bottom: 16px; right: 16px; }
+      #counter { display: none; }
+
+      #mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 300;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 10px 20px;
+        gap: 12px;
+        align-items: center;
+      }
+      #mobile-nav button {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        font-size: 15px;
+        font-family: var(--sans);
+        cursor: pointer;
+      }
+      #mobile-nav button:active { background: var(--surface-2); }
+      #mobile-nav button.primary {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+      #mobile-nav button.primary:active { opacity: 0.85; }
+      #mobile-counter {
+        font-size: 12px;
+        font-family: var(--mono);
+        color: var(--muted);
+        text-align: center;
+        min-width: 48px;
+      }
+      /* extra bottom padding so last slide content clears the nav bar */
+      .slide { padding-bottom: 100px; }
     }
   </style>
 </head>
@@ -1116,28 +1156,48 @@ talenta-ios/.claude/
 
 </div>
 
+<!-- mobile prev/next bar — hidden on desktop via CSS -->
+<div id="mobile-nav" style="display:none">
+  <button id="btn-prev" onclick="goTo(current - 1)">← Prev</button>
+  <span id="mobile-counter">1 / 19</span>
+  <button id="btn-next" class="primary" onclick="goTo(current + 1)">Next →</button>
+</div>
+
 <script>
-  const slides  = document.querySelectorAll('.slide');
-  const counter = document.getElementById('counter');
-  const progress = document.getElementById('progress');
-  const total   = slides.length;
-  let current   = 0;
+  const slides        = document.querySelectorAll('.slide');
+  const counter       = document.getElementById('counter');
+  const mobileCounter = document.getElementById('mobile-counter');
+  const mobileNav     = document.getElementById('mobile-nav');
+  const progress      = document.getElementById('progress');
+  const total         = slides.length;
+  let current         = 0;
+  const isMobile      = () => window.innerWidth <= 767;
 
   function goTo(n) {
     slides[current].classList.remove('active');
     current = Math.max(0, Math.min(n, total - 1));
     slides[current].classList.add('active');
-    counter.textContent  = `${current + 1} / ${total}`;
-    progress.style.width = `${((current + 1) / total) * 100}%`;
+    const label = `${current + 1} / ${total}`;
+    counter.textContent       = label;
+    mobileCounter.textContent = label;
+    progress.style.width      = `${((current + 1) / total) * 100}%`;
+    if (isMobile()) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Keyboard
+  // Show mobile nav bar on small screens
+  function syncNav() {
+    mobileNav.style.display = isMobile() ? 'flex' : 'none';
+  }
+  syncNav();
+  window.addEventListener('resize', syncNav);
+
+  // Keyboard (desktop)
   document.addEventListener('keydown', e => {
     if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
     if (['ArrowLeft',  'ArrowUp'       ].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
   });
 
-  // Touch swipe
+  // Swipe — desktop only (buttons handle mobile)
   let touchStartX = 0;
   let touchStartY = 0;
 
@@ -1147,9 +1207,9 @@ talenta-ios/.claude/
   }, { passive: true });
 
   document.addEventListener('touchend', e => {
+    if (isMobile()) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
-    // Only trigger if horizontal swipe dominates and exceeds 50px threshold
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
       dx < 0 ? goTo(current + 1) : goTo(current - 1);
     }
