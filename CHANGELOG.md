@@ -7,6 +7,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.40.9] — 2026-04-23
+
+### Fixed
+- `setup-symlinks.sh`, `sync.sh`, `setup-packages.sh`: prune dangling `reference/` symlinks recursively — all three scripts previously skipped `reference/` in their prune step, causing broken nested symlinks (e.g. `reference/builder/`, `reference/contract/builder/`) to survive re-runs because `link_if_absent` skips existing symlinks even when dangling
+
 ## [3.40.8] — 2026-04-23
 
 ### Fixed
