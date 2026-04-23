@@ -156,6 +156,16 @@ If the user selects **Discuss more**: stay in conversation and address the engin
 
 If the user selects **Discard**: delete `plan.md` and the run directory if empty.
 
+## Write Path Rule
+
+Never embed `$(...)` in a `file_path` argument — Write and Edit do not evaluate shell expressions and will create a literal `__CMDSUB_OUTPUT__` directory. Always resolve the project root with a Bash call first:
+
+```bash
+git rev-parse --show-toplevel
+```
+
+Then concatenate the result with the target relative path before passing it to Write or Edit.
+
 ## Search Protocol — Never Violate
 
 | What you need | Tool |

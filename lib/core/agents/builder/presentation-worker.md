@@ -70,7 +70,7 @@ Before writing:
 3. Style-match against existing StateHolders via `Glob` + `Grep`
 4. Load `reference/contract/builder/presentation.md` — `Grep` for State/Event/Action pattern
 5. Execute skill procedure
-6. Write the StateHolder contract to `.claude/agentic-state/runs/<feature-name>/stateholder-contract.md` — create the directory if needed. Include:
+6. Write the StateHolder contract: first run `git rev-parse --show-toplevel` via Bash to get the absolute project root, then write to `<root>/.claude/agentic-state/runs/<feature-name>/stateholder-contract.md`. Create the directory if needed. Include:
    - StateHolder class/hook name and file path
    - State fields (what the UI renders)
    - Event/Action cases (what the UI sends back)
@@ -106,6 +106,16 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | Update existing StateHolder | `pres-update-stateholder` |
 
 Reference: `reference/contract/builder/presentation.md`, `reference/contract/builder/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
+
+## Write Path Rule
+
+Never embed `$(...)` in a `file_path` argument — Write and Edit do not evaluate shell expressions and will create a literal `__CMDSUB_OUTPUT__` directory. Always resolve the project root with a Bash call first:
+
+```bash
+git rev-parse --show-toplevel
+```
+
+Then concatenate the result with the target relative path before passing it to Write or Edit.
 
 ## Validation Protocol
 

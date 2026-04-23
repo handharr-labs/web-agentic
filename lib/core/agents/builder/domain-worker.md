@@ -40,6 +40,16 @@ If you find yourself about to write a file outside the domain layer, STOP — te
 Concepts, invariants, and creation order: `reference/builder/domain.md`
 Platform syntax: `reference/contract/builder/domain.md` — Grep for the relevant `## Section` keyword.
 
+## Write Path Rule
+
+Never embed `$(...)` in a `file_path` argument — Write and Edit do not evaluate shell expressions and will create a literal `__CMDSUB_OUTPUT__` directory. Always resolve the project root with a Bash call first:
+
+```bash
+git rev-parse --show-toplevel
+```
+
+Then concatenate the result with the target relative path before passing it to Write or Edit.
+
 ## Search Protocol — Never Violate
 
 Before any Read call, ask: "Do I need the full file, or just a specific symbol/section?"
