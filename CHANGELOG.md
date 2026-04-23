@@ -7,6 +7,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.41.0] — 2026-04-24
+
+### Added
+- `feature-planner`: enrich Explore agent to return artifact paths, naming conventions, and key symbols (emitEvent cases, MARK sections, constructor params); write `context.md` alongside `plan.md` so codebase discovery is done once and cached as a file
+- `feature-orchestrator`: Correction Mode — trivial single-layer fixes surface to the user for inline edit; complex fixes spawn the layer worker directly, both bypassing full orchestration re-entry and delegation flag re-write
+- `feature-orchestrator`: early `state.json` write — initial state written before `domain-worker` spawns so sessions are resumable even if they exit mid-Phase 1
+- `feature-orchestrator`: pass `context-path` to `domain-worker`, `data-worker`, and `pres-orchestrator` spawns
+- `domain-worker`, `data-worker`, `presentation-worker`, `pres-orchestrator`: Context Shortcut — read `context.md` first when provided and skip Glob+Grep discovery; fall back to standard flow for artifacts not in context
+
+### Changed
+- `feature-orchestrator`: Phase 1 state write changed from post-worker to pre-worker (early write)
+
+### Fixed
+- `docs/perf-report`: revise TE-14689 D3 findings — ViewModel direct edit was correct per `presentation-worker` judgment rule; feature flag files are outside Clean Architecture layers; raise D3 6→8, Overall 7.6→7.9
+
 ## [3.40.10] — 2026-04-23
 
 ### Fixed
