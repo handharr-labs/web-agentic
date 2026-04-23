@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.40.6] — 2026-04-23
+
+### Fixed
+- `sync.sh`: prune dangling `.claude/hooks/*.sh` symlinks during the stale symlink cleaning step
+- `sync.sh`: migrate stale `PROJECT_ROOT/hooks/` placeholder in `settings.local.json` to `.claude/hooks/` on every run (matches fix already in `setup-packages.sh` and `setup-symlinks.sh`)
+
 ## [3.40.5] — 2026-04-23
 
 ### Fixed
