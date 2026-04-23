@@ -7,6 +7,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.40.7] — 2026-04-23
+
+### Fixed
+- `setup-symlinks.sh`: prune dangling symlinks in `agents/`, `skills/`, and `hooks/` after the linking step — re-running the script no longer leaves stale symlinks from deleted skills/agents
+
 ## [3.40.6] — 2026-04-23
 
 ### Fixed
