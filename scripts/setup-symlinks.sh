@@ -175,6 +175,16 @@ for _dir in "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"; do
     fi
   done
 done
+# reference/ may be nested — prune recursively
+if [ -d "$CLAUDE_DIR/reference" ]; then
+  while IFS= read -r _link; do
+    if [ ! -e "$_link" ]; then
+      rm "$_link"
+      echo "  remove  ${_link#$CLAUDE_DIR/} (dangling)"
+      _pruned=$((_pruned + 1))
+    fi
+  done < <(find "$CLAUDE_DIR/reference" -type l)
+fi
 [ "$_pruned" -eq 0 ] && echo "  clean"
 unset _pruned _dir _link
 

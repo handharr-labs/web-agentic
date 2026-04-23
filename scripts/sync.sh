@@ -166,6 +166,14 @@ else
       rm "$link"; echo "  remove  $(basename "$link") (dangling hook)"; stale_found=true
     fi
   done
+  # Prune dangling reference symlinks (recursive — reference/ has subdirs)
+  if [ -d "$PROJECT_ROOT/.claude/reference" ]; then
+    while IFS= read -r link; do
+      if [ ! -e "$link" ]; then
+        rm "$link"; echo "  remove  ${link#$PROJECT_ROOT/.claude/} (dangling reference)"; stale_found=true
+      fi
+    done < <(find "$PROJECT_ROOT/.claude/reference" -type l)
+  fi
 
   $stale_found || echo "  clean"
 fi
