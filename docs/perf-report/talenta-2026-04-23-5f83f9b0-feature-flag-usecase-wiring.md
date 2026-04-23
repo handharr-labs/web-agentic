@@ -11,12 +11,12 @@
 |---|---|---|---|
 | D1 · Orchestration Quality | 8/10 | Good | feature-orchestrator delegated correctly; no direct file reads by orchestrator |
 | D2 · Worker Invocation | 7/10 | Good | feature-planner + feature-orchestrator used appropriately; second orchestrator spawn for a 1-line fix added overhead |
-| D3 · Skill Execution | 6/10 | Fair | plan-feature skill used; no domain/data/presentation skills invoked despite modifying presentation-layer ViewModel |
+| D3 · Skill Execution | 8/10 | Good | plan-feature skill used; ViewModel direct edit was correct per presentation-worker judgment rule; feature flag files are outside Clean Architecture layers |
 | D4 · Token Efficiency | 8/10 | Good | 95% cache hit ratio; read:grep ratio of 0.4 (excellent); no duplicate reads |
 | D5 · Routing Accuracy | 9/10 | Excellent | feat/ branch, correct worker types, task classified accurately from the start |
 | D6 · Workflow Compliance | 9/10 | Excellent | feature branch, specific git add, no --no-verify, commits include issue prefix |
 | D7 · One-Shot Rate | 6/10 | Fair | 1 error tool result; second orchestrator spawn was a correction; delegation guard triggered mid-session requiring user input |
-| **Overall** | **7.6/10** | **Good** | |
+| **Overall** | **7.9/10** | **Good** | |
 
 ## Token Breakdown
 
@@ -65,22 +65,18 @@ Read:Grep ratio: 0.4 (target < 3 — excellent; Grep-first discipline well appli
 
 ### Issues found
 
-- **[D3]** No `pres-update-stateholder` skill was invoked despite `CICOLocationViewModel.swift` receiving substantial changes: use case injection (constructor + property + init wiring), a new private helper method, and event-handler modification. Skills exist precisely to govern these writes; bypassing them means the worker wrote directly without skill scaffolding.
-- **[D3]** Similarly, changes to `MekariFlagResponse.swift` and `MekariFlagCustomProvider.swift` (data-layer feature flag machinery) were done without a corresponding `data-update-*` skill call. This is a partial bypass of the skills layer.
+- **[D3]** ViewModel direct edit was correct — `presentation-worker` applied its Task Assessment rule (public contract change without skill coverage → direct edit is the correct fallback). `pres-update-stateholder` does not yet cover use case injection (constructor + property + init wiring is a multi-touch-point change beyond the skill's current scope). No violation recorded.
+- **[D3]** Feature flag changes to `MekariFlagResponse.swift` / `MekariFlagCustomProvider.swift` are outside Clean Architecture layers — feature flag machinery is a cross-cutting concern, not a domain/data/presentation artifact. No `data-update-*` skill applies here. No violation recorded.
 - **[D7]** The second `feature-orchestrator` spawn (moving the call from `handlePostCICOValidateLocationSuccess` to `.viewDidLoadEvent`) was a rework spawn — the first execution placed the call in the wrong location. This added ~2 minutes of orchestration overhead for a single-line relocation. The planning step did not specify where in `CICOLocationViewModel` the call should land, allowing the misplacement.
-- **[D7]** The delegation guard fired mid-session, requiring user intervention. While the agent handled it correctly (stopped and asked), the guard triggering at all indicates the second spawn was attempting a direct edit rather than routing through the skill layer properly.
+- **[D7]** The delegation guard fired mid-session, requiring user intervention. While the agent handled it correctly (stopped and asked), the guard triggering was a direct consequence of re-entering `feature-orchestrator` for a single-layer correction — which re-wrote `delegation.json` unnecessarily.
 
-> **Low score on D3?** Review `.claude/software-dev-agentic/lib/core/agents/builder/presentation-worker.md` — check whether the skill invocation requirement for ViewModel updates is clearly stated, and whether `pres-update-stateholder` is listed as mandatory for injecting use cases into an existing StateHolder/ViewModel.
-
-> **Low score on D7?** Review `.claude/software-dev-agentic/lib/core/agents/builder/feature-orchestrator.md` — the plan spec passed to feature-orchestrator should include the target insertion point in the ViewModel (which `emitEvent` case, which MARK section). Ambiguous placement is a predictable misplacement vector.
+> **Low score on D7?** Review `.claude/software-dev-agentic/lib/core/agents/builder/feature-orchestrator.md` — two fixes needed: (1) the plan spec should include the target insertion point in the ViewModel (which `emitEvent` case, which MARK section); (2) single-layer corrections after a completed phase should bypass the full orchestration stack and spawn the layer worker directly with exact coordinates from `state.json`.
 
 ## Recommendations
 
 1. **Highest impact fix — Include call-site coordinates in plans.** The rework spawn happened because the plan said "call the use case" without specifying exactly where in `emitEvent(_:)` to place it. Plans for ViewModel wiring should include the target case name and the line-order relative to existing calls (e.g., "append after `actions.accept(.showLoading(false))` in `.viewDidLoadEvent`").
 
-2. **Enforce skill calls for ViewModel updates.** `pres-update-stateholder` should be invoked before any write to an existing StateHolder/ViewModel. The feature-orchestrator's prompt should require a skill call per modified presentation-layer artifact, not just for new artifacts.
-
-3. **Add `data-update-mapper` (or equivalent) for feature flag additions.** Additions to `MekariFlagResponse.swift` / `MekariFlagCustomProvider.swift` are data-layer artifact updates and should be governed by a skill call, even if small. This creates a traceable record in `skill_calls`.
+2. **Add Correction Mode to `feature-orchestrator`.** After a phase completes, single-layer corrections should skip the full orchestration stack — no pre-flight, no sub-orchestrator, no delegation flag re-write. Spawn the layer worker directly (`presentation-worker`, `data-worker`, etc.) with exact coordinates from `state.json` artifacts. This eliminates orchestration hop overhead (the main cost driver) and naturally hits prompt cache since the worker reads the same source files within the TTL window. It also prevents the delegation guard from re-firing on correction spawns.
 
 ---
 
