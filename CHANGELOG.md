@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.40.5] — 2026-04-23
+
+### Fixed
+- All builder agents (`feature-orchestrator`, `feature-planner`, `domain-worker`, `data-worker`, `presentation-worker`): added **Write Path Rule** — `$(...)` expressions in `file_path` arguments are not evaluated by Write/Edit and produce a literal `__CMDSUB_OUTPUT__` directory; agents must resolve project root via Bash first
+- `presentation-worker` step 6: explicit instruction to run `git rev-parse --show-toplevel` before writing `stateholder-contract.md`
+
 ## [3.40.4] — 2026-04-23
 
 ### Fixed
