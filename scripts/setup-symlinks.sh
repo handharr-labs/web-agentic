@@ -128,7 +128,7 @@ link_reference() {
     [ -d "$subdir" ] || continue
     subname="$(basename "$subdir")"
     mkdir -p "$dest_base/$subname"
-    link_reference "$subdir" "$rel_prefix/$subname" "$dest_base/$subname"
+    link_reference "$subdir" "../$rel_prefix/$subname" "$dest_base/$subname"
   done
 }
 
