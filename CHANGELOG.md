@@ -7,6 +7,17 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.47.0] — 2026-04-25
+
+### Changed
+- Skills are now create-only: workers handle artifact modifications via direct `Read` + `Edit` with reference docs — no skill wrapper needed for updates
+- `extract-session.sh`: fix path slug encoding for dotted usernames — dots now encoded as dashes to match Claude's actual `~/.claude/projects/` folder format; added fuzzy basename fallback
+- `docs/core-design-principles.md`: updated precondition rule to reflect direct-edit model for existing artifacts
+
+### Removed
+- All update and fix skills across iOS, Flutter, and Web (18 skill dirs): `data-update-mapper`, `domain-update-usecase`, `pres-update-screen`, `pres-update-stateholder`, `test-update`, `test-fix`
+- Corresponding pointers removed from worker frontmatter (`related_skills`), routing tables, precondition rules, agent descriptions, `perf-worker`, `flutter/README`, `ios/test-orchestrator`, and `web/skills/README`
+
 ## [3.46.3] — 2026-04-24
 
 ### Changed
