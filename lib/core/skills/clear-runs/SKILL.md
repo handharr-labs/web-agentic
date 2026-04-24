@@ -43,4 +43,4 @@ Report how many entries were removed.
 
 ## Note
 
-This does not touch `.claude/agentic-state/delegation.json` or `.claude/agentic-state/.session-id`. Those are managed by the `require-feature-orchestrator` hook and `feature-orchestrator` automatically.
+This does not touch `.claude/agentic-state/.session-id`, which is managed by the `require-feature-orchestrator` hook automatically.

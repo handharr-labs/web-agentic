@@ -1,6 +1,6 @@
 ---
 name: feature-orchestrator
-description: Build or update a feature across Clean Architecture layers. Invoke when asked to create, add, implement, scaffold, update, modify, or extend a feature, screen, or module — regardless of platform.
+description: Coordinates Clean Architecture workers to build or update a feature. Designed to be invoked only by the `/plan-feature` or `/feature-orchestrator` skills — not directly.
 model: sonnet
 tools: Read, Glob, Grep, Bash, AskUserQuestion
 agents:
@@ -24,78 +24,32 @@ If the user's description matches any of these patterns — "create tests", "wri
 
 Only proceed to the steps below when the intent is feature building or modification.
 
-## Pre-flight — Resume Check
+## Pre-flight — Context Check
 
-Before anything else, check for existing runs:
+**If the prompt contains a `Pre-loaded context` block** (injected by the skill):
+- Extract `feature`, `next_phase`, `artifacts`, `operations`, and `separate-ui-layer` directly from the inlined `context.md` and `state.json` — do not read these files from disk
+- If `next_phase` is set: skip all completed phases and jump directly to it — skip Phase 0
+- If `next_phase` is null or absent: the run is complete; confirm with user before re-running
 
-```bash
-find "$(git rev-parse --show-toplevel)/.claude/agentic-state/runs" -name "state.json" 2>/dev/null
-```
-
-If one or more `state.json` files are found:
-- Read each file and extract `feature` and `next_phase`
-- Call `AskUserQuestion` with:
+**If no pre-loaded context is present** (direct invocation — unsupported path):
+- Warn the user: "This agent is designed to be invoked via `/plan-feature` or `/feature-orchestrator` skills. Direct invocation bypasses context loading. Proceed at your own risk."
+- Then look for an approved plan:
+  ```bash
+  find "$(git rev-parse --show-toplevel)/.claude/agentic-state/runs" -name "plan.md" 2>/dev/null
   ```
-  question : "Which feature would you like to work on?"
-  header   : "Feature"
-  multiSelect: false
-  options  : one entry per found run — label: "Resume: <feature>", description: "next: <next_phase>"
-             plus always: label: "Start new feature", description: "Begin a new feature from scratch"
+  For each found `plan.md`, Grep for `status: approved`. If one exists:
+  - Extract `feature`, `operations`, and `separate-ui-layer` from its frontmatter
+  - Skip Phase 0 — inform user: "Found approved plan for `<feature>` — skipping intent gathering"
+
+- If no approved plan, ask:
   ```
-
-If the user picks **Resume**:
-- Load the chosen `state.json` — use `artifacts` paths already recorded
-- Skip all completed phases and jump directly to `next_phase`
-- Do **not** re-run Phase 0 (intent is already known from the existing run)
-
-If the user picks **Start new feature** (or no runs found):
-- Proceed normally to the next pre-flight step below
-
-## Pre-flight — Approved Plan Check
-
-After the resume check, look for an approved plan from `feature-planner`:
-
-```bash
-find "$(git rev-parse --show-toplevel)/.claude/agentic-state/runs" -name "plan.md" 2>/dev/null
-```
-
-For each found `plan.md`, Grep for `status: approved`. If an approved plan exists:
-- Extract `feature`, `operations`, and `separate-ui-layer` from its frontmatter
-- Skip Phase 0 entirely — intent is already known
-- Inform the user: "Found approved plan for `<feature>` — skipping intent gathering"
-
-If no approved plan is found, call `AskUserQuestion` with:
-```
-question : "How would you like to proceed?"
-header   : "Feature"
-multiSelect: false
-options  :
-  - label: "Plan first",     description: "Run feature-planner to produce a reviewable plan before building"
-  - label: "Build directly", description: "Skip planning — gather intent inline and go straight to workers"
-```
-
-If the user picks **Plan first**: spawn `feature-planner` with no arguments, then return here and re-check for an approved plan before continuing.
-If the user picks **Build directly**: proceed to Phase 0 normally.
-
-## Pre-flight — Set Delegation Flag
-
-Before anything else, run:
-```bash
-python3 - <<'PYEOF'
-import json, time, os, subprocess
-root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel']).decode().strip()
-branch = subprocess.check_output(['git', 'branch', '--show-current']).decode().strip()
-slug = branch.replace('/', '-')
-f = f'{root}/.claude/agentic-state/delegation.json'
-d = json.load(open(f)) if os.path.exists(f) else {}
-d[slug] = int(time.time())
-tmp = f + '.tmp'
-json.dump(d, open(tmp, 'w'), indent=2)
-os.replace(tmp, f)
-PYEOF
-```
-
-This writes the current branch into `delegation.json` with a timestamp, unblocking the `require-feature-orchestrator` hook. The entry is branch-scoped and persists across sessions — no need to re-run on continuation sessions.
+  question : "How would you like to proceed?"
+  options  :
+    - label: "Plan first",     description: "Run feature-planner for a reviewable plan before building"
+    - label: "Build directly", description: "Skip planning — gather intent inline and go straight to workers"
+  ```
+  If **Plan first**: spawn `feature-planner`, then re-check for an approved plan.
+  If **Build directly**: proceed to Phase 0.
 
 ## Correction Mode
 
@@ -225,23 +179,6 @@ Update state file `.claude/agentic-state/runs/<feature>/state.json`:
 1. Report all created/modified files grouped by layer (domain / data / presentation / ui).
 2. Run `gh pr create` if no open PR exists for this branch — title: `feat(<feature>): <short description> #<issue>`, body: `Closes #<issue>`.
 3. Suggest next step (e.g. tests: "run `write tests for [feature]` to generate the full test suite").
-4. Remove this branch's entry from `delegation.json`:
-```bash
-python3 - <<'PYEOF'
-import json, os, subprocess
-root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel']).decode().strip()
-branch = subprocess.check_output(['git', 'branch', '--show-current']).decode().strip()
-slug = branch.replace('/', '-')
-f = f'{root}/.claude/agentic-state/delegation.json'
-if not os.path.exists(f):
-    exit(0)
-d = json.load(open(f))
-d.pop(slug, None)
-tmp = f + '.tmp'
-json.dump(d, open(tmp, 'w'), indent=2)
-os.replace(tmp, f)
-PYEOF
-```
 
 ## Write Path Rule
 
@@ -314,7 +251,7 @@ If a worker spawn is interrupted mid-run (auth expiry, permission denial, or use
 2. Surface a clear message:
    ```
    Session interrupted during <phase> phase. State saved.
-   To resume: invoke feature-orchestrator and select "Resume: <feature>" when prompted.
+   To resume: invoke the `/feature-orchestrator` skill and select "Resume: <feature>".
    ```
 3. Do not attempt to re-spawn the worker inline — wait for the user to explicitly resume.
 

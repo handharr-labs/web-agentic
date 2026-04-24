@@ -1,19 +1,44 @@
 ---
 name: feature-orchestrator
-description: Build or update a feature across Clean Architecture layers. The agent decides whether to invoke feature-planner for a reviewable plan first, or proceed directly to worker execution.
-allowed-tools: Agent
+description: Build or update a feature across Clean Architecture layers. Loads run context from disk and passes it inline — orchestrator skips cold pre-flight reads.
+allowed-tools: Bash, Read, AskUserQuestion, Agent
 ---
 
 ## Arguments
 
-`$ARGUMENTS` — optional feature description provided at invocation time.
+`$ARGUMENTS` — optional feature description.
 
 ## Steps
 
-Spawn `feature-orchestrator` with the following prompt:
+1. Find existing runs:
+   ```bash
+   find "$(git rev-parse --show-toplevel)/.claude/agentic-state/runs" -name "state.json" 2>/dev/null
+   ```
 
-> Feature description: <$ARGUMENTS>
->
-> Before proceeding, check for an existing run or approved plan. If neither exists, ask the user: "Would you like to plan first (feature-planner) or build directly?" — then act accordingly.
+2. **If runs exist:** use `AskUserQuestion`:
+   - One option per found run: label `"Resume: <feature>"`, description `"next: <next_phase>"`
+   - Always include: label `"Start new feature"`
+   - If user picks **Resume** → read `context.md` and `state.json` for that run → go to step 3
+   - If user picks **Start new** → go to step 4
 
-If `$ARGUMENTS` is empty, pass an empty feature description — the agent will collect intake interactively.
+   **If no runs exist** → go to step 4
+
+3. **Resume — spawn with pre-loaded context** (substitute actual file contents):
+
+   > Feature: <feature name from state.json>
+   >
+   > Pre-loaded context — do not re-read context.md or state.json:
+   >
+   > **context.md**
+   > <content>
+   >
+   > **state.json**
+   > <content>
+   >
+   > Proceed directly to the next pending phase. Skip pre-flight reads for these files.
+
+4. **New call — spawn without context:**
+
+   > Feature: <$ARGUMENTS, or empty if not provided>
+   >
+   > No existing run. If no feature description was given, ask the user for it. Then ask: "Would you like to plan first (recommended) or build directly?"
