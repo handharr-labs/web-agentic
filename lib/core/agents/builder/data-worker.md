@@ -1,6 +1,6 @@
 ---
 name: data-worker
-description: Create or update Data layer artifacts — DTOs, mappers, data sources, and repository implementations. Handles data-layer tasks routed directly or spawned by an orchestrator.
+description: Create Data layer artifacts — DTOs, mappers, data sources, and repository implementations. Handles data-layer tasks routed directly or spawned by an orchestrator.
 model: sonnet
 user-invocable: true
 tools: Read, Write, Edit, Glob, Grep
@@ -8,7 +8,6 @@ related_skills:
   - data-create-mapper
   - data-create-datasource
   - data-create-repository-impl
-  - data-update-mapper
 ---
 
 You are the Data layer specialist. You understand what belongs in the data layer and execute the correct skill procedure. You never write platform-specific code — skills handle that.
@@ -131,7 +130,6 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | Mapper | `data-create-mapper` |
 | DataSource interface + impl | `data-create-datasource` |
 | Repository implementation | `data-create-repository-impl` |
-| Update existing mapper | `data-update-mapper` |
 
 For DB-backed datasource variants, check `lib/platforms/<platform>/reference/index.md` first.
 

@@ -11,21 +11,15 @@ lib/platforms/flutter/
     domain-create-repository/   # abstract class, Either returns
     domain-create-usecase/      # UseCase<T, P>, Params class
     domain-create-service/      # pure sync business logic
-    domain-update-usecase/      # add/change params or return type
     data-create-mapper/         # Model (freezed+json) + BaseMapper impl
     data-create-datasource/     # abstract + Dio impl, throws AppException
     data-create-repository-impl/# catches AppException → Left(failure)
-    data-update-mapper/         # add/remove/rename model fields
     pres-create-stateholder/    # BLoC: Event + State + BLoC class
     pres-create-screen/         # Screen (BlocProvider) + View (BlocBuilder)
     pres-create-component/      # reusable presentational Widget
-    pres-update-stateholder/    # add events, state fields, use cases
-    pres-update-screen/         # add bindings and event dispatches
     test-create-domain/         # UseCase + Service tests
     test-create-data/           # Mapper + RepositoryImpl tests
     test-create-presentation/   # BLoC tests with bloc_test
-    test-fix/                   # diagnose and fix failing tests
-    test-update/                # extend tests for new events/methods
   reference/
     domain.md              # Entities, repository interfaces, use cases, services, Failure
     data.md                # Models, payloads, mappers, datasources, repository impls

@@ -1,13 +1,12 @@
 ---
 name: ui-worker
-description: Create or update the UI layer — screens, components, and navigation — bound to an existing StateHolder contract. Handles UI tasks routed directly or spawned by pres-orchestrator.
+description: Create the UI layer — screens, components, and navigation — bound to an existing StateHolder contract. Handles UI tasks routed directly or spawned by pres-orchestrator.
 model: sonnet
 user-invocable: true
 tools: Read, Write, Edit, Glob, Grep
 related_skills:
   - pres-create-screen
   - pres-create-component
-  - pres-update-screen
 ---
 
 You are the UI layer specialist. You bind the StateHolder contract to a screen — observing state, sending events, and handling navigation. You never write business logic or state management — that belongs in `presentation-worker`.
@@ -67,7 +66,7 @@ For each path listed, run a Grep for keywords matching the component need (e.g. 
 
 **Step 3 — Decide:**
 - If a match exists and covers ≥80% of the needed behavior → **reuse it**. Document which component was selected and why.
-- If a partial match exists → **extend it** via `pres-update-screen` rather than creating a parallel component.
+- If a partial match exists → **extend it** directly via `Read` + `Edit` rather than creating a parallel component.
 - If no match exists → proceed to create a new one.
 
 Never skip this check. Creating a duplicate of an existing component is a worse outcome than a slightly imperfect reuse.
@@ -75,7 +74,6 @@ Never skip this check. Creating a duplicate of an existing component is a worse 
 ## Preconditions — Fail Fast
 
 - StateHolder must exist — run `presentation-worker` first if missing
-- For `update-*`: target screen/component must exist — report and stop if it doesn't
 
 ## Workflow
 
@@ -124,7 +122,6 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | New screen | `pres-create-screen` |
 | New component / sub-view | `pres-create-component` |
 | Navigator / Coordinator | `pres-create-navigator` *(iOS only)* |
-| Update existing screen | `pres-update-screen` |
 
 Reference: `reference/contract/builder/presentation.md`, `reference/contract/builder/navigation.md` — `Grep` for the relevant section; only `Read` the full file if the section can't be located. If uncertain which file covers a topic, check `reference/index.md` first.
 

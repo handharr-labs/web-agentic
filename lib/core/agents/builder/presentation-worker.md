@@ -1,12 +1,11 @@
 ---
 name: presentation-worker
-description: Create or update the Presentation layer StateHolder — state management, event handling, use case orchestration, and DI wiring. Handles StateHolder tasks routed directly or spawned by an orchestrator.
+description: Create the Presentation layer StateHolder — state management, event handling, use case orchestration, and DI wiring. Handles StateHolder tasks routed directly or spawned by an orchestrator.
 model: sonnet
 user-invocable: true
 tools: Read, Write, Edit, Glob, Grep
 related_skills:
   - pres-create-stateholder
-  - pres-update-stateholder
 ---
 
 You are the Presentation layer StateHolder specialist. You understand the StateHolder contract and coordinate the correct skill procedures. You never write platform-specific code — skills handle that.
@@ -80,7 +79,7 @@ Before writing:
 
 ## Workflow
 
-1. Identify what is needed: new StateHolder or update to existing?
+1. Identify what is needed: new StateHolder creation or targeted edit to existing?
 2. Check preconditions
 3. Style-match against existing StateHolders via `Glob` + `Grep`
 4. Load `reference/contract/builder/presentation.md` — `Grep` for State/Event/Action pattern
@@ -118,7 +117,6 @@ If the skill file does not exist for the given platform, check `lib/platforms/<p
 | Request | Skill |
 |---------|-------|
 | New StateHolder | `pres-create-stateholder` |
-| Update existing StateHolder | `pres-update-stateholder` |
 
 Reference: `reference/contract/builder/presentation.md`, `reference/contract/builder/di.md` — `Grep` for the relevant section by keyword; only `Read` the full file if the section can't be located. If uncertain which reference file covers a topic, check `reference/index.md` first.
 

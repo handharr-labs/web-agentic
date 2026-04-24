@@ -257,7 +257,7 @@ Target: **90% line coverage**. Priority: critical business logic > edge cases > 
 
 ---
 
-## Analysis Report Format (for `test-update`) <!-- 5 -->
+## Analysis Report Format <!-- 5 -->
 
 ```markdown
 # ViewModel Test Analysis Report

@@ -61,10 +61,10 @@ Then route based on context:
 | Situation | Route to test-worker with |
 |-----------|--------------------------|
 | No test file exists | `test-create-presentation` skill — create from scratch |
-| Tests failing after StateHolder *(iOS: ViewModel)* code change | `test-update` skill — update to match |
-| Tests failing (broken mocks, compile errors) | `test-fix` skill — fix without changing logic |
-| Tests have TODO markers or wrong mocks | `test-fix` skill — complete and verify |
-| Coverage gaps identified | `test-update` skill — add missing coverage |
+| Tests failing after StateHolder *(iOS: ViewModel)* code change | `test-worker` — update tests to match new code |
+| Tests failing (broken mocks, compile errors) | `test-worker` — fix without changing logic |
+| Tests have TODO markers or wrong mocks | `test-worker` — complete and verify |
+| Coverage gaps identified | `test-worker` — add missing coverage |
 
 ## Search Rules — Never Violate
 

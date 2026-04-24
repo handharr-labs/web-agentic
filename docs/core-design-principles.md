@@ -324,8 +324,8 @@ Agents validate preconditions before executing procedures — they never guess o
 - Is the task within this worker's layer scope? — STOP and name the correct worker if not
 
 **Workers check before writing (`## Preconditions`):**
-- Does the target file/module exist? (before `update-*` skills)
 - Does the target file/module NOT exist? (before `create-*` skills — avoid overwriting)
+- For direct edits to existing artifacts: confirm the file exists before `Read` + `Edit`
 - Are required dependencies available?
 
 **Workers check before returning (`## Output`):**

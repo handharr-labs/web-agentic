@@ -17,13 +17,20 @@ PROJECT_PATH="${1:-$(pwd)}"
 SESSION_ID="${2:-}"
 
 # Derive the Claude project hash from the absolute path
-PROJECT_HASH=$(echo "$PROJECT_PATH" | sed 's|/|-|g')
+# Claude encodes both '/' and '.' as '-' in the projects directory slug
+PROJECT_HASH=$(echo "$PROJECT_PATH" | sed 's|[/.]|-|g')
 SESSIONS_DIR="$HOME/.claude/projects/${PROJECT_HASH}"
 
 if [ ! -d "$SESSIONS_DIR" ]; then
-  echo "ERROR: No Claude sessions directory found for: $PROJECT_PATH" >&2
-  echo "  Expected: $SESSIONS_DIR" >&2
-  exit 1
+  # Fallback: fuzzy match on the project basename
+  PROJECT_BASENAME=$(basename "$PROJECT_PATH")
+  SESSIONS_DIR=$(ls -d "$HOME/.claude/projects/"*"${PROJECT_BASENAME}" 2>/dev/null | head -1)
+  if [ -z "$SESSIONS_DIR" ] || [ ! -d "$SESSIONS_DIR" ]; then
+    echo "ERROR: No Claude sessions directory found for: $PROJECT_PATH" >&2
+    echo "  Tried: $HOME/.claude/projects/${PROJECT_HASH}" >&2
+    echo "  Hint: ls ~/.claude/projects/ | grep $(basename "$PROJECT_PATH")" >&2
+    exit 1
+  fi
 fi
 
 if [ -n "$SESSION_ID" ]; then

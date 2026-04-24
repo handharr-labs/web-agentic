@@ -137,7 +137,6 @@ If the session is **mixed** (e.g. flag removal + file restoration), apply skill 
 | Repository interface | `domain-create-repository` |
 | Use case | `domain-create-usecase` |
 | Domain service | `domain-create-service` |
-| Update use case | `domain-update-usecase` |
 
 *Data layer:*
 
@@ -146,14 +145,12 @@ If the session is **mixed** (e.g. flag removal + file restoration), apply skill 
 | DTO / mapper | `data-create-mapper` |
 | DataSource interface + impl | `data-create-datasource` |
 | Repository implementation | `data-create-repository-impl` |
-| Update mapper | `data-update-mapper` |
 
 *Presentation layer:*
 
 | Artifact created | Expected skill |
 |---|---|
 | New StateHolder | `pres-create-stateholder` |
-| Update StateHolder | `pres-update-stateholder` |
 
 - Deduct `-1` per skill call that doesn't match the expected skill for the artifact inferred from its context (e.g. `domain-create-usecase` called when a repository interface was needed)
 - Deduct `-2` if a write to `write_paths` produced a domain/data/presentation artifact with **no corresponding skill call** — this means the worker bypassed skills and wrote directly (anti-pattern)
