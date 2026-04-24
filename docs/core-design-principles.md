@@ -92,6 +92,7 @@ Workers are platform-agnostic protocol-definers. Skills are the platform-specifi
 | Role | Protocol analogy | Platform-aware? |
 |---|---|---|
 | Orchestrators | Interface contract | No |
+| Planners | Requirements analysis | No |
 | Workers | Use-case logic | No |
 | Skills | Concrete implementation | Yes |
 
@@ -119,7 +120,8 @@ This keeps each worker's context small and its reasoning correct for its scope. 
 | Type | Suffix | Example |
 |---|---|---|
 | Orchestrator | `-orchestrator` | `feature-orchestrator.md`, `pres-orchestrator.md` |
-| Worker | `-worker` | `domain-worker.md`, `data-worker.md` |
+| Planner | `-planner` | `feature-planner.md`, `domain-planner.md` |
+| Worker | `-worker` | `domain-worker.md`, `feature-worker.md` |
 
 Format: `<domain>-<role>.md`
 
@@ -184,10 +186,22 @@ Shared to all downstream projects via symlink. Current personas: `builder`, `det
 
 | Role | Subordinates | Can write files? | Has `agents` field? | Has `skills` field? |
 |---|---|---|---|---|
-| Orchestrator | Other orchestrators or workers | No — delegates all writes to workers | Yes | Typically no |
-| Worker | Skills via `related_skills` | Yes | No | Yes — skills injected at startup |
+| Orchestrator | Planners, other orchestrators, or workers | No — delegates all writes to workers | Yes | Typically no |
+| Planner | Layer planners (in parallel) or none | Plan artifacts only (`plan.md`, `context.md`) — never source files | Yes (if spawning sub-planners) | No |
+| Worker | Skills via `related_skills` | Yes — source files only | No | Yes — skills injected at startup |
 
-> Orchestrators may spawn other orchestrators when the inner orchestrator represents a fully bounded sub-workflow. The outer orchestrator owns the top-level state file and final report. Example: `feature-orchestrator` spawns `pres-orchestrator` for the presentation+UI phase — `pres-orchestrator` skips state file writes when called as a sub-orchestrator.
+**Planner — role and scope:**
+
+A planner explores the codebase and produces a human-reviewable plan before any source file is written. It is always read-only with respect to source code.
+
+- Reads existing artifacts to assess what exists, what naming conventions are in use, and what key symbols need preserving
+- May spawn layer-specialized sub-planners in parallel (e.g. `domain-planner`, `data-planner`, `pres-planner`) to keep each exploration context small and focused
+- Writes only `plan.md` and `context.md` to the runs directory — never source files
+- Stops and waits for human approval before execution begins
+
+Sub-planners follow the same constraints: read-only, structured findings output, no source writes.
+
+> Orchestrators may spawn other orchestrators when the inner orchestrator represents a fully bounded sub-workflow. The outer orchestrator owns the top-level state file and final report.
 
 #### Agents — By Scope
 
@@ -377,6 +391,17 @@ The agentic system enforces its own conventions through automated review — the
 | Workflow too platform-specific for any core agent | Platform agent + platform skill → `lib/platforms/<platform>/skills/` (flat) |
 | Architecture reference knowledge (cross-platform standard) | `lib/platforms/<platform>/reference/contract/<persona>/` — grouped by persona; accessible as `.claude/reference/contract/<persona>/<name>.md` downstream |
 | Architecture reference knowledge (platform-specific) | `lib/platforms/<platform>/reference/` (flat) |
+
+**Planner vs Worker — when to use which:**
+
+| Work profile | Recommended path |
+|---|---|
+| Contained, well-understood (1–3 artifacts, clear scope, single layer) | Worker directly — overhead of planning exceeds the benefit |
+| Cross-layer feature build, multiple artifact types, or uncertain existing state | Planner first → worker — exploration cost is front-loaded, execution is zero-rework |
+| Modification to an existing artifact (targeted edit) | Worker directly with context.md Key Symbols if available |
+| Large-scale change across many modules or unknown conventions | Planner first — sub-planners explore in parallel, findings aggregated before a single line is written |
+
+> The rule of thumb: if a worker would spend significant time exploring before it can execute, a planner is the better investment. If the scope is clear and bounded, skip the planner and go straight to the worker.
 
 > For execution examples and the current agent roster, see [persona-builder.md](persona/builder.md).
 
