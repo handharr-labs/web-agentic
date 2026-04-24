@@ -7,6 +7,16 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.48.0] — 2026-04-25
+
+### Added
+- `domain-planner`: explore-only agent — discovers entities, use cases, repository interfaces, domain services; returns structured findings, no writes
+- `data-planner`: explore-only agent — discovers DTOs, mappers, datasources, repository implementations; returns structured findings, no writes
+- `pres-planner`: explore-only agent — discovers StateHolders, screens, components, navigators + key symbols (event cases, state fields, constructor params); no writes
+
+### Changed
+- `feature-planner`: Phase 2 now spawns domain-planner, data-planner, and pres-planner in parallel via Agent tool, replacing the single Explore agent; aggregates three structured findings blocks into context.md + plan.md; added `Agent` to tools and `agents:` frontmatter list
+
 ## [3.47.1] — 2026-04-25
 
 ### Changed
