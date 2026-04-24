@@ -12,10 +12,12 @@
 | Doc | What it covers | Role in the deck |
 |---|---|---|
 | `stakeholder-brief.md` | Non-technical narrative: problem, solution, AI team analogy, results, business outcomes | **Primary source** — almost all slide content comes from here |
-| `core-design-principles.md` | Agent/persona conventions: how agents are built, roles (Orchestrator/Worker/Skill), knowledge rules, skill types, taxonomy | **Background context** — informs the "How It Works" and "Meet the Team" slides; not cited directly |
+| `core-design-principles.md` | Agent/persona conventions: roles (Orchestrator/Planner/Worker/Skill), knowledge rules, skill types, taxonomy, anatomy | **Background context** — informs "How It Works", "Meet the Team", and "Plan First" slides; not cited directly |
 | `submodule-repo-structure.md` | Distribution mechanism: how the toolkit ships to downstream projects, folder layout, symlink architecture, setup scripts | **Background context** — informs the "One toolkit, every platform" differentiator; not cited directly |
+| `persona/builder.md` | Builder anatomy: dual entry skills, planner phase (parallel sub-planners), feature-worker execution, layer-to-agent mapping | **Background context** — informs Slide 13 "In Action" walkthrough |
+| `persona/detective.md` | Detective anatomy: scientific debugging method, step-to-agent mapping, tool isolation guarantee | **Background context** — informs "Meet the Team" detective row |
 
-The brief is a deliberate translation of the two principles docs into language a non-engineer can follow. The deck should stay at that level of abstraction.
+The brief is a deliberate translation of the principles docs into language a non-engineer can follow. The deck should stay at that level of abstraction.
 
 ---
 
@@ -53,15 +55,18 @@ Confirm or correct before build starts.
 | 7 | Solution: Grep over Read | Code: Grep 12 lines vs Read 200 lines, token delta |
 | 8 | Solution: Prompt Caching | Diagram: what gets cached, when, how much it saves |
 | 9 | Solution: Shared Submodule | Symlink diagram: one file → all projects |
-| 10 | What We Built | Not a chatbot. A hierarchy of specialists. |
-| 11 | How It Works | The team hierarchy diagram (HTML/CSS tree) |
-| 12 | Meet the Team | Persona table: Builder, Detective, Auditor, Tracker, Installer |
-| 13 | In Action — Leave Request | Full build walkthrough (condensed tree diagram, Flutter) |
-| 14 | Results | 34-file feature · 85% cost ↓ · 6.3→8.0 quality |
-| 15 | Where We're Going | Android · Broader scope · Shorter feedback loops |
-| 16 | Closing — One Sentence | Full-bleed quote slide |
+| 10 | What We Built | Not a chatbot. A 5-layer hierarchy of specialists. |
+| 11 | How It Works — Anatomy | The full layer diagram: Trigger Skill → Orchestrator → Planner(s) → Worker → Skills |
+| 12 | Plan First, Then Build | Planner decision rule: simple task → worker directly; complex/unknown → planner first |
+| 13 | Meet the Team | Persona table: Builder, Detective, Auditor, Tracker, Installer — roles per persona |
+| 14 | In Action — Leave Request | Full build walkthrough with planner phase (parallel sub-planners → approval → feature-worker) |
+| 15 | Results | 34-file feature · 85% cost ↓ · 6.3→8.0 quality |
+| 16 | Where We're Going | Android · Broader scope · Shorter feedback loops |
+| 17 | Closing — One Sentence | Full-bleed quote slide |
 
-Total: **16 slides** (+3 solution slides, problems now paired with their fix)
+Total: **17 slides** (+1 from adding the Planner decision slide; prior "How It Works" split into Anatomy + Plan First)
+
+> **Cut option:** Slides 11 and 12 can be merged into a single "How It Works" slide if 17 feels long — show the anatomy diagram on the left, the Planner vs Worker rule on the right.
 
 ---
 
@@ -301,6 +306,125 @@ Claude caches the stable part of a context (system prompt, preloaded skills, age
 
 ---
 
+## New / Updated Slides — Deep Dive
+
+### Slide 11 — How It Works: Anatomy
+
+**Headline:** Five layers. Each one knows exactly its job.
+
+**Visual:** HTML/CSS tree diagram, top-to-bottom flow:
+
+```
+User
+ │
+ ▼
+Trigger Skill        — routes the request, pre-loads run context, builds the spawn prompt
+ │
+ ▼
+Orchestrator         — coordinates phases in order; zero file writes
+ │
+ ▼
+Planner(s)           — explore the codebase; produce a reviewable plan; zero source writes
+ │
+ ▼
+Worker               — reads the approved plan; executes skills; validates every artifact
+ │
+ ▼
+Skills               — concrete platform code (Swift, Dart, TypeScript)
+```
+
+**Key callout (right panel or annotation):**
+- Each layer has one job — it cannot reach into another
+- Planner reads; Worker writes — never mixed
+- Skills are the only platform-aware layer — everything above is platform-agnostic
+
+**Caption:** Not a monolith. A chain of specialists — each accountable for its own scope.
+
+---
+
+### Slide 12 — Plan First, Then Build
+
+**Headline:** Scope first. Code second. No rework.
+
+**The decision rule (two-column layout):**
+
+| Work profile | Path |
+|---|---|
+| Single artifact, known location | Worker directly — planning overhead exceeds the benefit |
+| Cross-layer feature, uncertain existing state | Planner first → Worker — exploration is front-loaded |
+| Targeted edit to existing file | Worker directly with key symbols from context |
+| Complex change, unknown conventions | Planner first — sub-planners explore in parallel |
+
+**Visual — parallel planner phase:**
+```
+feature-planner
+  │         │         │
+  ▼         ▼         ▼
+domain-   data-    pres-
+planner   planner  planner    ← all three run simultaneously
+  │
+  │  [findings aggregated → plan.md written → user approves]
+  │
+  ▼
+feature-worker               ← executes the plan; one artifact at a time
+```
+
+**Caption:** Planners front-load the thinking cost so the worker executes without guessing. Parallel sub-planners mean exploration is as fast as the slowest layer — not the sum of all three.
+
+---
+
+### Slide 13 — Meet the Team
+
+**Headline:** Five personas. Each a coherent specialist workflow.
+
+**Table (updated — Planner now a distinct role column):**
+
+| Persona | Entry | Orchestrator | Planner(s) | Worker(s) | What it does |
+|---|---|---|---|---|---|
+| Builder | `/feature-orchestrator`, `/plan-feature` | `feature-orchestrator` | `feature-planner` + 3 layer planners | `feature-worker`, layer workers | Full CLEAN feature build — domain → data → presentation |
+| Detective | Natural language | `debug-orchestrator` | — | `debug-worker`, `debug-log-worker` | Root cause investigation via scientific debugging |
+| Auditor | Natural language | `arch-review-orchestrator` | — | `arch-review-worker` | Convention compliance review before code reaches consumers |
+| Tracker | Natural language | — | — | `issue-worker` | GH issue + branch + backlog row creation |
+| Installer | Natural language | — | — | `setup-worker` | Project onboarding — symlinks, platform detection, orientation |
+
+---
+
+### Slide 14 — In Action: Leave Request (updated walkthrough)
+
+**Headline:** From intent to 34 files — with a plan in between.
+
+**Full flow (condensed tree, Flutter):**
+
+```
+/plan-feature "leave request"
+ │
+ ▼
+feature-orchestrator
+ │
+ ▼
+feature-planner
+  ├── domain-planner   ← finds existing entities, naming conventions
+  ├── data-planner     ← finds existing mappers, datasource pattern
+  └── pres-planner     ← finds StateHolder structure, event cases
+ │
+ │  plan.md written → engineer reviews → approves
+ │
+ ▼
+feature-worker
+  ├── domain-create-entity      → LeaveRequest.dart
+  ├── domain-create-usecase     → GetLeaveRequestListUseCase.dart
+  ├── data-create-mapper        → LeaveRequestMapper.dart
+  ├── data-create-datasource    → LeaveRequestRemoteDataSource.dart
+  ├── pres-create-stateholder   → LeaveRequestBloc.dart
+  └── pres-create-screen        → LeaveRequestScreen.dart
+```
+
+**Key numbers alongside:** 34 files total · each artifact Glob+Grep validated · state.json checkpointed after each · resumable if interrupted
+
+**Caption:** The planner explores once, in parallel. The worker executes with zero guesswork. The engineer reviews the plan — not 34 individual files.
+
+---
+
 ## Design Direction
 
 - **Background:** Dark (`#0F1117`) — engineering credibility
@@ -325,6 +449,7 @@ Single HTML file with:
 ## Content Decisions
 
 - [x] Platform scope: web included — Leave Request walkthrough mentions TypeScript alongside Swift/Dart
+- [x] Planner taxonomy: added as a first-class layer in the anatomy diagram and its own "Plan First" slide
 - [ ] Token cost numbers: show both percentage (85%) AND absolute (737k → 103k)? Or percentage only?
-- [ ] Slide 11 "Where We're Going" — Android listed as next. Should web also appear here since it's already active, or is web's inclusion in the main slides sufficient?
-- [ ] Any slides to cut for a tighter deck? Current count: 12
+- [ ] Slide 16 "Where We're Going" — Android listed as next. Should web also appear here since it's already active, or is web's inclusion in the main slides sufficient?
+- [ ] Slide count: 17 — cut option is to merge Slides 11 + 12 into one "How It Works" slide (anatomy left, Planner decision right). Down to 16.
