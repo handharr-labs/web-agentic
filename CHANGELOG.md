@@ -7,6 +7,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.43.2] — 2026-04-24
+
+### Fixed
+- `plan-feature` skill: changed "Invoke" to "Spawn using the Agent tool" for both `feature-planner` and `feature-orchestrator` — prevents model from calling them as skills (which fails) instead of agents
+
 ## [3.43.1] — 2026-04-24
 
 ### Fixed

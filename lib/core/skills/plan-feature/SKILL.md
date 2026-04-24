@@ -4,7 +4,7 @@ description: Plan then build a feature — invokes feature-planner for reviewabl
 allowed-tools: Bash, Read, Agent
 ---
 
-1. Invoke `feature-planner`. Pass no arguments — it gathers intent interactively.
+1. Spawn `feature-planner` using the Agent tool. Pass no arguments — it gathers intent interactively.
 
 2. After it completes, find the context file it just wrote:
    ```bash
@@ -13,7 +13,7 @@ allowed-tools: Bash, Read, Agent
 
 3. Read that `context.md` and the `state.json` in the same directory.
 
-4. Invoke `feature-orchestrator` with the following prompt, substituting actual file contents:
+4. Spawn `feature-orchestrator` using the Agent tool with the following prompt, substituting actual file contents:
 
    > Approved plan ready. Pre-loaded context below — do not re-read context.md or state.json.
    >
