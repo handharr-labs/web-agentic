@@ -7,6 +7,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.46.1] — 2026-04-24
+
+### Fixed
+- `scripts/setup-symlinks.sh` prune loop: removed invalid `2>/dev/null` redirect from `for ... in` glob expansion (bash syntax error on line 167)
+
 ## [3.46.0] — 2026-04-24
 
 ### Removed

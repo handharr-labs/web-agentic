@@ -164,14 +164,13 @@ echo "Pruning dangling symlinks..."
 _pruned=0
 for _dir in "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"; do
   [ -d "$_dir" ] || continue
-  for _link in "$_dir"/* "$_dir"/*.sh 2>/dev/null; do
-    [ -L "$_link" ] || continue
+  while IFS= read -r _link; do
     if [ ! -e "$_link" ]; then
       rm "$_link"
       echo "  remove  $(basename "$_link") (dangling)"
       _pruned=$((_pruned + 1))
     fi
-  done
+  done < <(find "$_dir" -maxdepth 1 -type l)
 done
 # reference/ may be nested — prune recursively
 if [ -d "$CLAUDE_DIR/reference" ]; then
