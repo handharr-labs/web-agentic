@@ -7,6 +7,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.43.1] — 2026-04-24
+
+### Fixed
+- `core.pkg`: added `tracker-adjust-ticket` to skills list so downstream sync picks it up
+
 ## [3.43.0] — 2026-04-24
 
 ### Added
